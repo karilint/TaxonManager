@@ -23,7 +23,7 @@ services:
     volumes:
       - static:/vol/web
     environment:
-      - RNAMES_DOMAIN=${RNAMES_DOMAIN}
+      - APP_DOMAIN=${APP_DOMAIN}
       - PMA_DOMAIN=${PMA_DOMAIN}
     labels:
       - "com.centurylinklabs.watchtower.enable=false"

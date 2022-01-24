@@ -16,6 +16,6 @@ In the scientific classification of fossil species, organisms are organized into
 
 ## Project progress
 
-[Product Backlog]  
-[Sprint Backlog]
+[Product Backlog](https://github.com/karilint/TaxonManager/projects/1)  
+[Sprint Backlog](https://docs.google.com/spreadsheets/d/1Yv0OK8U75Q2zwGUySA_2B9S3rYz8OBQKHfaZ8EV1g_w/edit#gid=0)
 

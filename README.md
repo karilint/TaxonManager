@@ -10,9 +10,13 @@ In the scientific classification of fossil species, organisms are organized into
 
 ## Development Environment
 
-[Development Environment](./docs/dev_environment.md)
+[Development Environment Instructions](./docs/dev_environment.md)
+
+[Development Environment](https://Taxonmanager-staging.it.helsinki.fi)
 
 ## Production Environment
+
+[Productio Environment](https://Taxonmanager.it.helsinki.fi)
 
 ## Project progress
 

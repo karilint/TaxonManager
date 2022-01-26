@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.orcid',
+    'front.apps.FrontConfig',
 ]
 
 SITE_ID = 1

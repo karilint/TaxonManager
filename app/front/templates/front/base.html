@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>TaxonawdawdManager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TaxonManager</title>
     <script src="https://use.fontawesome.com/baa70f3cd3.js"></script>
     <link rel="stylesheet" href="path/to/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
@@ -226,6 +227,16 @@
             width: 100%;
         }
 
+        /* - makes an additional dropdown menu (contains login and help buttons) appear on the sidebar when opened, on small screens */
+        .showMenu {
+            padding: 20px;
+        }
+
+        @media screen and (min-width: 993px) {
+            .showMenu {
+                display: none;
+            }
+        }
 
 
         /* Begin style from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_full_page_tabs*/
@@ -327,72 +338,86 @@
     <div class="main-container">
         <div class="header-container w3-container w3-theme">
             <div class="header w3-display-container">
-              <div class="header-left w3-display-left">
-                <div class="w3-container">
-                  <div class="header-button w3-left">
-                    <i class="fa fa-bars w3-button w3-theme-b1 w3-hide-large w3-xlarge w3-bar-item" onclick="w3_open()"></i>
-                  </div>
-                  <div class="w3-left">
-                    <h2 class="title-logo"><a href="/">TaxonManager</a></h2>
-                  </div>
+                <div class="header-left w3-display-left">
+                    <div class="w3-container">
+                        <div class="header-button w3-left">
+                            <i class="fa fa-bars w3-button w3-theme-b1 w3-hide-large w3-xlarge w3-bar-item"
+                                onclick="w3_open()"></i>
+                        </div>
+                        <div class="w3-left">
+                            <h2 class="title-logo"><a href="/">TaxonManager</a></h2>
+                        </div>
+                    </div>
                 </div>
-              
-              </div>
                 <div class="header-right w3-display-right">
-                  <div class="menu-item w3-display-container w3-hide-medium w3-hide-small">
-                    <div class="menu-item-left w3-display-left">
-                      <div class="w3-dropdown-hover w3-theme">
-                        <div class="header-button header-text-button">
-                          <button class="w3-button w3-theme-b1"><h4 class="help-button">Help <i class="fa fa-caret-down"></i></h4></button>
+                    <div class="menu-item w3-display-container w3-hide-medium w3-hide-small">
+                        <div class="menu-item-left w3-display-left">
+                            <div class="w3-dropdown-hover w3-theme">
+                                <div class="header-button header-text-button">
+                                    <button class="w3-button w3-theme-b1">
+                                        <h4 class="help-button">Help <i class="fa fa-caret-down"></i></h4>
+                                    </button>
+                                </div>
+                                <div class="help-dropdown list-item w3-dropdown-content w3-bar-block w3-card-4">
+                                    <a href="/"> Example link </a><br>
+                                </div>
+                            </div>
                         </div>
-                        <div class="help-dropdown list-item w3-dropdown-content w3-bar-block w3-card-4">
-                            <a href="/"> Example link </a><br>
+                        <div class="menu-item-right w3-display-right">
+                            <div class="header-button header-text-button">
+                                <a href="/login" class="w3-button w3-theme-b1">
+                                    <h4 class="login-button">Login</h4>
+                                </a>
+                            </div>
                         </div>
-                      </div>
                     </div>
-                    <div class="menu-item-right w3-display-right">
-                        <div class="header-button header-text-button">
-                            <a href="/login" class="w3-button w3-theme-b1">
-                              <h4 class="login-button">Login</h4>
-                            </a>
-                        </div>
-                    </div>
-                  </div>
                 </div>
             </div>
-          </div>
-          <div class="page-container w3-container">
-            <div class="navigation list-item w3-theme-beige w3-sidebar w3-bar-block w3-collapse w3-animate-left w3-card" id="mySidebar">
-              <h4 class="w3-bar-item">Features</h4>
-              <a class="w3-bar-item w3-button" href="/add_reference"> Add reference </a>
-              <a class="w3-bar-item w3-button" href="/references"> References </a>
-              </div>
-            </div>
-            <div class="main-content w3-main">
-                <div class="content w3-container">
-                    {% block content %}
-                    {% endblock %}
+        </div>
+        <div class="page-container w3-container">
+            <div class="navigation list-item w3-theme-beige w3-sidebar w3-bar-block w3-collapse w3-animate-left w3-card"
+                id="mySidebar">
+                <div class="showMenu">
+                    <div class="w3-dropdown-hover w3-left">
+                        <button class="w3-button w3-theme-b1">Menu</button>
+                        <div class="w3-dropdown-content w3-bar-block w3-border" style="right:0">
+                            <a href="/login" class="w3-bar-item w3-button">Login</a>
+                            <a href="/" class="w3-bar-item w3-button">Help</a>
+                        </div>
+                    </div>
+                    <br><br>
+                    <br><br>
                 </div>
+                <h4 class="w3-bar-item">Features</h4>
+                <a class="w3-bar-item w3-button" href="/add_reference"> Add reference </a>
+                <a class="w3-bar-item w3-button" href="/references"> References </a>
             </div>
-            <!-- Invisible overlay to close the side navigation -->
-            <div class="close-nav w3-overlay w3-hide-large" onclick="w3_close()" id="myOverlay"></div>
-            <footer class="w3-container w3-center w3-theme">
-              <p>2022 - TaxonManager</p>
-            </footer>
-          </div>
-        
-        <!-- For opening and closing the sidebar -->
-        <script>
+        </div>
+        <div class="main-content w3-main">
+            <div class="content w3-container">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+        <!-- Invisible overlay to close the side navigation -->
+        <div class="close-nav w3-overlay w3-hide-large" onclick="w3_close()" id="myOverlay"></div>
+        <footer class="w3-container w3-center w3-theme">
+            <p>2022 - TaxonManager</p>
+        </footer>
+    </div>
+
+    <!-- For opening and closing the sidebar -->
+    <script>
         function w3_open() {
-          document.getElementById("mySidebar").style.display = "block";
-          document.getElementById("myOverlay").style.display = "block";
+            document.getElementById("mySidebar").style.display = "block";
+            document.getElementById("myOverlay").style.display = "block";
         }
-        
+
         function w3_close() {
-          document.getElementById("mySidebar").style.display = "none";
-          document.getElementById("myOverlay").style.display = "none";
+            document.getElementById("mySidebar").style.display = "none";
+            document.getElementById("myOverlay").style.display = "none";
         }
-        </script>
+    </script>
     </div>
 </body>
 

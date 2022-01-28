@@ -6,6 +6,30 @@ on:
       - 'staging'
 
 jobs:
+  test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        working-directory: ./app
+      - name: Run backend
+        run: python manage.py testserver testdata/SampleData &
+        working-directory: ./app
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+            wait-on: http://localhost:8000
+            config: baseUrl=http://localhost:8000
+
   docker:
     runs-on: ubuntu-latest
     steps:

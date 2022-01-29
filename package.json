@@ -1,0 +1,25 @@
+{
+  "name": "taxonmanager",
+  "version": "1.0.0",
+  "description": "TaxonManger is a tool for classifying fossil species.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karilint/TaxonManager.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/karilint/TaxonManager/issues"
+  },
+  "homepage": "https://github.com/karilint/TaxonManager#readme",
+  "devDependencies": {
+    "cypress": "^9.3.1"
+  }
+}

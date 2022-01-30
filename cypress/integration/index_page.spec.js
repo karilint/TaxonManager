@@ -5,9 +5,21 @@
 // check out the link below and learn how to write your first test:
 // https://on.cypress.io/writing-first-test
 
-describe('TaxonManager', () => {
-    it('Front page can be opened', () => {
-      cy.visit('http://localhost:8000/')
-      cy.contains('TaxonManager')
-    })
+describe("TaxonManager", () => {
+  beforeEach(function() {
+    cy.visit("http://localhost:8000/")
   })
+  it("Front page can be opened", () => {
+    cy.contains("TaxonManager")
+    cy.contains("Login")
+    cy.contains("Features")
+    cy.contains("Help")
+    cy.contains("2022")
+    cy.get('#mySidebar')
+  })
+  it("Login link works", () => {
+    cy.url().should("not.contain", "login")
+    cy.contains("Login").click()
+    cy.url().should("include", "login")
+  })
+})

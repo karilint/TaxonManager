@@ -4,3 +4,4 @@ nginx/certs/key.pem
 nginx/certs/dhparam.pem
 node_modules/
 venv/
+videos/

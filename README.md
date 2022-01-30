@@ -14,9 +14,11 @@ In the scientific classification of fossil species, organisms are organized into
 
 [Development Environment](https://Taxonmanager-staging.it.helsinki.fi)
 
+[Cypress guide](./docs/cypressGuide.md)
+
 ## Production Environment
 
-[Productio Environment](https://Taxonmanager.it.helsinki.fi)
+[Production Environment](https://Taxonmanager.it.helsinki.fi)
 
 ## Project progress
 

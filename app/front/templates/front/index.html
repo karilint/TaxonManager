@@ -1,8 +1,16 @@
 {% extends "front/base.html" %}
+{% load socialaccount %}
 {% block content %}
 
 <body>
   <p>Taxonmanager frontpage</p>
+
+  {% if user.is_authenticated %}
+  <p>Hello, {{ user.username }}! You are logged in.<br><a href="/accounts/logout/">Logout</a></p>
+  {% else %}
+  <p>Hello guest! <a href="{% provider_login_url 'orcid' %}">Sign in with Orcid</a></p>
+  {% endif %}
+ 
   
   
 </body>

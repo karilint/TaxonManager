@@ -375,7 +375,7 @@
                                     <h4 class="logout-button">Login</h4>
                                 </a>
                                 {% else %}
-                                <a href="/login" class="w3-button w3-theme-b1">
+                                <a href="{% provider_login_url 'orcid' %}" class="w3-button w3-theme-b1">
                                     <h4 class="login-button">Login</h4>
                                 </a>
                                 {% endif %}

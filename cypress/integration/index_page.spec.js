@@ -17,9 +17,4 @@ describe("TaxonManager", () => {
     cy.contains("2022")
     cy.get('#mySidebar')
   })
-  it("Login link works", () => {
-    cy.url().should("not.contain", "login")
-    cy.contains("Login").click()
-    cy.url().should("include", "login")
-  })
 })

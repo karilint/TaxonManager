@@ -371,9 +371,13 @@
                         <div class="menu-item-right w3-display-right">
                             <div class="header-button header-text-button">
                                 {% if user.is_authenticated %}
-                                <a href="/accounts/logout" class="w3-button w3-theme-b1">
-                                    <h4 class="logout-button">Logout</h4>
-                                </a>
+                                <form method="post" action="{% url 'account_logout' %}">
+                                    {% csrf_token %}
+                                    {% if redirect_field_value %}
+                                      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                                    {% endif %}
+                                    <button class="w3-button w3-theme-b1" type="submit"><h4 class="logout-button">Logout</h4></button>
+                                </form>
                                 {% else %}
                                 <a href="{% provider_login_url 'orcid' %}" class="w3-button w3-theme-b1">
                                     <h4 class="login-button">Login</h4>

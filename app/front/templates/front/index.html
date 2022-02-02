@@ -6,10 +6,13 @@
   <p>Taxonmanager frontpage</p>
 
   {% if user.is_authenticated %}
-  <p>Hello, {{ user.username }}! You are logged in.<br><a href="/accounts/logout/">Logout</a></p>
+  <p>Hello, {{ user.username }}! You are logged in.<br></p>
+
   {% else %}
   <p>Hello guest! <a href="{% provider_login_url 'orcid' %}">Sign in with Orcid</a></p>
   {% endif %}
+
+
  
   
   

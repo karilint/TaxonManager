@@ -5,3 +5,4 @@ nginx/certs/dhparam.pem
 node_modules/
 venv/
 videos/
+.pytest_cache/

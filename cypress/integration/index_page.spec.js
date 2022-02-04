@@ -16,6 +16,11 @@ describe("TaxonManager", () => {
     cy.contains("Help")
     cy.contains("2022")
     cy.get('#mySidebar')
+
+    //add reference button, not logged in
+    cy.contains("Add reference").should("not.exist")
+    cy.visit('http://localhost:8000/add_reference')
+    cy.url().should('eq', 'http://localhost:8000/')
   })
   it("Menu shows up on sidebar, on small screens", () => {
     //menu does not show on larger screens

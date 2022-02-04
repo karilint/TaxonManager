@@ -1,8 +1,14 @@
 {% extends "front/base.html" %}
-{% block content %}
+{% block content %} 
+{% if user.is_authenticated %}
+    <bod>
+      <p>Add a reference</p>
+    </bod>>           
 
-<body>
-  <p>Add a reference</p>
-</body>
-
+{% else %}
+  <head>
+  <meta http-equiv="Refresh" content="0;url=/">
+  </head>
+  
+{% endif %}
 {% endblock %}

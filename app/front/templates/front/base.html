@@ -392,7 +392,7 @@
         <div class="page-container w3-container">
             <div class="navigation list-item w3-theme-beige w3-sidebar w3-bar-block w3-collapse w3-animate-left w3-card"
                 id="mySidebar">
-                <div class="showMenu">
+                <div class="showMenu" id ="menuForSmallScreen">
                     <div class="w3-dropdown-hover w3-left">
                         <button class="w3-button w3-theme-b1">Menu</button>
                         <div class="w3-dropdown-content w3-bar-block w3-border" style="right:0">
@@ -404,7 +404,9 @@
                     <br><br>
                 </div>
                 <h4 class="w3-bar-item">Features</h4>
+                {% if user.is_authenticated %}
                 <a class="w3-bar-item w3-button" href="/add_reference"> Add reference </a>
+                {% endif %}
                 <a class="w3-bar-item w3-button" href="/references"> References </a>
             </div>
         </div>

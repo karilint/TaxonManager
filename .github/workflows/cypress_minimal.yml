@@ -20,6 +20,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
         working-directory: ./app
+      - name: Make migrations
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate
+        working-directory: ./app      
       - name: Create test user
         run: |
           python manage.py shell --command="from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('testaaja', 'admin@admin.com', 'cypress')"

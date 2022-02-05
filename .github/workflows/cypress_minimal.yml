@@ -30,7 +30,7 @@ jobs:
           python manage.py shell --command="from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('testaaja', 'admin@admin.com', 'cypress')"
         working-directory: ./app
       - name: Run backend
-        run: python manage.py runserver
+        run: python manage.py runserver &
         working-directory: ./app
 
       - name: Cypress run

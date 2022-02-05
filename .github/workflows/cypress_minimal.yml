@@ -3,7 +3,7 @@ name: ci-staging
 on:
   push:
     branches:
-      - 'cypress_minimal'
+      - 'cypress_login'
 
 jobs:
   test:
@@ -21,7 +21,7 @@ jobs:
           pip install -r requirements.txt
         working-directory: ./app
       - name: Run backend
-        run: python manage.py testserver testdata/SampleData &
+        run: python manage.py runserver
         working-directory: ./app
 
       - name: Cypress run
@@ -29,4 +29,4 @@ jobs:
         with:
             wait-on: http://localhost:8000
             config: baseUrl=http://localhost:8000
-     
+    

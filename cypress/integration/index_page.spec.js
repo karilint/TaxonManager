@@ -22,7 +22,7 @@ describe("TaxonManager", () => {
     cy.visit("http://localhost:8000/add_reference");
     cy.url().should("eq", "http://localhost:8000/");
   });
-  it("Menu shows up on sidebar, on small screens", () => {
+  it("Menu shows up on sidebar and adapts to logging in and out, on small screens", () => {
     //menu does not show on larger screens
     cy.get("#menuForSmallScreen").should("not.be.visible");
 
@@ -31,19 +31,25 @@ describe("TaxonManager", () => {
     cy.get(".header-left .header-button").click();
     cy.contains("Menu");
 
-    // menu's login button works
+    // menu contains login and help button
     cy.get("#menuForSmallScreen")
-      .invoke("show")
-      .contains("Login")
-      .click({ force: true });
-    cy.url().should("include", "login");
+    cy.contains("Login")
+    cy.contains("Help")
 
-    // menu's help button works --will be updated when help page is established.
-    cy.get(".header-left .header-button").click();
+    // login via the admin page to bypass orcid authentication
+    cy.visit("http://localhost:8000/admin/login/?next=/admin/");
+    cy.get("#id_username").type("testaaja");
+    cy.get("#id_password").type("cypress");
+    cy.contains("Log in").click();
+    cy.visit("http://localhost:8000/");
+
+    // menu contains logout button but no login button
     cy.get("#menuForSmallScreen")
-      .invoke("show")
-      .contains("Help")
-      .click({ force: true });
+    cy.contains("Logout").click({ force: true });
+
+    // menu contains login button but no logout button
+    cy.get("#menuForSmallScreen")
+    cy.contains("Login")
   });
   it("Front page adapts to logging in and logging out", () => {
     // front page contains login button but no logout button

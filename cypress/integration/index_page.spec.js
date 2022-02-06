@@ -43,6 +43,11 @@ describe("TaxonManager", () => {
     cy.contains("Log in").click();
     cy.visit("http://localhost:8000/");
 
+    //add reference button, logged in
+    cy.contains("Add reference");
+    cy.visit("http://localhost:8000/add_reference/");
+    cy.url().should("eq", "http://localhost:8000/add_reference/");
+
     // menu contains logout button but no login button
     cy.get("#menuForSmallScreen")
     cy.contains("Logout").click({ force: true });
@@ -50,6 +55,7 @@ describe("TaxonManager", () => {
     // menu contains login button but no logout button
     cy.get("#menuForSmallScreen")
     cy.contains("Login")
+
   });
   it("Front page adapts to logging in and logging out", () => {
     // front page contains login button but no logout button

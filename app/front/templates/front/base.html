@@ -376,11 +376,11 @@
                                     {% if redirect_field_value %}
                                       <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
                                     {% endif %}
-                                    <button class="w3-button w3-theme-b1" type="submit"><h4 class="logout-button">Logout</h4></button>
+                                    <button class="w3-button w3-theme-b1" type="submit"><h4 class="logout-button" id="logoutButton">Logout</h4></button>
                                 </form>
                                 {% else %}
                                 <a href="{% provider_login_url 'orcid' %}" class="w3-button w3-theme-b1">
-                                    <h4 class="login-button">Login</h4>
+                                    <h4 class="login-button" id="loginButton">Login</h4>
                                 </a>
                                 {% endif %}
                             </div>
@@ -396,8 +396,18 @@
                     <div class="w3-dropdown-hover w3-left">
                         <button class="w3-button w3-theme-b1">Menu</button>
                         <div class="w3-dropdown-content w3-bar-block w3-border" style="right:0">
-                            <a href="/login" class="w3-bar-item w3-button">Login</a>
-                            <a href="/" class="w3-bar-item w3-button">Help</a>
+                            {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'account_logout' %}">
+                                {% csrf_token %}
+                                {% if redirect_field_value %}
+                                  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                                {% endif %}
+                                <button class="w3-bar-item w3-button" type="submit" id="logoutButton">Logout</button>
+                            </form>
+                            {% else %}
+                            <a href="{% provider_login_url 'orcid' %}" class="w3-bar-item w3-button" id="loginButton">Login</a>
+                            {% endif %}
+                            <a href="/" class="w3-bar-item w3-button"> Help</a>
                         </div>
                     </div>
                     <br><br>

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+from . import views # pylint:disable=E0401
 
 urlpatterns = [
     path('', views.index, name='index'),

@@ -1,4 +1,4 @@
-from django.apps import AppConfig
+from django.apps import AppConfig # pylint:disable=W0611
 
 
 class FrontConfig(AppConfig):

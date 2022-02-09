@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'front.apps.FrontConfig',
 ]
 
+CRISPY_TEMPLATE_PACK = 'uni_form'
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
@@ -100,6 +101,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                
             ],
         },
     },

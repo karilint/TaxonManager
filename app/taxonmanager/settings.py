@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.orcid',
+    'refs',
+    'crispy_forms',
     'front.apps.FrontConfig',
 ]
 

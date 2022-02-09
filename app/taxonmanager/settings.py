@@ -50,6 +50,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.orcid',
     'refs',
+<<<<<<< HEAD
+=======
+    'crispy_forms',
+>>>>>>> 8746e6712e6f20873f2cea35f6026ed77fdf7025
     'front.apps.FrontConfig',
 ]
 

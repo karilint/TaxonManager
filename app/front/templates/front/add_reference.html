@@ -1,14 +1,18 @@
 {% extends "front/base.html" %}
-{% block content %} 
+
+{% block content %}
 {% if user.is_authenticated %}
-    <bod>
-      <p>Add a reference</p>
-    </bod>>           
+<form method="post">
+  {% csrf_token %}
+  <table>{{ form.as_table }}</table>
+  <button type="submit">Add Reference</button>
+</form>
 
 {% else %}
-  <head>
+
+<head>
   <meta http-equiv="Refresh" content="0;url=/">
-  </head>
-  
+</head>
+
 {% endif %}
 {% endblock %}

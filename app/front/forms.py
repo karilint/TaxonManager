@@ -1,31 +1,81 @@
 from django import forms
 
-#     authors         = models.CharField(max_length=80)
-#     year            = models.CharField(max_length=4)
-#     edition         = models.CharField(max_length=10)
-#     volume          = models.CharField(max_length=10)
-#     no_of_pages     = models.CharField(max_length=20)
-#     publisher       = models.CharField(max_length=20)
-#     city            = models.CharField(max_length=15)
-#     title           = models.CharField(max_length=30)
-#     journal         = models.CharField(max_length=200)
-#     bookTitle       = models.CharField(max_length=200)
-#     referenceType 
-
 class ReferenceForm(forms.Form):
-    author = forms.CharField(
+    authors = forms.CharField(
         label = "Author(s) of the reference",
+        help_text="Comma-delimited names with space-separated initials first (no ANDs). e.g. \"A. N. Other, B.-C. Person Jr., Ch. Someone-Someone, N. M. L. Haw Haw\""
+    )
+
+    title = forms.CharField(
+        label = "Title",
+        help_text="Best-effort UTF-8 encoded plaintext version of title. No HTML tags, markdown or LaTeX."
+    )
+
+    titlehtml = forms.CharField(
+        label = "Title html",
+        help_text="Valid HTML version of title. Don't wrap with <p> or other tags."
+    )
+
+    titlelatex = forms.CharField(
+        label = "Title latex",
+        help_text="LaTeX version of title. Don't escape backslashes (\) but do use valid LaTeX for accented and similar characers."
+    )
+
+    journal = forms.CharField(
+        label = "Journal",
+        help_text=""
+    )
+
+    volume = forms.CharField(
+        label = "Volume",
+        help_text=""
+    )
+
+    pagestart = forms.CharField(
+        label = "Page start",
+        help_text=""
+    )
+
+    pageend = forms.CharField(
+        label = "Page end",
+        help_text=""
+    )
+
+    articlenumber = forms.CharField(
+        label = "Article number",
+        help_text=""
     )
 
     year = forms.CharField(
-        label = "Reference year",
+        label = "Year",
         widget=forms.TextInput(attrs={'placeholder': '2022'})
     )
 
-    edition = forms.CharField(
-        label = "Edition",
+    note = forms.CharField(
+        label = "Note",
     )
 
-    volume = forms.IntegerField(
-        label = "Volume",
+    notehtml = forms.CharField(
+        label = "Note html",
+    )
+
+    notelatex = forms.CharField(
+        label = "Note latex",
+    )
+
+    doi = forms.CharField(
+        label = "Doi",
+    )
+
+    bibcode = forms.CharField(
+        label = "Bibcode",
+    )
+
+    url = forms.CharField(
+        label = "Url",
+        help_text="If not provided, this will be automatically constructed as https://dx.doi.org/<DOI> if possible."
+    )
+
+    bibtex = forms.IntegerField(
+        label = "Bibtex",
     )

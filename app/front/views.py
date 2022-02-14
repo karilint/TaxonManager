@@ -1,5 +1,6 @@
 from django import template
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -15,5 +16,6 @@ def login(request):
 def view_reference(request):
     return render(request, 'front/references.html')
 
+@login_required(redirect_field_name=None, login_url='/')
 def add_reference(request):
     return render(request, 'front/add_reference.html')

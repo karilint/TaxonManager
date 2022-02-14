@@ -29,6 +29,9 @@ jobs:
         run: |
           python manage.py shell --command="from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('testaaja', 'admin@admin.com', 'cypress')"
         working-directory: ./app
+      - name: Run unit tests
+        run: python manage.py test -v2
+        working-directory: ./app
       - name: Run backend
         run: python manage.py runserver &
         working-directory: ./app

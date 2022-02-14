@@ -8,13 +8,13 @@ In the scientific classification of fossil species, organisms are organized into
 
 [Definition of done](./docs/definition_of_done.md)
 
+[Testing guide](./docs/testingGuide.md)
+
 ## Development Environment
 
 [Development Environment Instructions](./docs/dev_environment.md)
 
 [Development Environment](https://Taxonmanager-staging.it.helsinki.fi)
-
-[Cypress guide](./docs/cypressGuide.md)
 
 ## Production Environment
 
@@ -22,6 +22,7 @@ In the scientific classification of fossil species, organisms are organized into
 
 ## Project progress
 
-[Product Backlog](https://github.com/karilint/TaxonManager/projects/1)  
+[Product Backlog](https://github.com/karilint/TaxonManager/projects/1) 
+
 [Sprint Backlog](https://docs.google.com/spreadsheets/d/1Yv0OK8U75Q2zwGUySA_2B9S3rYz8OBQKHfaZ8EV1g_w/edit#gid=0)
 

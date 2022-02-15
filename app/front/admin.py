@@ -1,5 +1,6 @@
 from django.contrib import admin # pylint:disable=W0611
-from front.models import *
+from front.models import (Comment, Expert, ExpertsGeographicDiv, GeographicDiv, Hierarchy, Kingdom, Publication,
+ReferenceLink, SynonymLink, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, TuCommentLink)
 
 admin.site.register(Comment)
 admin.site.register(Expert)

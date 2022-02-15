@@ -43,30 +43,30 @@ class TaxonAuthorLkp(models.Model):
         unique_together = (('taxon_author_id', 'kingdom_id'))
 
     taxon_author_id = models.IntegerField(primary_key=True)
-    taxon_author = models.CharField(max_length=100)
-    update_date = models.DateTimeField()
+    taxon_author = models.CharField(max_length=100, null=True, blank=True)
+    update_date = models.DateTimeField(null=True, blank=True)
     kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
-    short_author = models.CharField(max_length=50)
+    short_author = models.CharField(max_length=50, null=True, blank=True)
 
 class TaxonomicUnit(models.Model):
     """
     Taxonomic Units
     """
     tsn = models.AutoField(primary_key=True)
-    unit_ind1 = models.CharField(max_length=1, null=True)
-    unit_name1 = models.CharField(max_length=35, null=True)
-    unit_ind2 = models.CharField(max_length=1, null=True)
-    unit_name2 = models.CharField(max_length=35, null=True)
-    unit_ind3 = models.CharField(max_length=7, null=True)
-    unit_name3 = models.CharField(max_length=35, null=True)
-    unit_ind4 = models.CharField(max_length=7, null=True)
-    unit_name4 = models.CharField(max_length=35, null=True)
-    unnamed_taxon_ind = models.CharField(max_length=100, null=True)
-    name_usage = models.CharField(max_length=100, null=True)
-    unaccept_reason = models.CharField(max_length=100, null=True)
-    credibility_rtng = models.CharField(max_length=100, null=True)
-    completeness_rtng = models.CharField(max_length=100, null=True)
-    currency_rating = models.CharField(max_length=100, null=True)
+    unit_ind1 = models.CharField(max_length=1, null=True, blank=True)
+    unit_name1 = models.CharField(max_length=35, null=True, blank=True)
+    unit_ind2 = models.CharField(max_length=1, null=True, blank=True)
+    unit_name2 = models.CharField(max_length=35, null=True, blank=True)
+    unit_ind3 = models.CharField(max_length=7, null=True, blank=True)
+    unit_name3 = models.CharField(max_length=35, null=True, blank=True)
+    unit_ind4 = models.CharField(max_length=7, null=True, blank=True)
+    unit_name4 = models.CharField(max_length=35, null=True, blank=True)
+    unnamed_taxon_ind = models.CharField(max_length=100, null=True, blank=True)
+    name_usage = models.CharField(max_length=100, null=True, blank=True)
+    unaccept_reason = models.CharField(max_length=100, null=True, blank=True)
+    credibility_rtng = models.CharField(max_length=100, null=True, blank=True)
+    completeness_rtng = models.CharField(max_length=100, null=True, blank=True)
+    currency_rating = models.CharField(max_length=100, null=True, blank=True)
     phylo_sort_seq = models.IntegerField(null=True, blank=True)
     initial_time_stamp = models.DateTimeField(null=True, blank=True)
     parent_tsn = models.IntegerField()
@@ -91,11 +91,11 @@ class Hierarchy(models.Model):
     """
     Describes hierarchies, I guess?
     """
-    hierarchy_string = models.CharField(max_length=300)
+    hierarchy_string = models.CharField(max_length=300, null=True, blank=True)
     tsn = models.ForeignKey(TaxonomicUnit,on_delete=models.CASCADE) # models.IntegerField(null=True)#
-    parent_tsn = models.IntegerField(default=0)
-    level =  models.IntegerField()
-    childrencount = models.IntegerField(default=0)
+    parent_tsn = models.IntegerField(null=True, blank=True)
+    level =  models.IntegerField(null=True, blank=True)
+    childrencount = models.IntegerField(null=True, blank=True)
 
 class TuCommentLink(models.Model):
     """
@@ -106,7 +106,7 @@ class TuCommentLink(models.Model):
         Comment,
         on_delete=models.CASCADE
     )
-    update_date = models.DateTimeField()
+    update_date = models.DateTimeField(null=True, blank=True)
 
 class Publication(models.Model):
     class Meta:
@@ -114,18 +114,18 @@ class Publication(models.Model):
 
     pub_id_prefix = models.CharField(max_length=3, unique=True)
     publication_id = models.IntegerField(primary_key=True)
-    reference_author = models.CharField(max_length=100)
-    title = models.CharField(max_length=255)
-    publication_name = models.CharField(max_length=255)
-    listed_pub_date = models.DateTimeField()
-    actual_pub_date = models.DateTimeField()
-    publisher = models.CharField(max_length=80)
-    pub_place = models.CharField(max_length=40)
-    isbn = models.CharField(max_length=16)
-    issn = models.CharField(max_length=40)
-    pages = models.CharField(max_length=15)
-    pub_comment = models.CharField(max_length=500)
-    update_date = models.DateTimeField()
+    reference_author = models.CharField(max_length=100,null=True, blank=True)
+    title = models.CharField(max_length=255,null=True, blank=True)
+    publication_name = models.CharField(max_length=255,null=True, blank=True)
+    listed_pub_date = models.DateTimeField(null=True, blank=True)
+    actual_pub_date = models.DateTimeField(null=True, blank=True)
+    publisher = models.CharField(max_length=80,null=True, blank=True)
+    pub_place = models.CharField(max_length=40,null=True, blank=True)
+    isbn = models.CharField(max_length=16,null=True, blank=True)
+    issn = models.CharField(max_length=40,null=True, blank=True)
+    pages = models.CharField(max_length=15,null=True, blank=True)
+    pub_comment = models.CharField(max_length=500,null=True, blank=True)
+    update_date = models.DateTimeField(null=True, blank=True)
     
     def __repr__(self):
         return "Publication id: {self.publication_id}"
@@ -171,8 +171,8 @@ class GeographicDiv(models.Model):
         unique_together = (('tsn', 'geographic_value'))
 
     tsn = models.ForeignKey(TaxonomicUnit, on_delete=models.CASCADE, unique=True)
-    geographic_value = models.CharField(max_length=45)
-    update_date = models.DateTimeField()
+    geographic_value = models.CharField(max_length=45, null=True, blank=True)
+    update_date = models.DateTimeField(null=True, blank=True)
 
     # Relationship defining experts for a given geographical area
     experts = models.ManyToManyField(

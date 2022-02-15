@@ -1,29 +1,34 @@
 from django.db import models # pylint:disable=W0611
-import uuid
-from django.utils import timezone
+
+# (null=True, blank=True) allows empty fields, makes testing easier for now
 
 class Comment(models.Model):
-    commentator = models.CharField(max_length=200)
-    comment_detail = models.TextField()
-    comment_time_stamp = models.DateTimeField()
-    update_date = models.DateTimeField()
+    commentator = models.CharField(max_length=100)
+    comment_detail = models.TextField(max_length=2000)
+    comment_time_stamp = models.DateTimeField(null=True, blank=True)
+    update_date = models.DateTimeField(null=True, blank=True)
 
 # Create your models here.
 class Kingdom(models.Model):
     """ Defines a kingdom """
-    kingdom_name = models.CharField(max_length=100, blank=False)
-    update_date = models.DateTimeField()
+    kingdom_name = models.CharField(max_length=20)
+    update_date = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return "Kingdom: {}".format(
+            self.kingdom_name,
+        )
 
 class TaxonUnitType(models.Model):
     class Meta:
         unique_together = (('kingdom', 'rank_id'))
 
     kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
-    rank_id = models.IntegerField(default=0)
+    rank_id = models.IntegerField(null=True, blank=True)
     rank_name = models.CharField(max_length=100)
-    dir_parent_rank_id = models.IntegerField(default=0)
-    req_parent_rank_id = models.IntegerField(default=0)
-    update_date = models.DateTimeField()
+    dir_parent_rank_id = models.IntegerField(null=True, blank=True)
+    req_parent_rank_id = models.IntegerField(null=True, blank=True)
+    update_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return "Kingdom: {}, rank_id:{}, rank_name:{}, dir_parent_rank_id:{}".format(
@@ -37,7 +42,7 @@ class TaxonAuthorLkp(models.Model):
     class Meta:
         unique_together = (('taxon_author_id', 'kingdom_id'))
 
-    taxon_author_id = models.IntegerField(primary_key=True) #models.ForeignKey(TaxonomicUnit, to_field='taxon_author_id', on_delete=models.CASCADE)
+    taxon_author_id = models.IntegerField(primary_key=True)
     taxon_author = models.CharField(max_length=100)
     update_date = models.DateTimeField()
     kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
@@ -48,30 +53,31 @@ class TaxonomicUnit(models.Model):
     Taxonomic Units
     """
     tsn = models.AutoField(primary_key=True)
-    unit_ind1 = models.CharField(max_length=100)
-    unit_name1 = models.CharField(max_length=100)
-    unit_ind2 = models.CharField(max_length=100)
-    unit_name2 = models.CharField(max_length=100)
-    unit_ind3 = models.CharField(max_length=100)
-    unit_name3 = models.CharField(max_length=100)
-    unit_ind4 = models.CharField(max_length=100)
-    unnamed_taxon_ind = models.CharField(max_length=100)
-    name_usage = models.CharField(max_length=100)
-    unaccept_reason = models.CharField(max_length=100)
-    credibility_rtng = models.CharField(max_length=100)
-    completeness_rtng = models.CharField(max_length=100)
-    currency_rating = models.CharField(max_length=100)
-    phylo_sort_seq = models.IntegerField(default=0)
-    initial_time_stamp = models.DateTimeField()
-    parent_tsn = models.IntegerField(default=0)
+    unit_ind1 = models.CharField(max_length=1, null=True)
+    unit_name1 = models.CharField(max_length=35, null=True)
+    unit_ind2 = models.CharField(max_length=1, null=True)
+    unit_name2 = models.CharField(max_length=35, null=True)
+    unit_ind3 = models.CharField(max_length=7, null=True)
+    unit_name3 = models.CharField(max_length=35, null=True)
+    unit_ind4 = models.CharField(max_length=7, null=True)
+    unit_name4 = models.CharField(max_length=35, null=True)
+    unnamed_taxon_ind = models.CharField(max_length=100, null=True)
+    name_usage = models.CharField(max_length=100, null=True)
+    unaccept_reason = models.CharField(max_length=100, null=True)
+    credibility_rtng = models.CharField(max_length=100, null=True)
+    completeness_rtng = models.CharField(max_length=100, null=True)
+    currency_rating = models.CharField(max_length=100, null=True)
+    phylo_sort_seq = models.IntegerField(null=True, blank=True)
+    initial_time_stamp = models.DateTimeField(null=True, blank=True)
+    parent_tsn = models.IntegerField()
     taxon_author_id = models.ForeignKey(TaxonAuthorLkp, on_delete=models.CASCADE)
     kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
-    rank_id = models.IntegerField(default=0)
-    hybrid_author_id = models.IntegerField(default=0)
-    update_date = models.DateTimeField()
-    uncertain_prnt_ind = models.CharField(max_length=100)
-    n_usage = models.CharField(max_length=100)
-    complete_name = models.CharField(max_length=100)
+    rank_id = models.IntegerField(null=True, blank=True)
+    hybrid_author_id = models.IntegerField(null=True, blank=True)
+    update_date = models.DateTimeField(null=True, blank=True)
+    uncertain_prnt_ind = models.CharField(max_length=100, null=True, blank=True)
+    n_usage = models.CharField(max_length=100, null=True, blank=True)
+    complete_name = models.CharField(max_length=100, null=True, blank=True)
     
     # Relationships
     comments = models.ManyToManyField(
@@ -79,7 +85,7 @@ class TaxonomicUnit(models.Model):
     )
 
     def __str__(self):
-        return self.id
+        return f"tsn_id: {self.tsn} parent_tsn: {self.parent_tsn}"
 
 class Hierarchy(models.Model):
     """

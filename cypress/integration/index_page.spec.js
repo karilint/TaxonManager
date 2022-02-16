@@ -17,10 +17,9 @@ describe("TaxonManager", () => {
     cy.contains("2022");
     cy.get("#mySidebar");
 
-    //add reference button, not logged in
     cy.contains("Add reference").should("not.exist");
-    cy.visit("http://localhost:8000/add_reference");
-    cy.url().should("eq", "http://localhost:8000/");
+    cy.visit("http://localhost:8000/add_reference/");
+    cy.contains("Add a reference, this page will provide a form to add a reference").should("not.exist");
   });
   it("Menu shows up on sidebar and adapts to logging in and out, on small screens", () => {
     //menu does not show on larger screens
@@ -42,11 +41,6 @@ describe("TaxonManager", () => {
     cy.get("#id_password").type("cypress");
     cy.contains("Log in").click();
     cy.visit("http://localhost:8000/");
-
-    //add reference button, logged in
-    cy.contains("Add reference");
-    cy.visit("http://localhost:8000/add_reference/");
-    cy.url().should("eq", "http://localhost:8000/add_reference/");
 
     // menu contains logout button but no login button
     cy.get("#menuForSmallScreen")
@@ -79,5 +73,36 @@ describe("TaxonManager", () => {
     // front page contains login button but no logout button
     cy.get("#loginButton").should("exist");
     cy.get("#logout-button").should("not.exist");
+  });
+
+  it("Create group contributor and test how view changes", () => {
+    cy.visit("http://localhost:8000/admin/login/?next=/admin/");
+    cy.get("#id_username").type("testaaja");
+    cy.get("#id_password").type("cypress");
+    cy.contains("Log in").click();
+
+    //add testaaja to the group
+    cy.contains("Users").click();
+    cy.visit("http://localhost:8000/admin/auth/user/2/change/");
+    cy.contains("Choose all").click();
+    cy.contains("Save and continue").click();
+
+    //add reference button, logged in and part of group contributors
+    cy.visit("http://localhost:8000/");
+    cy.contains("Add reference");
+    cy.visit("http://localhost:8000/add_reference/");
+    cy.url().should("eq", "http://localhost:8000/add_reference/");
+    cy.contains("Add a reference, this page will provide a form to add a reference");
+
+    cy.visit('http://localhost:8000/admin/auth/user/2/change/');
+    cy.contains("Remove all").click();
+    cy.contains("Save and continue").click();
+    
+    //add reference button, logged in and part of group contributors
+    cy.visit("http://localhost:8000/");
+    cy.contains("Add reference").should("not.exist");
+    cy.visit("http://localhost:8000/add_reference/");
+    cy.contains("Add a reference, this page will provide a form to add a reference").should("not.exist");
+    cy.contains("Logout").click({ force: true });
   });
 });

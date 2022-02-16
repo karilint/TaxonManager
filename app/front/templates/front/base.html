@@ -160,7 +160,6 @@
             padding-left: 40px !important;
         }
 
-
         .navigation h4 {
             padding: 10px 0;
             font-weight: bold;
@@ -208,7 +207,6 @@
         }
 
 
-
         /* Clear floats after the columns */
         section:after {
             content: "";
@@ -242,7 +240,6 @@
                 display: none;
             }
         }
-
 
         /* Begin style from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_full_page_tabs*/
         /* Style tab links */
@@ -414,9 +411,11 @@
                     <br><br>
                 </div>
                 <h4 class="w3-bar-item">Features</h4>
-                {% if user.is_authenticated %}
+                {% for x in user.groups.all %}  
+                {% if x.name == 'contributors' %}          
                 <a class="w3-bar-item w3-button" href="/add_reference"> Add reference </a>
                 {% endif %}
+                {% endfor %}
                 <a class="w3-bar-item w3-button" href="/references"> References </a>
             </div>
         </div>
@@ -447,7 +446,6 @@
     </script>
     </div>
 </body>
-
 
 
 </html>

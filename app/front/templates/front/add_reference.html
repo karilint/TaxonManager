@@ -1,14 +1,11 @@
 {% extends "front/base.html" %}
 {% block content %} 
-{% if user.is_authenticated %}
-    <bod>
-      <p>Add a reference</p>
-    </bod>>           
-
-{% else %}
-  <head>
-  <meta http-equiv="Refresh" content="0;url=/">
-  </head>
-  
+<body>
+{% for x in user.groups.all %}  
+{% if x.name == 'contributors' %} 
+<p>Add a reference, this page will provide a form to add a reference</p>
 {% endif %}
+{% endfor %}
+</body>
 {% endblock %}
+

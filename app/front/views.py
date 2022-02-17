@@ -32,7 +32,6 @@ def view_reference(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     c = {'page_obj': page_obj, 'paginator': paginator}
-    # return render(request, 'refs/refs-list.html')
     return render(request, 'front/references.html', c)
 
 def search(request):

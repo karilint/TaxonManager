@@ -3,7 +3,7 @@ name: ci-staging
 on:
   push:
     branches:
-      - 'unittest'
+      - 'database_with_tests'
 
 jobs:
   test:

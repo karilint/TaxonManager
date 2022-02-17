@@ -1,20 +1,20 @@
 {% extends "front/base.html" %}
 {% load socialaccount %}
 {% block content %}
-
+{% load static %}
 <body>
-  <p>Taxonmanager frontpage</p>
-
+  <h1><b>Taxonmanager</b></h1>
   {% if user.is_authenticated %}
   <p>Hello, {{ user.username }}! You are logged in.<br></p>
 
   {% else %}
   <p>Hello guest! <a href="{% provider_login_url 'orcid' %}">Sign in with Orcid</a></p>
   {% endif %}
-
-
- 
+  <div id="image_text">
+    <img src="{% static "images/bird.jpg" %}" height="275" width="700" alt="bird image" class="responsive">
+    <p id="image_credit">Picture © Luonnontieteellinen Keskusmuseo</p>
+  </div>
   
-  
+  <p>TaxonManger is a tool for classifying fossil species.<br><br>In the scientific classification of fossil species, organisms are organized into hierarchical categories, taxa. Different taxon levels include, for example, class, order, tribe, genus, and species. As research progresses, knowledge about the relationships of the species also increases, which may lead to changes in their taxonomy.</p>
 </body>
 {% endblock %}

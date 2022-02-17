@@ -15,10 +15,10 @@ describe("TaxonManager", () => {
     cy.contains("Features");
     cy.contains("Help");
     cy.contains("2022");
+    cy.contains("Add reference")
     cy.get("#mySidebar");
 
     //add reference button, not logged in
-    cy.contains("Add reference").should("not.exist");
     cy.visit("http://localhost:8000/add_reference");
     cy.url().should("eq", "http://localhost:8000/");
   });

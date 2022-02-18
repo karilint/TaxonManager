@@ -8,7 +8,8 @@
   <p>Hello, {{ user.username }}! You are logged in.<br></p>
 
   {% else %}
-  <p>Hello guest! <a href="{% provider_login_url 'orcid' %}">Sign in with Orcid</a></p>
+  <p>Hello guest! Log in with your <a href="{% provider_login_url 'orcid' %}">ORCID account.</a></p>
+  <p>Upon the first time of use we will send an e-mail to you for verification. Please follow the link provided to finalize the signup process.</p>
   {% endif %}
   <div class="image_text">
     <img src="{% static "images/bird.jpg" %}" height="275" width="700" alt="bird image" class="responsive">

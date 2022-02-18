@@ -190,11 +190,18 @@ class Expert(models.Model):
 
 
 class GeographicDiv(models.Model):
+    """ Model of a geographical division """
+
     class Meta:
         unique_together = (('tsn', 'geographic_value'))
 
+    # TODO: This causes a warning, but this is left as is
+    # until we understand the requirements better.
     tsn = models.ForeignKey(
-        TaxonomicUnit, on_delete=models.CASCADE, unique=True)
+        TaxonomicUnit,
+        on_delete=models.CASCADE,
+        unique=True
+    )
     geographic_value = models.CharField(max_length=45, null=True, blank=True)
     update_date = models.DateTimeField(null=True, blank=True)
 
@@ -208,6 +215,8 @@ class GeographicDiv(models.Model):
 
 
 class ExpertsGeographicDiv(models.Model):
+    """ join-table between Expert and
+    GeographicDiv tables """
     # FIXME: Connecting the ExpertsGeographicDiv with TSN might not work
     # correctly to achieve many-to-many relationship between experts and
     # geographic areas. If we defined an ID to GeographicDiv table, this

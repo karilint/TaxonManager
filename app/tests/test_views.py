@@ -17,9 +17,7 @@ class StatuscodeTest(TestCase):
 
     def test_add_reference_page_returns_redirect_before_logging_in(self):
         response = self.client.get('/add-references/')
-        # FIXME: Status code is now 404 instead of 302. Couldn't think
-        # of why, quickly.
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 302)
 
     def test_add_reference_page_returns_ok_after_logging_in(self):
         self.client.force_login(self.test_user)
@@ -43,3 +41,4 @@ class TemplateTest(TestCase):
         self.client.force_login(self.test_user)
         response = self.client.get('/add-references/')
         self.assertTemplateUsed(response, 'front/add_reference.html')
+

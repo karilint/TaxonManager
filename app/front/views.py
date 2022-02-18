@@ -17,7 +17,7 @@ from refs.models import Ref, get_ref_from_doi
 from .utils import canonicalize_doi
 from refs.forms import RefForm
 from refs.filters import RefFilter
-
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     return render(request, 'front/index.html')
@@ -68,7 +68,7 @@ def search(request):
               'paginator': paginator})
     return render(request, 'front/search.html', c)
 
-
+@login_required
 def refs_add(request, pk=None):
     c = {'pk': pk if pk else ''}
     if request.method == 'POST':

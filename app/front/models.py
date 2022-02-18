@@ -237,4 +237,8 @@ class SynonymLink(models.Model):
     update_date = models.DateTimeField()
 
     def __str__(self):
-        return f"tsn: {self.tsn}"
+        return "tsn: {}, tsn_accepted: {}, update_date: {}".format(
+            self.tsn,
+            self.tsn_accepted,
+            self.update_date
+        )

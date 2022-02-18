@@ -132,7 +132,8 @@ class ModelTest(TestCase):
     
     def test_taxonomic_unit_refers_to_comments_correctly(self):
         """ Tests that the many-to-many relationship
-        between taxonomic_unit and comments works """
+        between taxonomic_unit and comments works.
+        Could be prettier """
         for i in range(len(self.taxonomic_units)):
             taxonomic_unit = self.taxonomic_units[i]
             comment = taxonomic_unit.comments.all()[0]

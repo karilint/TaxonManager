@@ -134,7 +134,7 @@
         }
 
         .list-item .w3-button:hover {
-            background-color: #f0f1fa !important;
+            background-color: #bed4a5 !important;
         }
 
         .page-container {
@@ -357,15 +357,34 @@
             left: -17px;
         }
 
-        #image_text
+        .image_text
         {
             text-align: center;
         }
+
         #image_credit
         {
             color: #9c9994;
             font-size: small;
+            font-weight: normal;
         }
+
+        #image_credit_header
+        {
+            opacity: 1;
+            color: #ffffff;
+            font-size: 8px;
+            position: absolute;
+            bottom: -18px;
+        }
+
+        #welcome_header
+        {
+            position: absolute;
+            top: -15px;
+            left:-5px;
+        }
+  
     </style>
 
     <!-- css used for Django select2 -->
@@ -384,7 +403,11 @@
                                 onclick="w3_open()"></i>
                         </div>
                         <div class="w3-left">
-                            <div class="w3-hide-medium w3-hide-small"><img src="{% static "images/nowdatabase.jpg" %}" alt="now database" height="115" width="150" class="responsive" id="header_image"> <h2 class="title-logo"><a href="/">Welcome</a></h2></div>
+                            <div class="w3-hide-medium w3-hide-small">
+                                <img src="{% static "images/nowdatabase.jpg" %}" alt="now database" height="115" width="150" class="responsive" id="header_image">
+                                <div id="image_credit_header">Picture_©_Noira_Martiskainen</div>
+                                <h2 class="title-logo"><a href="/" id="welcome_header">Welcome</a></h2>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -445,6 +468,10 @@
                     </tr>
                     <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/references"> References </a></th></tr>
                     <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/"> Help </a></th></tr>
+                    <tr><th> <div class="w3-hide-large image_text">
+                        <img src="{% static "images/nowdatabase.jpg" %}" alt="now database" height="95" width="120" class="responsive">
+                        <div id="image_credit""image_credit_header2">Picture © Noira Martiskainen</div>
+                    </div></th></tr>
                 </table>
             </div>
         </div>

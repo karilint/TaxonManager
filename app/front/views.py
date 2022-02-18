@@ -68,7 +68,7 @@ def search(request):
               'paginator': paginator})
     return render(request, 'front/search.html', c)
 
-@login_required
+# @login_required
 def refs_add(request, pk=None):
     c = {'pk': pk if pk else ''}
     if request.method == 'POST':

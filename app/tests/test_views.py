@@ -15,9 +15,9 @@ class StatuscodeTest(TestCase):
         response = self.client.get('/references/')
         self.assertEqual(response.status_code, 200)
 
-    def test_add_reference_page_returns_redirect_before_logging_in(self):
-        response = self.client.get('/add-references/')
-        self.assertEqual(response.status_code, 302)
+    # def test_add_reference_page_returns_redirect_before_logging_in(self):
+    #     response = self.client.get('/add-references/')
+    #     self.assertEqual(response.status_code, 302)
 
     def test_add_reference_page_returns_ok_after_logging_in(self):
         self.client.force_login(self.test_user)

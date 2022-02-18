@@ -6,3 +6,4 @@ node_modules/
 venv/
 videos/
 .pytest_cache/
+__pycache__/

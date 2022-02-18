@@ -94,3 +94,24 @@ def delete(request, pk):
     ref = get_object_or_404(Ref, pk=pk)
     ref.delete()
     return HttpResponseRedirect('/references')
+
+def resolve(request, pk=None):
+    # Look up DOI and pre-populate form, render to front/add.html
+    if request.method == 'GET':
+        doi = request.GET.get('doi')
+        doi = canonicalize_doi(doi)
+        if not pk:
+            try:
+                # We're trying to add a reference but one with the same DOI
+                # is in the database already.
+                ref = Ref.objects.get(doi=doi)
+                return HttpResponseRedirect(f'/front/add_reference/{ref.pk}')
+            except Ref.DoesNotExist:
+                ref = None
+        else:
+            ref = get_object_or_404(Ref, pk=pk)
+        ref = get_ref_from_doi(doi, ref)
+        form = RefForm(instance=ref)
+        c = {'form': form, 'pk': pk if pk else ''}
+        return render(request, 'front/add_reference.html', c)
+    raise Http404

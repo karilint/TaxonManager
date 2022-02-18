@@ -1,15 +1,8 @@
 {% extends "front/base.html" %}
-{% load crispy_forms_tags %}
 
 {% block content %}
 {% if user.is_authenticated %}
 {% include 'references/edit.html' %}
-
-<!-- <form method="post">
-  {% csrf_token %}
-  <table>{{ form.as_table }}</table>
-  <button type="submit">Add Reference</button>
-</form> -->
 
 {% else %}
 

@@ -3,9 +3,6 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-from refs.models import Ref
-from refs.forms import RefForm
-
 from django import forms
 
 from django.shortcuts import render, get_object_or_404
@@ -17,6 +14,10 @@ from refs.models import Ref, get_ref_from_doi
 from .utils import canonicalize_doi
 from refs.forms import RefForm
 from refs.filters import RefFilter
+
+# Django-simple-history history tracking for a third-party model
+from simple_history import register
+register(Ref)
 
 
 def index(request):

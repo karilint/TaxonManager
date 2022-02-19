@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang='en'>
 {% load socialaccount %}
-
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <title>TaxonManager</title>
@@ -14,12 +14,12 @@
         /* color themes */
         .w3-theme {
             color: #F5F3EC !important;
-            background-color: #3f2503 !important
+            background-color: #8ba064 !important
         }
 
         .w3-theme-b1 {
             color: #F5F3EC !important;
-            background-color: #3f2503 !important;
+            background-color: #8fa567 !important;
         }
 
         .w3-theme-b1:hover {
@@ -37,16 +37,14 @@
 
         .title-logo {
             font-family: 'Helvetica', cursive;
-            font-size: 60px;
+            font-size: 50px;
             text-align: right;
+            position: absolute;
+            left: 140px;
         }
 
         .title-logo a {
             text-decoration: none;
-        }
-
-        .title-logo::first-letter {
-            color: #665848;
         }
 
         .help-button,
@@ -81,12 +79,13 @@
         }
 
         .header-button .w3-button:hover {
-            background-color: #F5F3EC !important;
+            background-color: #edf5ec !important;
             color: #665848 !important;
         }
 
         .header-text-button .w3-button {
             font-family: 'Work Sans', sans-serif !important;
+            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
         }
 
         .header-left .w3-display-container {
@@ -135,7 +134,7 @@
         }
 
         .list-item .w3-button:hover {
-            background-color: #e6dcd0 !important;
+            background-color: #bed4a5 !important;
         }
 
         .page-container {
@@ -149,8 +148,8 @@
             overflow: scroll;
             height: calc(100% - 100px) !important;
             z-index: 3 !important;
-            width: 250px !important;
-            background-color: #F5F3EC !important;
+            width: 150px !important;
+            background-color: #f9fdf7 !important;
             overflow-y: auto;
             overflow-x: auto;
         }
@@ -159,7 +158,6 @@
             padding: 3px 16px !important;
             padding-left: 40px !important;
         }
-
 
         .navigation h4 {
             padding: 10px 0;
@@ -208,7 +206,6 @@
         }
 
 
-
         /* Clear floats after the columns */
         section:after {
             content: "";
@@ -242,7 +239,6 @@
                 display: none;
             }
         }
-
 
         /* Begin style from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_full_page_tabs*/
         /* Style tab links */
@@ -332,6 +328,60 @@
             overflow: hidden;
             transition: max-height 0.2s ease-out;
         }
+
+        #sideButton
+        {
+            text-align: center;
+            padding: 3px 16px !important;
+            border: 1px solid #3f2503 !important;
+            font-weight: normal;
+        }
+
+        #sideButton_notAvailable
+        {
+            text-align: center;
+            padding: 3px 16px !important;
+            border: 1px solid #000000 !important;
+            background-color: #d1ceca;
+            color: #9c9994;
+            font-weight: normal;
+        }
+
+        #header_image
+        {
+            position: absolute;
+            top: -25px;
+            left: -17px;
+        }
+
+        .image_text
+        {
+            text-align: center;
+        }
+
+        #image_credit
+        {
+            color: #9c9994;
+            font-size: small;
+            font-weight: normal;
+        }
+
+        #image_credit_header
+        {
+            opacity: 1;
+            color: #ffffff;
+            font-size: 8px;
+            position: absolute;
+            bottom: -18px;
+        }
+
+        #welcome_header
+        {
+            position: absolute;
+            top: -15px;
+            left:-5px;
+        }
+  
     </style>
 
     <!-- css used for Django select2 -->
@@ -350,24 +400,16 @@
                                 onclick="w3_open()"></i>
                         </div>
                         <div class="w3-left">
-                            <h2 class="title-logo"><a href="/">TaxonManager</a></h2>
+                            <div class="w3-hide-medium w3-hide-small">
+                                <img src="{% static "images/nowdatabase.jpg" %}" alt="now database" height="115" width="150" class="responsive" id="header_image">
+                                <div id="image_credit_header">Picture_©_Noira_Martiskainen</div>
+                                <h2 class="title-logo"><a href="/" id="welcome_header">Welcome</a></h2>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="header-right w3-display-right">
                     <div class="menu-item w3-display-container w3-hide-medium w3-hide-small">
-                        <div class="menu-item-left w3-display-left">
-                            <div class="w3-dropdown-hover w3-theme">
-                                <div class="header-button header-text-button">
-                                    <button class="w3-button w3-theme-b1">
-                                        <h4 class="help-button">Help <i class="fa fa-caret-down"></i></h4>
-                                    </button>
-                                </div>
-                                <div class="help-dropdown list-item w3-dropdown-content w3-bar-block w3-card-4">
-                                    <a href="/"> Example link </a><br>
-                                </div>
-                            </div>
-                        </div>
                         <div class="menu-item-right w3-display-right">
                             <div class="header-button header-text-button">
                                 {% if user.is_authenticated %}
@@ -407,18 +449,27 @@
                             {% else %}
                             <a href="{% provider_login_url 'orcid' %}" class="w3-bar-item w3-button" id="loginButton">Login</a>
                             {% endif %}
-                            <a href="/" class="w3-bar-item w3-button"> Help</a>
                         </div>
                     </div>
                     <br><br>
                     <br><br>
                 </div>
-                <h4 class="w3-bar-item">Features</h4>
-                <a class="w3-bar-item w3-button" href="{% url 'front:references' %}"> References </a>
-                <a class="w3-bar-item w3-button" href="{% url 'front:search' %}"> Search References </a>
-                {% if user.is_authenticated %}
-                <a class="w3-bar-item w3-button" href="{% url 'front:add-references' %}"> Add reference </a>
-                {% endif %}
+                <h4 class="w3-bar-item" id="sideHeader">Features</h4>
+                <table>
+                    <tr><th>{% if user.is_authenticated %}
+                        <a class="w3-bar-item w3-button" id="sideButton" href="/add-references"> Add reference </a>
+                        {% else %}
+                        <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/add-references"> Add reference </a>
+                        {% endif %}
+                    </th>
+                    </tr>
+                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/references"> References </a></th></tr>
+                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/"> Help </a></th></tr>
+                    <tr><th> <div class="w3-hide-large image_text">
+                        <img src="{% static "images/nowdatabase.jpg" %}" alt="now database" height="95" width="120" class="responsive">
+                        <div id="image_credit">Picture © Noira Martiskainen</div>
+                    </div></th></tr>
+                </table>
             </div>
         </div>
         <div class="main-content w3-main">
@@ -448,7 +499,5 @@
     </script>
     </div>
 </body>
-
-
 
 </html>

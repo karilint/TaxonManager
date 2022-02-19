@@ -10,14 +10,14 @@ from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import user_passes_test
-from .models import Ref, get_ref_from_doi
+from .models import Reference, get_ref_from_doi
 from .utils import canonicalize_doi
-from refs.forms import RefForm
+from .forms import RefForm
 from refs.filters import RefFilter
 
 # Django-simple-history history tracking for a third-party model
 from simple_history import register
-register(Ref)
+register(Reference)
 
 
 def index(request):
@@ -29,7 +29,7 @@ def login(request):
     return render(request, 'front/login.html')
 
 def view_reference(request):
-    refs = Ref.objects.all()
+    refs = Reference.objects.all().filter(visible=1)
     paginator = Paginator(refs, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -37,7 +37,7 @@ def view_reference(request):
     return render(request, 'front/references.html', c)
 
 def search(request):
-    ref_list = Ref.objects.all()
+    ref_list = Reference.objects.all().filter(visible=1)
     ref_filter = RefFilter(request.GET, queryset=ref_list)
     nresults = ref_filter.qs.count()
     filtered_qs = sorted(ref_filter.qs, key=lambda objects: objects.pk)
@@ -75,15 +75,15 @@ def refs_add(request, pk=None):
     if request.method == 'POST':
         ref = None
         if pk:
-            ref = Ref.objects.get(pk=pk)
+            ref = Reference.objects.get(pk=pk)
         form = RefForm(request.POST, instance=ref)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/references')
     else:
         try:
-            ref = Ref.objects.get(pk=pk)
-        except Ref.DoesNotExist:
+            ref = Reference.objects.get(pk=pk)
+        except Reference.DoesNotExist:
             ref = None
         form = RefForm(instance=ref)
 
@@ -92,7 +92,7 @@ def refs_add(request, pk=None):
 
 #@user_passes_test(user_can_edit)
 def delete(request, pk):
-    ref = get_object_or_404(Ref, pk=pk)
+    ref = get_object_or_404(Reference, pk=pk)
     ref.delete()
     return HttpResponseRedirect('/references')
 
@@ -105,12 +105,12 @@ def resolve(request, pk=None):
             try:
                 # We're trying to add a reference but one with the same DOI
                 # is in the database already.
-                ref = Ref.objects.get(doi=doi)
+                ref = Reference.objects.get(doi=doi)
                 return HttpResponseRedirect(f'/front/add_reference/{ref.pk}')
-            except Ref.DoesNotExist:
+            except Reference.DoesNotExist:
                 ref = None
         else:
-            ref = get_object_or_404(Ref, pk=pk)
+            ref = get_object_or_404(Reference, pk=pk)
         ref = get_ref_from_doi(doi, ref)
         form = RefForm(instance=ref)
         c = {'form': form, 'pk': pk if pk else ''}

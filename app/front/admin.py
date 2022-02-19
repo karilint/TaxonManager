@@ -2,9 +2,10 @@ from django.contrib import admin # pylint:disable=W0611
 
 # Register your models here.
 from simple_history.admin import SimpleHistoryAdmin
-from refs.models import Ref
+from simple_history.models import HistoricalRecords
+from .models import Reference
 
-admin.site.unregister(Ref)
+# admin.site.unregister(Reference)
 
 class RefAdmin(SimpleHistoryAdmin):
 
@@ -18,9 +19,11 @@ class RefAdmin(SimpleHistoryAdmin):
             return fields
         return None
 
-    search_fields = ('title', 'journal')
+    search_fields = ('authors', 'title', 'journal')
     history_list_display = ['changed_fields_with_values']
+    history = HistoricalRecords()
+
 
 
 # admin.site.register(Ref, SimpleHistoryAdmin)
-admin.site.register(Ref, RefAdmin)
+admin.site.register(Reference, RefAdmin)

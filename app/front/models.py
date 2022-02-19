@@ -12,6 +12,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+from email.policy import default
 from django.db import models
 import json
 import urllib.request
@@ -34,7 +35,7 @@ class UnresolvedDOIError(RefError):
 class ADSError(RefError):
     pass
 
-class Ref(models.Model):
+class Reference(models.Model):
     """A literature reference, for example a journal article, book etc."""
 
     source_type = 'article'
@@ -102,6 +103,7 @@ class Ref(models.Model):
     # JSON text string in CiteProc format.
     citeproc_json = models.TextField(null=True, blank=True)
 
+    visible = models.IntegerField(default=1)
 
     class Meta:
         app_label = 'refs'

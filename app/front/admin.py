@@ -4,8 +4,9 @@ from django.contrib import admin # pylint:disable=W0611
 from simple_history.admin import SimpleHistoryAdmin
 from simple_history.models import HistoricalRecords
 from .models import Reference
+from refs.models import Ref
 
-# admin.site.unregister(Reference)
+admin.site.unregister(Ref)
 
 class RefAdmin(SimpleHistoryAdmin):
 

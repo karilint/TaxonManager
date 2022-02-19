@@ -17,10 +17,6 @@ describe("TaxonManager", () => {
     cy.contains("2022");
     cy.contains("Add reference")
     cy.get("#mySidebar");
-
-    //add reference button, not logged in
-    cy.visit("http://localhost:8000/add_reference");
-    cy.url().should("eq", "http://localhost:8000/");
   });
   it("Menu shows up on sidebar and adapts to logging in and out, on small screens", () => {
     //menu does not show on larger screens
@@ -31,10 +27,9 @@ describe("TaxonManager", () => {
     cy.get(".header-left .header-button").click();
     cy.contains("Menu");
 
-    // menu contains login and help button
+    // menu contains login 
     cy.get("#menuForSmallScreen")
     cy.contains("Login")
-    cy.contains("Help")
 
     // login via the admin page to bypass orcid authentication
     cy.visit("http://localhost:8000/admin/login/?next=/admin/");
@@ -45,8 +40,8 @@ describe("TaxonManager", () => {
 
     //add reference button, logged in
     cy.contains("Add reference");
-    cy.visit("http://localhost:8000/add_reference/");
-    cy.url().should("eq", "http://localhost:8000/add_reference/");
+    cy.visit("http://localhost:8000/add-references/");
+    cy.url().should("eq", "http://localhost:8000/add-references/");
 
     // menu contains logout button but no login button
     cy.get("#menuForSmallScreen")
@@ -79,5 +74,37 @@ describe("TaxonManager", () => {
     // front page contains login button but no logout button
     cy.get("#loginButton").should("exist");
     cy.get("#logout-button").should("not.exist");
+  });
+  it("Adding references works", () => {
+    // front page contains login button but no logout button
+    cy.get("#loginButton").should("exist");
+    cy.get("#logout-button").should("not.exist");
+
+    // login via the admin page to bypass orcid authentication
+    cy.visit("http://localhost:8000/admin/login/?next=/admin/");
+    cy.get("#id_username").type("testaaja");
+    cy.get("#id_password").type("cypress");
+    cy.contains("Log in").click();
+    cy.visit("http://localhost:8000/add-references/");
+
+    // Add references page contains Add or Edit Reference
+    cy.contains("Add or Edit Reference");
+
+    // Add references page contains form for adding or editing
+    // cy.get("#add-ref-form").should("exist");
+
+    // Insert reference details
+    cy.get("#id_authors").type("Testi Kirjoittaja");
+    cy.get("#id_title").type("Testi otsikko");
+    cy.get("#id_year").type("2022");
+
+    // Submit
+    cy.contains("Submit").click();
+
+    // Visit
+    cy.visit("http://localhost:8000/references/");
+
+    // Check if reference can be found on page
+    cy.contains("Testi Kirjoittaja");
   });
 });

@@ -93,7 +93,8 @@ def refs_add(request, pk=None):
 #@user_passes_test(user_can_edit)
 def delete(request, pk):
     ref = get_object_or_404(Reference, pk=pk)
-    ref.delete()
+    ref.visible = 0
+    ref.save()
     return HttpResponseRedirect('/references')
 
 def resolve(request, pk=None):

@@ -72,19 +72,20 @@ describe("TaxonManager", () => {
     cy.get("#logout-button").should("not.exist");
   });
 
-  it("Add user to group, user should be able to add reference", ()=>{
-    // login via the admin page to bypass orcid authentication
+  it("Create group and add user", () =>{
     cy.visit("http://localhost:8000/admin/login/?next=/admin/");
     cy.get("#id_username").type("testaaja");
     cy.get("#id_password").type("cypress");
     cy.contains("Log in").click();
-  
+    cy.visit("http://localhost:8000/admin/auth/group/add/");
+    cy.get("#id_name").type("contributors");
+    cy.contains("Save and continue").click();
+
     //add testaaja to the group
     cy.contains("Users").click();
     cy.visit("http://localhost:8000/admin/auth/user/2/change/");
     cy.contains("Choose all").click();
     cy.contains("Save and continue").click();
-
   });
 
   it("Adding references works", () => {
@@ -119,22 +120,23 @@ describe("TaxonManager", () => {
 
     // Check if reference can be found on page
     cy.contains("Testi Kirjoittaja");
+    cy.contains("Logout").click({ force: true });
   });
-
-  it("User not part of group, should not be able to add reference", () => {
+  it("Logged in user that not part of group contributors", () => {
     // login via the admin page to bypass orcid authentication
     cy.visit("http://localhost:8000/admin/login/?next=/admin/");
     cy.get("#id_username").type("testaaja");
     cy.get("#id_password").type("cypress");
     cy.contains("Log in").click();
+
+    //remove user from group
     cy.visit('http://localhost:8000/admin/auth/user/2/change/');
     cy.contains("Remove all").click();
     cy.contains("Save and continue").click();
     
-    //add reference button, logged in and part of group contributors
+    //check view when user not part of group
     cy.visit("http://localhost:8000/add-references/");
     cy.contains("Add or Edit Reference").should("not.exist");
-    cy.contains("Logout").click({ force: true });
   });
 });
 

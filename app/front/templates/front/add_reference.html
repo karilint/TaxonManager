@@ -1,27 +1,19 @@
 {% extends "front/base.html" %}
 <body>
 {% load crispy_forms_tags %}
-
 {% block content %}
-{% for x in user.groups.all %}  
-{% if x.name == 'contributors' %} 
-{% include 'references/edit.html' %}
 
+{% with test=user.groups.all|length %}
+{% if test  > 0 %}
+{% include 'references/edit.html' %}
 <!-- <form method="post">
   {% csrf_token %}
   <table>{{ form.as_table }}</table>
   <button type="submit">Add Reference</button>
 </form> -->
-
-{% else %}
-
-<head>
-  <meta http-equiv="Refresh" content="0;url=/">
-</head>
-
 {% endif %}
-{% endfor %}
-<p>Login inorder to add a reference.</p>
+{% endwith %}
+<p>Login in order to add reference!</p>
 </body>
 {% endblock %}
 

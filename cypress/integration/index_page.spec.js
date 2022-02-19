@@ -78,12 +78,12 @@ describe("TaxonManager", () => {
     cy.get("#id_password").type("cypress");
     cy.contains("Log in").click();
     cy.visit("http://localhost:8000/admin/auth/group/add/");
-    cy.get("#id_name").type("contributors");
+    cy.get("#id_name").type("contributors2");
     cy.contains("Save and continue").click();
 
     //add testaaja to the group
     cy.contains("Users").click();
-    cy.visit("http://localhost:8000/admin/auth/user/2/change/");
+    cy.get('#main').contains('testaaja').click();
     cy.contains("Choose all").click();
     cy.contains("Save and continue").click();
   });
@@ -130,7 +130,8 @@ describe("TaxonManager", () => {
     cy.contains("Log in").click();
 
     //remove user from group
-    cy.visit('http://localhost:8000/admin/auth/user/2/change/');
+    cy.contains("Users").click();
+    cy.get('#main').contains('testaaja').click();
     cy.contains("Remove all").click();
     cy.contains("Save and continue").click();
     

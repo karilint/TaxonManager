@@ -10,7 +10,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import user_passes_test
-from refs.models import Ref, get_ref_from_doi
+from .models import Ref, get_ref_from_doi
 from .utils import canonicalize_doi
 from refs.forms import RefForm
 from refs.filters import RefFilter

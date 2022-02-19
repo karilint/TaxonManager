@@ -8,7 +8,6 @@ admin.site.unregister(Ref)
 
 class RefAdmin(SimpleHistoryAdmin):
 
-
     def changed_fields_with_values(self, obj):
         fields = ""
         if obj.prev_record:

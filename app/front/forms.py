@@ -18,7 +18,7 @@ from .models import Reference
 class RefForm(forms.ModelForm):
     class Meta:
         model = Reference
-        exclude = ['ris', 'citeproc_json']
+        exclude = ['ris', 'citeproc_json', 'visible']
 
     def clean_doi(self):
         doi = self.cleaned_data['doi']

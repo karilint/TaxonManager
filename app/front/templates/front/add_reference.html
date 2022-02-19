@@ -1,8 +1,10 @@
 {% extends "front/base.html" %}
+<body>
 {% load crispy_forms_tags %}
 
 {% block content %}
-{% if user.is_authenticated %}
+{% for x in user.groups.all %}  
+{% if x.name == 'contributors' %} 
 {% include 'references/edit.html' %}
 
 <!-- <form method="post">
@@ -18,4 +20,8 @@
 </head>
 
 {% endif %}
+{% endfor %}
+<p>Login inorder to add a reference.</p>
+</body>
 {% endblock %}
+

@@ -159,7 +159,6 @@
             padding-left: 40px !important;
         }
 
-
         .navigation h4 {
             padding: 10px 0;
             font-weight: bold;
@@ -207,7 +206,6 @@
         }
 
 
-
         /* Clear floats after the columns */
         section:after {
             content: "";
@@ -241,7 +239,6 @@
                 display: none;
             }
         }
-
 
         /* Begin style from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_full_page_tabs*/
         /* Style tab links */
@@ -348,7 +345,6 @@
             background-color: #d1ceca;
             color: #9c9994;
             font-weight: normal;
-            pointer-events: none;
         }
 
         #header_image
@@ -461,9 +457,9 @@
                 <h4 class="w3-bar-item" id="sideHeader">Features</h4>
                 <table>
                     <tr><th>{% if user.is_authenticated %}
-                        <a class="w3-bar-item w3-button" id="sideButton" href="/add_reference"> Add reference </a>
+                        <a class="w3-bar-item w3-button" id="sideButton" href="/add-references"> Add reference </a>
                         {% else %}
-                        <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/add_reference"> Add reference </a>
+                        <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/add-references"> Add reference </a>
                         {% endif %}
                     </th>
                     </tr>
@@ -503,7 +499,5 @@
     </script>
     </div>
 </body>
-
-
 
 </html>

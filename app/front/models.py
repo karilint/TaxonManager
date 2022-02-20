@@ -117,7 +117,7 @@ class Reference(models.Model):
             return '[missing {}]'.format(field_name)
         return s
 
-    def _str_(self):
+    def __str__(self):
         """Simple string representation of the reference."""
 
         return '{}: {}, {}'.format(self.id, self._get_or_missing('authors'),

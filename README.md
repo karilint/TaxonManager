@@ -10,8 +10,6 @@ In the scientific classification of fossil species, organisms are organized into
 
 [Testing guide](./docs/testingGuide.md)
 
-[Database schema](./docs/TaxonManager_schema.png)
-
 ## Development Environment
 
 [Development Environment Instructions](./docs/dev_environment.md)

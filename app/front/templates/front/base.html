@@ -2,393 +2,20 @@
 <html lang='en'>
 {% load socialaccount %}
 {% load static %}
+
 <head>
     <meta charset="UTF-8">
     <title>TaxonManager</title>
     <script src="https://use.fontawesome.com/baa70f3cd3.js"></script>
-    <link rel="stylesheet" href="path/to/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script src="https://kit.fontawesome.com/5768ea2a16.js" crossorigin="anonymous"></script>
-    <style>
-        /* color themes */
-        .w3-theme {
-            color: #F5F3EC !important;
-            background-color: #8ba064 !important
-        }
+    <link rel="stylesheet" type="text/css" href="{% static 'front/style.css' %}">
 
-        .w3-theme-b1 {
-            color: #F5F3EC !important;
-            background-color: #8fa567 !important;
-        }
-
-        .w3-theme-b1:hover {
-            color: #665848 !important;
-            background-color: #F5F3EC !important
-        }
-
-        .w3-theme-beige {
-            background-color: #F5F3EC;
-        }
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        .title-logo {
-            font-family: 'Helvetica', cursive;
-            font-size: 50px;
-            text-align: right;
-            position: absolute;
-            left: 140px;
-        }
-
-        .title-logo a {
-            text-decoration: none;
-        }
-
-        .help-button,
-        .login-button {
-            font-family: 'Work Sans', sans-serif !important;
-            font-weight: bold !important;
-        }
-        
-        .logout-button {
-            font-family: 'Work Sans', sans-serif !important;
-            font-weight: bold !important;
-        }
-
-        .main-container {
-            min-height: 100vh;
-            position: relative;
-            padding-bottom: 50px;
-            overflow: hidden;
-        }
-
-        /* header style */
-        .header-container {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 100px;
-            padding: 0px 16px !important;
-        }
-
-        .header {
-            height: 100px;
-        }
-
-        .header-button .w3-button:hover {
-            background-color: #edf5ec !important;
-            color: #665848 !important;
-        }
-
-        .header-text-button .w3-button {
-            font-family: 'Work Sans', sans-serif !important;
-            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-        }
-
-        .header-left .w3-display-container {
-            min-width: 110px;
-        }
-
-        .header-left .header-button {
-            margin: 33px 10px !important;
-        }
-
-        .header-left .w3-container {
-            padding-left: 4px !important;
-        }
-
-        .header-right {
-            padding: 30px;
-        }
-
-        .header-right .menu-item {
-            width: 200px;
-        }
-
-        .header-right .w3-button {
-            padding-top: 0px;
-            padding-bottom: 0px;
-        }
-
-        .help-dropdown {
-            right: 0;
-            width: 230px;
-        }
-
-        .logout-dropdown {
-            right: 0;
-            min-width: 160px;
-        }
-
-        .logout-dropdown hr {
-            border: 1px solid #dddddd;
-            margin: 0px;
-        }
-
-        .w3-bar-block .w3-bar-item {
-            margin: 0px !important;
-            font-family: Arial, Helvetica, sans-serif !important;
-        }
-
-        .list-item .w3-button:hover {
-            background-color: #bed4a5 !important;
-        }
-
-        .page-container {
-            margin-top: 100px !important;
-            padding: 0 !important;
-        }
-
-        /* - 100px comes from header-container height being 100px and padding 70px comes from footer height + 20px */
-        .navigation {
-            padding: 20px 0px 70px 0px !important;
-            overflow: scroll;
-            height: calc(100% - 100px) !important;
-            z-index: 3 !important;
-            width: 150px !important;
-            background-color: #f9fdf7 !important;
-            overflow-y: auto;
-            overflow-x: auto;
-        }
-
-        .navigation .w3-bar-item {
-            padding: 3px 16px !important;
-            padding-left: 40px !important;
-        }
-
-        .navigation h4 {
-            padding: 10px 0;
-            font-weight: bold;
-        }
-
-        .navigation hr {
-            border: 1px solid #dddddd;
-        }
-
-        .close-nav {
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .main-content {
-            margin-left: 250px;
-        }
-
-        .main-content table {
-            margin: 20px 0px;
-        }
-
-        .main-content caption {
-            text-align: left;
-        }
-
-        .main-content .icons {
-            padding: 10px 0px;
-        }
-
-        .main-content .icons .fa-trash-o {
-            padding-left: 5px;
-        }
-
-        .content {
-            margin: auto;
-            max-width: 900px;
-            padding: 50px 32px !important;
-        }
-
-        /* old css belove to be deleted or edited */
-
-        * {
-            box-sizing: border-box
-        }
-
-
-        /* Clear floats after the columns */
-        section:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        /* Style the footer */
-        footer {
-            padding: 10px;
-            position: absolute;
-            bottom: 0;
-            z-index: 3;
-            width: 100%;
-        }
-
-        /* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
-
-        table {
-            font-family: arial, sans-serif;
-            width: 100%;
-        }
-
-        /* - makes an additional dropdown menu (contains login and help buttons) appear on the sidebar when opened, on small screens */
-        .showMenu {
-            padding: 20px;
-        }
-
-        @media screen and (min-width: 993px) {
-            .showMenu {
-                display: none;
-            }
-        }
-
-        /* Begin style from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_full_page_tabs*/
-        /* Style tab links */
-        .tablink {
-            background-color: #555;
-            color: white;
-            float: left;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            padding: 14px 16px;
-            font-size: 17px;
-            width: 25%;
-        }
-
-        .tablink:hover {
-            background-color: #777;
-        }
-
-        /* Style the tab content (and add height:100% for full page content) */
-        .tabcontent {
-            color: white;
-            display: none;
-            padding: 100px 20px;
-            height: 100%;
-        }
-
-        /* End style from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_full_page_tabs*/
-        select[name="name"] {
-            width: 50%;
-        }
-
-        select[name="name_one"] {
-            width: 50%;
-        }
-
-        select[name="name_two"] {
-            width: 50%;
-        }
-
-        select[name="location"] {
-            width: 50%;
-        }
-
-        select[name="qualifier"] {
-            width: 50%;
-        }
-
-        select[name="reference"] {
-            width: 50%;
-        }
-
-        .faq .collapsible {
-            background-color: #eee;
-            color: #444;
-            cursor: pointer;
-            padding: 18px;
-            width: 100%;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-size: 15px;
-            transition: 0.4s;
-        }
-
-        .faq .active,
-        .collapsible:hover {
-            background-color: #ccc;
-        }
-
-        .faq .collapsible:after {
-            content: '\002B';
-            color: #777;
-            font-weight: bold;
-            float: right;
-            margin-left: 5px;
-        }
-
-        .faq .active:after {
-            content: "\2212";
-        }
-
-        .faq .content {
-            padding: 0 18px !important;
-            background-color: white;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.2s ease-out;
-        }
-
-        #sideButton
-        {
-            text-align: center;
-            padding: 3px 16px !important;
-            border: 1px solid #3f2503 !important;
-            font-weight: normal;
-        }
-
-        #sideButton_notAvailable
-        {
-            text-align: center;
-            padding: 3px 16px !important;
-            border: 1px solid #000000 !important;
-            background-color: #d1ceca;
-            color: #9c9994;
-            font-weight: normal;
-        }
-
-        #header_image
-        {
-            position: absolute;
-            top: -25px;
-            left: -17px;
-        }
-
-        .image_text
-        {
-            text-align: center;
-        }
-
-        #image_credit
-        {
-            color: #9c9994;
-            font-size: small;
-            font-weight: normal;
-        }
-
-        #image_credit_header
-        {
-            opacity: 1;
-            color: #ffffff;
-            font-size: 8px;
-            position: absolute;
-            bottom: -18px;
-        }
-
-        #welcome_header
-        {
-            position: absolute;
-            top: -15px;
-            left:-5px;
-        }
-  
-    </style>
-
-    <!-- css used for Django select2 -->
     {{ form.media.css }}
 </head>
 
 </head>
+
 <body>
     <div class="main-container">
         <div class="header-container w3-container w3-theme">
@@ -401,7 +28,8 @@
                         </div>
                         <div class="w3-left">
                             <div class="w3-hide-medium w3-hide-small">
-                                <img src="{% static "images/nowdatabase.jpg" %}" alt="now database" height="115" width="150" class="responsive" id="header_image">
+                                <img src="{% static " images/nowdatabase.jpg" %}" alt="now database" height="115"
+                                    width="150" class="responsive" id="header_image">
                                 <div id="image_credit_header">Picture_©_Noira_Martiskainen</div>
                                 <h2 class="title-logo"><a href="/" id="welcome_header">Welcome</a></h2>
                             </div>
@@ -416,9 +44,12 @@
                                 <form method="post" action="{% url 'account_logout' %}">
                                     {% csrf_token %}
                                     {% if redirect_field_value %}
-                                      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                                    <input type="hidden" name="{{ redirect_field_name }}"
+                                        value="{{ redirect_field_value }}" />
                                     {% endif %}
-                                    <button class="w3-button w3-theme-b1" type="submit"><h4 class="logout-button" id="logoutButton">Logout</h4></button>
+                                    <button class="w3-button w3-theme-b1" type="submit">
+                                        <h4 class="logout-button" id="logoutButton">Logout</h4>
+                                    </button>
                                 </form>
                                 {% else %}
                                 <a href="{% provider_login_url 'orcid' %}" class="w3-button w3-theme-b1">
@@ -434,7 +65,7 @@
         <div class="page-container w3-container">
             <div class="navigation list-item w3-theme-beige w3-sidebar w3-bar-block w3-collapse w3-animate-left w3-card"
                 id="mySidebar">
-                <div class="showMenu" id ="menuForSmallScreen">
+                <div class="showMenu" id="menuForSmallScreen">
                     <div class="w3-dropdown-hover w3-left">
                         <button class="w3-button w3-theme-b1">Menu</button>
                         <div class="w3-dropdown-content w3-bar-block w3-border" style="right:0">
@@ -442,12 +73,14 @@
                             <form method="post" action="{% url 'account_logout' %}">
                                 {% csrf_token %}
                                 {% if redirect_field_value %}
-                                  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                                <input type="hidden" name="{{ redirect_field_name }}"
+                                    value="{{ redirect_field_value }}" />
                                 {% endif %}
                                 <button class="w3-bar-item w3-button" type="submit" id="logoutButton">Logout</button>
                             </form>
                             {% else %}
-                            <a href="{% provider_login_url 'orcid' %}" class="w3-bar-item w3-button" id="loginButton">Login</a>
+                            <a href="{% provider_login_url 'orcid' %}" class="w3-bar-item w3-button"
+                                id="loginButton">Login</a>
                             {% endif %}
                         </div>
                     </div>
@@ -456,19 +89,30 @@
                 </div>
                 <h4 class="w3-bar-item" id="sideHeader">Features</h4>
                 <table>
-                    <tr><th>{% if user.is_authenticated %}
-                        <a class="w3-bar-item w3-button" id="sideButton" href="/add-references"> Add reference </a>
-                        {% else %}
-                        <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/add-references"> Add reference </a>
-                        {% endif %}
-                    </th>
+                    <tr>
+                        <th>{% if user.is_authenticated %}
+                            <a class="w3-bar-item w3-button" id="sideButton" href="/add-references"> Add reference </a>
+                            {% else %}
+                            <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/add-references"> Add
+                                reference </a>
+                            {% endif %}
+                        </th>
                     </tr>
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/references"> References </a></th></tr>
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/"> Help </a></th></tr>
-                    <tr><th> <div class="w3-hide-large image_text">
-                        <img src="{% static "images/nowdatabase.jpg" %}" alt="now database" height="95" width="120" class="responsive">
-                        <div id="image_credit">Picture © Noira Martiskainen</div>
-                    </div></th></tr>
+                    <tr>
+                        <th><a class="w3-bar-item w3-button" id="sideButton" href="/references"> References </a></th>
+                    </tr>
+                    <tr>
+                        <th><a class="w3-bar-item w3-button" id="sideButton" href="/"> Help </a></th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <div class="w3-hide-large image_text">
+                                <img src="{% static " images/nowdatabase.jpg" %}" alt="now database" height="95"
+                                    width="120" class="responsive">
+                                <div id="image_credit">Picture © Noira Martiskainen</div>
+                            </div>
+                        </th>
+                    </tr>
                 </table>
             </div>
         </div>

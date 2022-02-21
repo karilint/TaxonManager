@@ -1,81 +1,38 @@
+#   Copyright 2020 Frances M. Skinner, Christian Hill
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+
 from django import forms
+from .models import Reference
 
-class ReferenceForm(forms.Form):
-    authors = forms.CharField(
-        label = "Author(s) of the reference",
-        help_text="Comma-delimited names with space-separated initials first (no ANDs). e.g. \"A. N. Other, B.-C. Person Jr., Ch. Someone-Someone, N. M. L. Haw Haw\""
-    )
+class RefForm(forms.ModelForm):
+    class Meta:
+        model = Reference
+        exclude = ['ris', 'citeproc_json', 'visible']
 
-    title = forms.CharField(
-        label = "Title",
-        help_text="Best-effort UTF-8 encoded plaintext version of title. No HTML tags, markdown or LaTeX."
-    )
+    def clean_doi(self):
+        doi = self.cleaned_data['doi']
+        try:
+            ref = Reference.objects.get(doi=doi)
+            if ref.pk != self.instance.pk:
+                raise forms.ValidationError('A reference with this DOI exists'
+                             'in the database already')
+        except Reference.MultipleObjectsReturned:
+            # Hmmm... there are already multiple entries with this DOI in the
+            # database. TODO deal with this case
+            pass
+        except Reference.DoesNotExist:
+            # Good: a reference with this DOI is not in the DB already
+            pass
 
-    titlehtml = forms.CharField(
-        label = "Title html",
-        help_text="Valid HTML version of title. Don't wrap with <p> or other tags."
-    )
-
-    titlelatex = forms.CharField(
-        label = "Title latex",
-        help_text="LaTeX version of title. Don't escape backslashes (\) but do use valid LaTeX for accented and similar characers."
-    )
-
-    journal = forms.CharField(
-        label = "Journal",
-        help_text=""
-    )
-
-    volume = forms.CharField(
-        label = "Volume",
-        help_text=""
-    )
-
-    pagestart = forms.CharField(
-        label = "Page start",
-        help_text=""
-    )
-
-    pageend = forms.CharField(
-        label = "Page end",
-        help_text=""
-    )
-
-    articlenumber = forms.CharField(
-        label = "Article number",
-        help_text=""
-    )
-
-    year = forms.CharField(
-        label = "Year",
-        widget=forms.TextInput(attrs={'placeholder': '2022'})
-    )
-
-    note = forms.CharField(
-        label = "Note",
-    )
-
-    notehtml = forms.CharField(
-        label = "Note html",
-    )
-
-    notelatex = forms.CharField(
-        label = "Note latex",
-    )
-
-    doi = forms.CharField(
-        label = "Doi",
-    )
-
-    bibcode = forms.CharField(
-        label = "Bibcode",
-    )
-
-    url = forms.CharField(
-        label = "Url",
-        help_text="If not provided, this will be automatically constructed as https://dx.doi.org/<DOI> if possible."
-    )
-
-    bibtex = forms.IntegerField(
-        label = "Bibtex",
-    )
+        return self.cleaned_data['doi']

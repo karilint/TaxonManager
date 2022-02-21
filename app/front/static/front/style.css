@@ -1,13 +1,12 @@
-
 /* color themes */
 .w3-theme {
     color: #F5F3EC !important;
-    background-color: #3f2503 !important
+    background-color: #8ba064 !important
 }
 
 .w3-theme-b1 {
     color: #F5F3EC !important;
-    background-color: #3f2503 !important;
+    background-color: #8fa567 !important;
 }
 
 .w3-theme-b1:hover {
@@ -25,16 +24,14 @@ body {
 
 .title-logo {
     font-family: 'Helvetica', cursive;
-    font-size: 60px;
+    font-size: 50px;
     text-align: right;
+    position: absolute;
+    left: 140px;
 }
 
 .title-logo a {
     text-decoration: none;
-}
-
-.title-logo::first-letter {
-    color: #665848;
 }
 
 .help-button,
@@ -69,12 +66,13 @@ body {
 }
 
 .header-button .w3-button:hover {
-    background-color: #F5F3EC !important;
+    background-color: #edf5ec !important;
     color: #665848 !important;
 }
 
 .header-text-button .w3-button {
     font-family: 'Work Sans', sans-serif !important;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
 .header-left .w3-display-container {
@@ -123,7 +121,7 @@ body {
 }
 
 .list-item .w3-button:hover {
-    background-color: #e6dcd0 !important;
+    background-color: #bed4a5 !important;
 }
 
 .page-container {
@@ -137,8 +135,8 @@ body {
     overflow: scroll;
     height: calc(100% - 100px) !important;
     z-index: 3 !important;
-    width: 250px !important;
-    background-color: #F5F3EC !important;
+    width: 150px !important;
+    background-color: #f9fdf7 !important;
     overflow-y: auto;
     overflow-x: auto;
 }
@@ -147,7 +145,6 @@ body {
     padding: 3px 16px !important;
     padding-left: 40px !important;
 }
-
 
 .navigation h4 {
     padding: 10px 0;
@@ -196,7 +193,6 @@ body {
 }
 
 
-
 /* Clear floats after the columns */
 section:after {
     content: "";
@@ -230,7 +226,6 @@ table {
         display: none;
     }
 }
-
 
 /* Begin style from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_full_page_tabs*/
 /* Style tab links */
@@ -319,4 +314,57 @@ select[name="reference"] {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
+}
+
+#sideButton
+{
+    text-align: center;
+    padding: 3px 16px !important;
+    border: 1px solid #3f2503 !important;
+    font-weight: normal;
+}
+
+#sideButton_notAvailable
+{
+    text-align: center;
+    padding: 3px 16px !important;
+    border: 1px solid #000000 !important;
+    background-color: #d1ceca;
+    color: #9c9994;
+    font-weight: normal;
+}
+
+#header_image
+{
+    position: absolute;
+    top: -25px;
+    left: -17px;
+}
+
+.image_text
+{
+    text-align: center;
+}
+
+#image_credit
+{
+    color: #9c9994;
+    font-size: small;
+    font-weight: normal;
+}
+
+#image_credit_header
+{
+    opacity: 1;
+    color: #ffffff;
+    font-size: 8px;
+    position: absolute;
+    bottom: -18px;
+}
+
+#welcome_header
+{
+    position: absolute;
+    top: -15px;
+    left:-5px;
 }

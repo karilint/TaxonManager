@@ -254,18 +254,6 @@ class SynonymLink(models.Model):
         )
 
 
-try:
-    from django.conf import settings
-    ADS_TOKEN = settings.ADS_TOKEN
-except (ImportError, AttributeError):
-    ADS_TOKEN = ''
-
-class RefError(Exception):
-    pass
-class UnresolvedDOIError(RefError):
-    pass
-class ADSError(RefError):
-    pass
 
 class Reference(models.Model):
     """A literature reference, for example a journal article, book etc."""
@@ -338,7 +326,7 @@ class Reference(models.Model):
     visible = models.IntegerField(default=1)
 
     class Meta:
-        app_label = 'refs'
+        app_label = 'front'
 
 
     def _get_or_missing(self, field_name):
@@ -628,7 +616,7 @@ def parse_citeproc_json(citeproc_json, ref=None, query_ads=True):
         ref.article_number = article_number
         ref.citeproc_json = citeproc_json
     else:
-        ref = Ref(authors=authors, title=title, journal=journal, volume=volume,
+        ref = Reference(authors=authors, title=title, journal=journal, volume=volume,
                   year=year, page_start=page_start, page_end=page_end, doi=doi,
                   url=url, article_number=article_number,
                   citeproc_json=citeproc_json)

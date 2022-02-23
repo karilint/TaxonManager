@@ -10,15 +10,13 @@ from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import user_passes_test
-from .models import Reference, get_ref_from_doi
-from .utils import canonicalize_doi
-from .forms import RefForm
-from refs.filters import RefFilter
+from front.models import Reference, get_ref_from_doi
+from front.utils import canonicalize_doi
+from front.forms import RefForm
+from front.filters import RefFilter
 from django.contrib.auth.decorators import login_required
 
-# Django-simple-history history tracking for a third-party model
-from simple_history import register
-register(Reference)
+
 
 
 def index(request):
@@ -114,7 +112,7 @@ def resolve(request, pk=None):
         else:
             ref = get_object_or_404(Reference, pk=pk)
         ref = get_ref_from_doi(doi, ref)
-        form = RefForm(instance=ref)
+        form = RefForm(instance=Reference)
         c = {'form': form, 'pk': pk if pk else ''}
         return render(request, 'front/add_reference.html', c)
     raise Http404

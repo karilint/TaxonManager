@@ -13,7 +13,7 @@
 #   limitations under the License.
 
 from django import forms
-from .models import Reference
+from front.models import Reference
 
 class RefForm(forms.ModelForm):
     class Meta:

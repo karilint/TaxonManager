@@ -5,8 +5,8 @@ ReferenceLink, SynonymLink, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, TuComm
 # Register your models here.
 from simple_history.admin import SimpleHistoryAdmin
 from simple_history.models import HistoricalRecords
-from .models import Reference
-from refs.models import Ref
+from front.models import Reference
+
 
 admin.site.register(Comment)
 admin.site.register(Expert)
@@ -22,8 +22,9 @@ admin.site.register(TaxonomicUnit)
 admin.site.register(TaxonUnitType)
 admin.site.register(TuCommentLink)
 
-
-admin.site.unregister(Ref)
+# Django-simple-history history tracking for a third-party model
+from simple_history import register
+register(Reference)
 
 class RefAdmin(SimpleHistoryAdmin):
 
@@ -43,5 +44,5 @@ class RefAdmin(SimpleHistoryAdmin):
 
 
 
-# admin.site.register(Ref, SimpleHistoryAdmin)
+
 admin.site.register(Reference, RefAdmin)

@@ -59,6 +59,9 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
+# MIGRATION_MODULES = {'refs': 'front.migrations', 'front': 'front.migrations'}
+
+
 SITE_ID = 1
 
 

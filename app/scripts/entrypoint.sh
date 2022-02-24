@@ -9,6 +9,11 @@ echo "RUNNING: MAKEMIGRATIONS & MIGRATE"
 python manage.py makemigrations
 python manage.py migrate
 
+echo 
+echo "RUNNING: MAKEMIGRATIONS & MIGRATE TO FRONT"
+python manage.py makemigrations front
+python manage.py migrate front
+
 echo
 echo "INITIALIZING DATABASE"
 python manage.py shell < ./scripts/initialize.py

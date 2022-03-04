@@ -11,8 +11,9 @@ from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import user_passes_test
 from front.models import Reference, get_ref_from_doi
+from .models import TaxonomicUnit, TaxonUnitType
 from front.utils import canonicalize_doi
-from front.forms import RefForm
+from front.forms import RefForm, NameForm
 from front.filters import RefFilter
 from django.contrib.auth.decorators import login_required
 
@@ -26,6 +27,58 @@ def index(request):
 # !! Temporary address for login page, references view and adding a reference
 def login(request):
     return render(request, 'front/login.html')
+
+
+
+def taxon_add(request):
+    # if this is a POST request we need to process the form data
+    
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = NameForm(request.POST)
+                
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            
+            try:
+                # save names from Modelform, but don't admit new unit to db yet
+                new_unit = form.save(commit=False)
+                
+                # handle custom fields and db dependencies:
+                # get parent id by parent's name + set it to be the new unit's parent
+                parent =TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data['parent_name'])                
+                new_unit.parent_id = parent.taxon_id
+
+                # set new unit's kingdom based on parent's kingdom
+                new_unit.kingdom = parent.kingdom
+            
+                #FIX: set author (can be something or null)
+                # if it is something:
+                # 1. set correct taxon_author_id for new unit by references(and handle publications vs. experts) or what?
+                # do here: some db -queries
+                # set author here: new_unit.taxon_author_id = SUITABLE FOUND taxon_author_id
+
+                #else if there's no author:
+                #get rank by kingdom name and rank name + set rank to new unit
+                rank = TaxonUnitType.objects.get(rank_name = form.cleaned_data['rank_name'], kingdom = new_unit.kingdom)
+                new_unit.rank_id = rank
+
+                #save new unit =name
+                new_unit.save()
+            except TaxonomicUnit.DoesNotExist:
+                # form was filled incorrectly
+                print("saving new unit did not workout; do something")
+
+            return HttpResponseRedirect('/addName')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = NameForm()
+    return render(request, 'front/add_name.html', {'form': form})
+
 
 def view_reference(request):
     refs = Reference.objects.all().filter(visible=1)

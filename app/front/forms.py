@@ -13,7 +13,7 @@
 #   limitations under the License.
 
 from django import forms
-from front.models import Reference
+from .models import Reference, TaxonomicUnit
 
 class RefForm(forms.ModelForm):
     class Meta:
@@ -36,3 +36,18 @@ class RefForm(forms.ModelForm):
             pass
 
         return self.cleaned_data['doi']
+
+class NameForm(forms.ModelForm):
+    template_name = 'add_name.html'
+    rank_name = forms.CharField()
+    parent_name = forms.CharField()
+    # FIX: In order to query database and set an author for new unit, add a suitable field 
+    
+    # other later deemed necessary fields can also be added here
+
+    class Meta:
+        model = TaxonomicUnit
+        fields = ['unit_name1', 'unit_name2', 'unit_name3', 'unit_name4']
+        exclude = ['unnamed_taxon_ind']
+
+        

@@ -9,12 +9,12 @@
 <ul>
 {% for taxon in taxons %}
 
-{% if taxon.complete_name and taxon.taxon_author_id.taxon_author %}
-<li><a href="linkki.hierarkia.nakymaan?">{{ taxon.complete_name }}</a> ({{ taxon.taxon_author_id.taxon_author }})</li>
+{% if taxon.complete_name and taxon.rank_id.rank_name %}
+<li><a href="linkki.hierarkia.nakymaan?">{{ taxon.complete_name }}</a> ({{ taxon.rank_id.rank_name }})</li>
 {% elif taxon.complete_name %}
 <li><a href="linkki.hierarkia.nakymaan?">{{ taxon.complete_name }}</a></li>
-{% elif taxon.taxon_author_id.taxon_author %}
-<li><a href="linkki.hierarkia.nakymaan?">{{ taxon.unit_name1 }}</a> ({{ taxon.taxon_author_id.taxon_author }})</li>
+{% elif taxon.rank_id.rank_name %}
+<li><a href="linkki.hierarkia.nakymaan?">{{ taxon.unit_name1 }}</a> ({{ taxon.rank_id.rank_name }})</li>
 {% else %}
 <li><a href="linkki.hierarkia.nakymaan?">{{ taxon.unit_name1 }}</a></li>
 

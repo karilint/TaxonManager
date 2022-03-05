@@ -15,6 +15,7 @@ from front.utils import canonicalize_doi
 from front.forms import RefForm
 from front.filters import RefFilter
 from django.contrib.auth.decorators import login_required
+from .models import TaxonomicUnit
 
 
 
@@ -116,3 +117,9 @@ def resolve(request, pk=None):
         c = {'form': form, 'pk': pk if pk else ''}
         return render(request, 'front/add_reference.html', c)
     raise Http404
+
+
+def view_taxons(request):
+    taxons = TaxonomicUnit.objects.all()
+    context = {'taxons': taxons}
+    return render(request, 'front/taxons.html', context)

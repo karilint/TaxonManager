@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'refs',
     'front.apps.FrontConfig',
     'simple_history',
+    'treebeard',
 ]
 
 CRISPY_TEMPLATE_PACK = 'uni_form'

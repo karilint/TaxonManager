@@ -8,6 +8,7 @@
     <title>TaxonManager</title>
     <script src="https://use.fontawesome.com/baa70f3cd3.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="icon"href="{% static 'favicon.ico' %}">
     <script src="https://kit.fontawesome.com/5768ea2a16.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'front/style.css' %}">
 
@@ -83,6 +84,7 @@
                 </div>
                 <h4 class="w3-bar-item" id="sideHeader">Features</h4>
                 <table>
+                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/taxons"> Taxons </a></th></tr>
                     <tr><th>{% if user.is_authenticated %}
                         <a class="w3-bar-item w3-button" id="sideButton" href="/add-references"> Add reference </a>
                         {% else %}

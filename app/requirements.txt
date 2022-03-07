@@ -30,3 +30,5 @@ sqlparse==0.4.2
 toml==0.10.2
 urllib3==1.26.7
 django-simple-history==3.0.0
+django-mptt==0.13.4
+django-treebeard==4.5.1

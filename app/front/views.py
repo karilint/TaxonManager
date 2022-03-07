@@ -16,6 +16,7 @@ from front.utils import canonicalize_doi
 from front.forms import RefForm, NameForm
 from front.filters import RefFilter
 from django.contrib.auth.decorators import login_required
+from .models import TaxonomicUnit
 
 
 
@@ -169,3 +170,23 @@ def resolve(request, pk=None):
         c = {'form': form, 'pk': pk if pk else ''}
         return render(request, 'front/add_reference.html', c)
     raise Http404
+
+
+def view_taxons(request):
+    taxons = TaxonomicUnit.objects.all()
+    context = {'taxons': taxons}
+    return render(request, 'front/taxons.html', context)
+
+def view_hierarchy(request, parent_id=None):
+    hierarchies = []
+    try:
+        root = TaxonomicUnit.objects.get(parent_id=parent_id)
+        hierarchies.append(root)
+        while (root.parent_id != 0):
+            root = TaxonomicUnit.objects.get(taxon_id=root.parent_id)
+            hierarchies.append(root)
+        hierarchies.reverse()
+    except:
+        pass
+    context = {'hierarchies': hierarchies}
+    return render(request, 'front/hierarchy.html', context)

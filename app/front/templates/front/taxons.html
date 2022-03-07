@@ -1,0 +1,33 @@
+{% extends "front/base.html" %}
+{% block content %}
+
+<body>
+
+{% if taxons %}
+<h1>Taxons</h1>
+
+<ul>
+{% for taxon in taxons %}
+
+{% if taxon.complete_name and taxon.rank_id.rank_name %}
+<li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.complete_name }}</a> ({{ taxon.rank_id.rank_name }})</li>
+{% elif taxon.complete_name %}
+<li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.complete_name }}</a></li>
+{% elif taxon.rank_id.rank_name %}
+<li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.unit_name1 }}</a> ({{ taxon.rank_id.rank_name }})</li>
+{% else %}
+<li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.unit_name1 }}</a></li>
+
+<!-- href="{% url 'front:add-references' ref.pk %}" -->
+
+{% endif %}
+{% endfor %}
+</ul>
+
+{% else %}
+There are no taxons in the database.
+{% endif %}
+  
+</body>
+
+{% endblock %} 

@@ -1,4 +1,7 @@
 from django.urls import path, re_path
+from django.views.generic.base import RedirectView
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.conf import settings
 
 from . import views # pylint:disable=E0401
 
@@ -11,5 +14,6 @@ urlpatterns = [
     re_path(r'^add-references/(?:(?P<pk>\d+))?$', views.refs_add, name='add-references'),
     re_path(r'^delete/(?P<pk>\d+)$', views.delete, name='delete'),
     re_path(r'^resolve/(?:(?P<pk>\d+))?$', views.resolve, name='resolve'),
-    path('taxons/', views.view_taxons, name='taxons')
+    path('taxons/', views.view_taxons, name='taxons'),
+    path("favicon.ico", RedirectView.as_view(url=staticfiles_storage.url("favicon.ico")))
 ]

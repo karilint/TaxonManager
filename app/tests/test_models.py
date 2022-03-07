@@ -35,10 +35,10 @@ class ModelTest(TestCase):
         )
         cls.author = TaxonAuthorLkp.objects.all()[0]
 
-        TaxonomicUnit.objects.create(
+        TaxonomicUnit.objects.create( 
             unit_name1="Lynx",
             taxon_author_id=cls.author,
-            parent_tsn=100,
+            parent_id=100,
             kingdom=cls.kingdom,
             complete_name="Lynx lynx"
         )
@@ -50,12 +50,12 @@ class ModelTest(TestCase):
             tu = TaxonomicUnit.objects.create(
                 unit_name1 = f'Test {taxonomic_unit_name}',
                 taxon_author_id = cls.author,
-                parent_tsn = 100,
+                parent_id = 100,
                 kingdom = cls.kingdom,
                 complete_name = f'Test {taxonomic_unit_name}'
             )
             # Create synonyms for each
-            tu.synonymlink_set.create(tsn=tu.tsn, update_date=timezone.now())
+            tu.synonymlink_set.create(synonym_id=tu.taxon_id, update_date=timezone.now())
             # Add to list
             cls.taxonomic_units.append(tu)
 
@@ -113,7 +113,7 @@ class ModelTest(TestCase):
 
     def test_taxonomic_unit_string_method(self):
         self.assertEqual(
-            str(self.taxonomic_unit), "Lynx, Kingdom: Animalia (tsn_id: 1, parent_tsn: 100)")
+            str(self.taxonomic_unit), "Lynx, Kingdom: Animalia (taxon_id: 1, parent_id: 100)")
 
     def test_taxonomic_unit_refers_to_kingdom_correctly(self):
         self.assertEqual(self.taxonomic_unit.kingdom.kingdom_name, "Animalia")
@@ -127,7 +127,7 @@ class ModelTest(TestCase):
         SynonymLink objects that refer to it """
         for i in self.taxonomic_units:
             self.assertEqual(
-                i.synonymlink_set.all()[0].tsn, i.tsn
+                i.synonymlink_set.all()[0].synonym_id, i.taxon_id
             )
     
     def test_taxonomic_unit_refers_to_comments_correctly(self):

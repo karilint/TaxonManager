@@ -66,7 +66,7 @@ class TaxonomicUnit(models.Model):
     """
     Taxonomic Units
     """
-    tsn = models.AutoField(primary_key=True)
+    taxon_id = models.AutoField(primary_key=True)
     unit_ind1 = models.CharField(max_length=1, null=True, blank=True)
     unit_name1 = models.CharField(max_length=35)
     unit_ind2 = models.CharField(max_length=1, null=True, blank=True)
@@ -83,11 +83,11 @@ class TaxonomicUnit(models.Model):
     currency_rating = models.CharField(max_length=7, null=True, blank=True)
     phylo_sort_seq = models.IntegerField(null=True, blank=True)
     initial_time_stamp = models.DateTimeField(null=True, blank=True)
-    parent_tsn = models.IntegerField()
+    parent_id = models.IntegerField()
     taxon_author_id = models.ForeignKey(
-        TaxonAuthorLkp, on_delete=models.CASCADE)
+        TaxonAuthorLkp, on_delete=models.CASCADE, null=True, blank=True)
     kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
-    rank_id = models.IntegerField(null=True, blank=True)
+    rank_id = models.ForeignKey(TaxonUnitType, on_delete=models.CASCADE, null=True)
     hybrid_author_id = models.IntegerField(null=True, blank=True)
     update_date = models.DateTimeField(null=True, blank=True)
     uncertain_prnt_ind = models.CharField(max_length=3, null=True, blank=True)
@@ -100,7 +100,7 @@ class TaxonomicUnit(models.Model):
     )
 
     def __str__(self):
-        return f"{self.unit_name1}, Kingdom: {self.kingdom} (tsn_id: {self.tsn}, parent_tsn: {self.parent_tsn})"
+        return f"{self.unit_name1}, Kingdom: {self.kingdom} (taxon_id: {self.taxon_id}, parent_id: {self.parent_id})"
 
 
 class Hierarchy(models.Model):
@@ -109,8 +109,8 @@ class Hierarchy(models.Model):
     """
     hierarchy_string = models.CharField(max_length=128, null=True, blank=True)
     # models.IntegerField(null=True)#
-    tsn = models.ForeignKey(TaxonomicUnit, on_delete=models.CASCADE)
-    parent_tsn = models.IntegerField(null=True, blank=True)
+    taxon_id = models.ForeignKey(TaxonomicUnit, on_delete=models.CASCADE)
+    parent_id = models.IntegerField(null=True, blank=True)
     level = models.IntegerField(null=True, blank=True)
     childrencount = models.IntegerField(null=True, blank=True)
 
@@ -122,7 +122,7 @@ class TuCommentLink(models.Model):
     """
     Many-to-many table between Comment and TaxonomicUnit tables
     """
-    tsn = models.ForeignKey(
+    taxon_id = models.ForeignKey(
         TaxonomicUnit, on_delete=models.CASCADE)  # models.IntegerField(null=True)#
     comment_id = models.ForeignKey(
         Comment,
@@ -131,7 +131,7 @@ class TuCommentLink(models.Model):
     update_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"tsn: {self.tsn}, comment_id: {self.comment_id}"
+        return f"taxon_id: {self.taxon_id}, comment_id: {self.comment_id}"
 
 
 class Publication(models.Model):
@@ -159,7 +159,7 @@ class Publication(models.Model):
 
 class ReferenceLink(models.Model):
     class Meta:
-        unique_together = (('tsn', 'doc_id_prefix', 'documentation_id'))
+        unique_together = (('taxon_id', 'doc_id_prefix', 'documentation_id'))
 
     # doc_id_prefix identifies the reference as a
     # publication, expert or other source
@@ -169,7 +169,7 @@ class ReferenceLink(models.Model):
         ('SRC', 'Other source')
     ]
 
-    tsn = models.ForeignKey(TaxonomicUnit, on_delete=models.CASCADE)
+    taxon_id = models.ForeignKey(TaxonomicUnit, on_delete=models.CASCADE)
     doc_id_prefix = models.CharField(
         max_length=3,
         choices=DOC_ID_PREFIX_CHOICES
@@ -184,7 +184,7 @@ class ReferenceLink(models.Model):
     update_date = models.DateTimeField()
 
     def __str__(self):
-        return f"tsn: {self.tsn}, documentation_id = {self.documentation_id}"
+        return f"taxon_id: {self.taxon_id}, documentation_id = {self.documentation_id}"
 
 
 class Expert(models.Model):
@@ -203,11 +203,11 @@ class GeographicDiv(models.Model):
     """ Model of a geographical division """
 
     class Meta:
-        unique_together = (('tsn', 'geographic_value'))
+        unique_together = (('taxon_id', 'geographic_value'))
 
     # TODO: This causes a warning, but this is left as is
     # until we understand the requirements better.
-    tsn = models.ForeignKey(
+    taxon_id = models.ForeignKey(
         TaxonomicUnit,
         on_delete=models.CASCADE,
         unique=True
@@ -231,25 +231,25 @@ class ExpertsGeographicDiv(models.Model):
     # correctly to achieve many-to-many relationship between experts and
     # geographic areas. If we defined an ID to GeographicDiv table, this
     # may work better. This is just a hunch though.
-    geographic_tsn = models.ForeignKey(
-        GeographicDiv, to_field='tsn', on_delete=models.CASCADE)
+    geographic_id = models.ForeignKey(
+        GeographicDiv, to_field='taxon_id', on_delete=models.CASCADE, default=1)
     expert_id = models.ForeignKey(Expert, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"geographic_tsn: {self.geographic_tsn}, expert_id: {self.expert_id}"
+        return f"geographic_id: {self.geographic_id}, expert_id: {self.expert_id}"
 
 
 class SynonymLink(models.Model):
     # FIXME: Couldn't get this to work with two FKs with both pointing to
     # tsn column in TaxonomicUnit table
-    tsn = models.IntegerField()
-    tsn_accepted = models.ForeignKey(TaxonomicUnit, on_delete=models.CASCADE)
+    synonym_id = models.IntegerField()
+    taxon_id_accepted = models.ForeignKey(TaxonomicUnit, on_delete=models.CASCADE)
     update_date = models.DateTimeField()
 
     def __str__(self):
-        return "tsn: {}, tsn_accepted: {}, update_date: {}".format(
-            self.tsn,
-            self.tsn_accepted,
+        return "synonym_id: {}, taxon_id_accepted: {}, update_date: {}".format(
+            self.synonym_id,
+            self.taxon_id_accepted,
             self.update_date
         )
 
@@ -651,3 +651,4 @@ def get_ref_from_doi(doi, ref=None, query_ads=True):
     citeproc_json = get_citeproc_json_from_doi(doi)
     ref = parse_citeproc_json(citeproc_json, ref, query_ads)
     return ref
+

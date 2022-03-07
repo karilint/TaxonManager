@@ -123,3 +123,17 @@ def view_taxons(request):
     taxons = TaxonomicUnit.objects.all()
     context = {'taxons': taxons}
     return render(request, 'front/taxons.html', context)
+
+def view_hierarchy(request, parent_id=None):
+    hierarchies = []
+    try:
+        root = TaxonomicUnit.objects.get(parent_id=parent_id)
+        hierarchies.append(root)
+        while (root.parent_id != 0):
+            root = TaxonomicUnit.objects.get(taxon_id=root.parent_id)
+            hierarchies.append(root)
+        hierarchies.reverse()
+    except:
+        pass
+    context = {'hierarchies': hierarchies}
+    return render(request, 'front/hierarchy.html', context)

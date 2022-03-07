@@ -15,7 +15,7 @@ from front.utils import canonicalize_doi
 from front.forms import RefForm
 from front.filters import RefFilter
 from django.contrib.auth.decorators import login_required
-from .models import TaxonomicUnit, Kingdom
+from .models import TaxonomicUnit
 
 
 
@@ -126,13 +126,14 @@ def view_taxons(request):
 
 def view_hierarchy(request, parent_id=None):
     hierarchies = []
-
-    root = TaxonomicUnit.objects.get(parent_id=parent_id)
-    hierarchies.append(root)
-    while (root.parent_id != 0):
-        root = TaxonomicUnit.objects.get(taxon_id=root.parent_id)
+    try:
+        root = TaxonomicUnit.objects.get(parent_id=parent_id)
         hierarchies.append(root)
-
-    hierarchies.reverse()
+        while (root.parent_id != 0):
+            root = TaxonomicUnit.objects.get(taxon_id=root.parent_id)
+            hierarchies.append(root)
+        hierarchies.reverse()
+    except:
+        pass
     context = {'hierarchies': hierarchies}
     return render(request, 'front/hierarchy.html', context)

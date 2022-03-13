@@ -22,8 +22,6 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.commentator} ({self.comment_time_stamp})"
 
-# Create your models here.
-
 
 class Kingdom(models.Model):
     kingdom_name = models.CharField(max_length=20)

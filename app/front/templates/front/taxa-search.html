@@ -1,0 +1,105 @@
+{% extends "front/base.html" %}
+<!-- <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:100,100i,400,400i,700,700i" rel="stylesheet"> -->
+<!-- {% load static pyref_tags %} -->
+<!-- {% block extra_css %} -->
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'refs/css/refs.css' %}" /> -->
+<!-- {% endblock %} -->
+
+
+
+
+{% block content %}
+
+<body>
+
+<div class="container content-container">
+<p><a href="/taxa">Taxa list</a> | <a href="/addName">Add taxon</a> | <a href="">Search</a></p>
+
+<h1>Taxon Search</h1>
+
+
+
+<div class="container">
+
+    <form method="get">
+        <div class="card card-body search-card">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_name1">{{ filter.form.unit_name1.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.unit_name1 }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_name2">{{ filter.form.unit_name2.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.unit_name2 }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_name3">{{ filter.form.unit_name3.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.unit_name3 }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_name4">{{ filter.form.unit_name4.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.unit_name4 }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12 text-center">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+
+    {% if filtered_taxa is not None %}
+    <h2 class="text-center">{{ nresults }} results</h2>
+
+    {% if nresults %}
+
+    
+    {% for taxon in filtered_taxa %}
+    <p>
+    {% if taxon.complete_name and taxon.rank_id.rank_name %}
+    <li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.complete_name }}</a> ({{ taxon.rank_id.rank_name }})</li>
+    {% elif taxon.complete_name %}
+    <li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.complete_name }}</a></li>
+    {% elif taxon.rank_id.rank_name %}
+    <li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.unit_name1 }}</a> ({{ taxon.rank_id.rank_name }})</li>
+    {% else %}
+    <li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.unit_name1 }}</a></li>
+    </p>
+    {% endif %}
+    {% endfor %}
+
+
+    {% endif %}
+    {% endif %}
+
+
+
+
+</div>
+</body>
+
+{% endblock %} 

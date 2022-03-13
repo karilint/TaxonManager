@@ -14,7 +14,7 @@ from front.models import Reference, get_ref_from_doi
 from .models import TaxonomicUnit, TaxonUnitType
 from front.utils import canonicalize_doi
 from front.forms import RefForm, NameForm
-from front.filters import RefFilter
+from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from .models import TaxonomicUnit
 
@@ -172,10 +172,43 @@ def resolve(request, pk=None):
     raise Http404
 
 
-def view_taxons(request):
-    taxons = TaxonomicUnit.objects.all()
-    context = {'taxons': taxons}
-    return render(request, 'front/taxons.html', context)
+def view_taxa(request):
+    taxa = TaxonomicUnit.objects.all()[:20]
+    context = {'taxa': taxa}
+    return render(request, 'front/taxa.html', context)
+
+def search_taxa(request):
+    taxa = TaxonomicUnit.objects.all()
+    taxon_filter = TaxonFilter(request.GET, queryset=taxa)
+    nresults = taxon_filter.qs.count()
+    filtered_qs = sorted(taxon_filter.qs, key=lambda objects: objects.pk)
+
+    paginator = Paginator(filtered_qs, 10)
+
+    content = {}
+    if request.GET:
+        page = request.GET.get('page')
+        try:
+            response = paginator.page(page)
+        except PageNotAnInteger:
+            response = paginator.page(1)
+        except EmptyPage:
+            response = paginator.page(paginator.num_pages)
+
+        querydict = request.GET.copy()
+        try:
+            del querydict['page']
+        except KeyError:
+            pass
+        content['querystring'] = '&' + querydict.urlencode()
+    else:
+        response = None
+
+    content.update({'filter': taxon_filter,
+              'filtered_taxa': response,
+              'nresults': nresults,
+              'paginator': paginator})
+    return render(request, 'front/taxa-search.html', content)
 
 def view_hierarchy(request, parent_id=None):
     hierarchies = []

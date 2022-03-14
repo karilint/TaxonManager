@@ -37,7 +37,7 @@ class ModelTest(TestCase):
 
         TaxonomicUnit.objects.create( 
             unit_name1="Lynx",
-            taxon_author_id=cls.author,
+            taxon_author_id=cls.author.taxon_author_id,
             parent_id=100,
             kingdom=cls.kingdom,
             complete_name="Lynx lynx"
@@ -49,7 +49,7 @@ class ModelTest(TestCase):
         for taxonomic_unit_name in range(number_of_taxonomic_units):
             tu = TaxonomicUnit.objects.create(
                 unit_name1 = f'Test {taxonomic_unit_name}',
-                taxon_author_id = cls.author,
+                taxon_author_id = cls.author.taxon_author_id,
                 parent_id = 100,
                 kingdom = cls.kingdom,
                 complete_name = f'Test {taxonomic_unit_name}'
@@ -120,7 +120,7 @@ class ModelTest(TestCase):
 
     def test_taxonomic_unit_refers_to_taxon_author_correctly(self):
         self.assertEqual(
-            self.taxonomic_unit.taxon_author_id.short_author, "Linnaeus 1758")
+            self.taxonomic_unit.taxon_author.short_author, "Linnaeus 1758")
     
     def test_taxonomic_unit_refers_to_synonym_link_and_synonym_link_has_correct_details(self):
         """ Tests that a TaxonomicUnit can refer to

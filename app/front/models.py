@@ -131,7 +131,7 @@ class TuCommentLink(models.Model):
     update_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"taxon_id: {self.taxon_id}, comment_id: {self.comment_id}"
+        return f"taxon_id: {self.taxon}, comment_id: {self.comment}"
 
 
 class Publication(models.Model):
@@ -159,7 +159,7 @@ class Publication(models.Model):
 
 class ReferenceLink(models.Model):
     class Meta:
-        unique_together = (('taxon_id', 'doc_id_prefix', 'documentation_id'))
+        unique_together = (('taxon', 'doc_id_prefix', 'documentation'))
 
     # doc_id_prefix identifies the reference as a
     # publication, expert or other source
@@ -184,7 +184,7 @@ class ReferenceLink(models.Model):
     update_date = models.DateTimeField()
 
     def __str__(self):
-        return f"taxon_id: {self.taxon_id}, documentation_id = {self.documentation_id}"
+        return f"taxon_id: {self.taxon}, documentation_id = {self.documentation}"
 
 
 class Expert(models.Model):
@@ -203,7 +203,7 @@ class GeographicDiv(models.Model):
     """ Model of a geographical division """
 
     class Meta:
-        unique_together = (('taxon_id', 'geographic_value'))
+        unique_together = (('taxon', 'geographic_value'))
 
     # TODO: This causes a warning, but this is left as is
     # until we understand the requirements better.
@@ -232,11 +232,11 @@ class ExpertsGeographicDiv(models.Model):
     # geographic areas. If we defined an ID to GeographicDiv table, this
     # may work better. This is just a hunch though.
     geographic = models.ForeignKey(
-        GeographicDiv, to_field='taxon_id', on_delete=models.CASCADE, default=1)
+        GeographicDiv, to_field='taxon', on_delete=models.CASCADE, default=1)
     expert = models.ForeignKey(Expert, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"geographic_id: {self.geographic_id}, expert_id: {self.expert_id}"
+        return f"geographic_id: {self.geographic}, expert: {self.expert}"
 
 
 class SynonymLink(models.Model):

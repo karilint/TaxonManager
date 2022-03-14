@@ -232,7 +232,7 @@ class ExpertsGeographicDiv(models.Model):
     # geographic areas. If we defined an ID to GeographicDiv table, this
     # may work better. This is just a hunch though.
     geographic = models.ForeignKey(
-        GeographicDiv, to_field='taxon', on_delete=models.CASCADE, default=1)
+        GeographicDiv, on_delete=models.CASCADE, default=1)
     expert = models.ForeignKey(Expert, on_delete=models.CASCADE)
 
     def __str__(self):

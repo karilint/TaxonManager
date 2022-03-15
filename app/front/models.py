@@ -82,10 +82,10 @@ class TaxonomicUnit(models.Model):
     phylo_sort_seq = models.IntegerField(null=True, blank=True)
     initial_time_stamp = models.DateTimeField(null=True, blank=True)
     parent_id = models.IntegerField()
-    taxon_author_id = models.ForeignKey(
+    taxon_author = models.ForeignKey(
         TaxonAuthorLkp, on_delete=models.CASCADE, null=True, blank=True)
     kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
-    rank_id = models.ForeignKey(TaxonUnitType, on_delete=models.CASCADE, null=True)
+    rank = models.ForeignKey(TaxonUnitType, on_delete=models.CASCADE, null=True)
     hybrid_author_id = models.IntegerField(null=True, blank=True)
     update_date = models.DateTimeField(null=True, blank=True)
     uncertain_prnt_ind = models.CharField(max_length=3, null=True, blank=True)
@@ -107,7 +107,7 @@ class Hierarchy(models.Model):
     """
     hierarchy_string = models.CharField(max_length=128, null=True, blank=True)
     # models.IntegerField(null=True)#
-    taxon_id = models.ForeignKey(TaxonomicUnit, on_delete=models.CASCADE)
+    taxon = models.ForeignKey(TaxonomicUnit, on_delete=models.CASCADE)
     parent_id = models.IntegerField(null=True, blank=True)
     level = models.IntegerField(null=True, blank=True)
     childrencount = models.IntegerField(null=True, blank=True)
@@ -120,16 +120,16 @@ class TuCommentLink(models.Model):
     """
     Many-to-many table between Comment and TaxonomicUnit tables
     """
-    taxon_id = models.ForeignKey(
+    taxon = models.ForeignKey(
         TaxonomicUnit, on_delete=models.CASCADE)  # models.IntegerField(null=True)#
-    comment_id = models.ForeignKey(
+    comment = models.ForeignKey(
         Comment,
         on_delete=models.CASCADE
     )
     update_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"taxon_id: {self.taxon_id}, comment_id: {self.comment_id}"
+        return f"taxon_id: {self.taxon}, comment_id: {self.comment}"
 
 
 class Publication(models.Model):
@@ -157,7 +157,7 @@ class Publication(models.Model):
 
 class ReferenceLink(models.Model):
     class Meta:
-        unique_together = (('taxon_id', 'doc_id_prefix', 'documentation_id'))
+        unique_together = (('taxon', 'doc_id_prefix', 'documentation'))
 
     # doc_id_prefix identifies the reference as a
     # publication, expert or other source
@@ -167,12 +167,12 @@ class ReferenceLink(models.Model):
         ('SRC', 'Other source')
     ]
 
-    taxon_id = models.ForeignKey(TaxonomicUnit, on_delete=models.CASCADE)
+    taxon = models.ForeignKey(TaxonomicUnit, on_delete=models.CASCADE)
     doc_id_prefix = models.CharField(
         max_length=3,
         choices=DOC_ID_PREFIX_CHOICES
     )
-    documentation_id = models.ForeignKey(
+    documentation = models.ForeignKey(
         Publication, to_field='publication_id', on_delete=models.CASCADE)
     # TODO: made des desc for clarity. Change database schema to match!
     original_desc_ind = models.CharField(max_length=1)
@@ -182,7 +182,7 @@ class ReferenceLink(models.Model):
     update_date = models.DateTimeField()
 
     def __str__(self):
-        return f"taxon_id: {self.taxon_id}, documentation_id = {self.documentation_id}"
+        return f"taxon_id: {self.taxon}, documentation_id = {self.documentation}"
 
 
 class Expert(models.Model):
@@ -201,11 +201,11 @@ class GeographicDiv(models.Model):
     """ Model of a geographical division """
 
     class Meta:
-        unique_together = (('taxon_id', 'geographic_value'))
+        unique_together = (('taxon', 'geographic_value'))
 
     # TODO: This causes a warning, but this is left as is
     # until we understand the requirements better.
-    taxon_id = models.ForeignKey(
+    taxon = models.ForeignKey(
         TaxonomicUnit,
         on_delete=models.CASCADE,
         unique=True
@@ -229,12 +229,12 @@ class ExpertsGeographicDiv(models.Model):
     # correctly to achieve many-to-many relationship between experts and
     # geographic areas. If we defined an ID to GeographicDiv table, this
     # may work better. This is just a hunch though.
-    geographic_id = models.ForeignKey(
-        GeographicDiv, to_field='taxon_id', on_delete=models.CASCADE, default=1)
-    expert_id = models.ForeignKey(Expert, on_delete=models.CASCADE)
+    geographic = models.ForeignKey(
+        GeographicDiv, on_delete=models.CASCADE, default=1)
+    expert = models.ForeignKey(Expert, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"geographic_id: {self.geographic_id}, expert_id: {self.expert_id}"
+        return f"geographic_id: {self.geographic}, expert: {self.expert}"
 
 
 class SynonymLink(models.Model):

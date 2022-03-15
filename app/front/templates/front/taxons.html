@@ -2,10 +2,10 @@
 {% block content %}
 
 <body>
+<p><a href="">Taxa list</a> | <a href="/addName">Add taxon</a> </p>
 
+<h1>Taxa lists</h1>
 {% if taxons %}
-<h1>Taxons</h1>
-
 <ul>
 {% for taxon in taxons %}
 
@@ -25,7 +25,7 @@
 </ul>
 
 {% else %}
-There are no taxons in the database.
+There are no taxa in the database.
 {% endif %}
   
 </body>

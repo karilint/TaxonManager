@@ -36,11 +36,13 @@ class RefForm(forms.ModelForm):
             pass
 
         return self.cleaned_data['doi']
-
+parent_types = [('1', 'Animalia'), ('2', 'Archaebacteria'), ('3', 'Eubacteria'), ('4', 'Protista'), ('5', 'Chromista'), ('6', 'Fungi'), ('7', 'Plantae')]
+rank_type = [('test_1', 'test_1'), ('test_2', 'test_2'), ('3', 'test_3'), ('4', 'test_4')]
 class NameForm(forms.ModelForm):
     template_name = 'add_name.html'
-    rank_name = forms.CharField()
-    parent_name = forms.CharField()
+    parent_name = forms.CharField(widget=forms.Select(choices=parent_types))
+    rank_name = forms.CharField(widget=forms.Select(choices=rank_type))
+    
     # FIX: In order to query database and set an author for new unit, add a suitable field 
     
     # other later deemed necessary fields can also be added here
@@ -49,5 +51,3 @@ class NameForm(forms.ModelForm):
         model = TaxonomicUnit
         fields = ['unit_name1', 'unit_name2', 'unit_name3', 'unit_name4']
         exclude = ['unnamed_taxon_ind']
-
-        

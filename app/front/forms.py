@@ -62,4 +62,4 @@ class NameForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['rank_name'].queryset = Kingdom.objects.none()
+        # self.fields['rank_name'].queryset = Kingdom.objects.none()

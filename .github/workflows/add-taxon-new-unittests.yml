@@ -22,8 +22,10 @@ jobs:
         working-directory: ./app
       - name: Make migrations
         run: |
-          python manage.py makemigrations front
+          python manage.py makemigrations
           python manage.py migrate --fake-initial
+          python manage.py makemigrations front
+          python manage.py migrate --fake-initial front
         working-directory: ./app      
       - name: Create test user
         run: |

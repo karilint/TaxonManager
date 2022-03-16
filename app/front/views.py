@@ -35,7 +35,7 @@ def load_taxonomicUnitTypes(request):
     kingdomName = Kingdom.objects.get(id=kingdomId)
     print('test {}'.format(kingdomName))
     # taxonomicTypes = TaxonUnitType.objects.filter(kingdom=kingdomId)
-    taxonomicUnits = TaxonomicUnit.objects.filter(kingdom=kingdomId).filter(rank=2)
+    taxonomicUnits = TaxonomicUnit.objects.filter(kingdom=kingdomId)
     print('testes {}'.format(taxonomicUnits))
     return render(request, 'front/taxonomic_unit_types.html', {'taxonomicTypes': taxonomicUnits})
 

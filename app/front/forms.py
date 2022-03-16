@@ -44,11 +44,7 @@ class NameForm(forms.ModelForm):
     # parent_name = forms.CharField(widget=forms.Select(choices=parent_types))
     # rank_name = forms.CharField(widget=forms.Select(choices=rank_type))
 
-    parent_name = forms.CharField(
-        widget=forms.Select(
-            choices=Kingdom.objects.all().values_list('id', 'kingdom_name')
-        )
-    )
+    parent_name = forms.ModelChoiceField(queryset=Kingdom.objects.all())
     rank_name = forms.CharField(widget=forms.Select(choices=[]))
     
     # FIX: In order to query database and set an author for new unit, add a suitable field 
@@ -63,3 +59,4 @@ class NameForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # self.fields['rank_name'].queryset = Kingdom.objects.none()
+        # self.fields['parent_name'].queryset = Kingdom.objects.all().values_list('id', 'kingdom_name')

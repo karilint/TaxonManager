@@ -29,7 +29,8 @@ def index(request):
 def login(request):
     return render(request, 'front/login.html')
 
-
+def load_taxonomicUnitTypes(request):
+    pass
 
 def taxon_add(request):
     # if this is a POST request we need to process the form data

@@ -85,7 +85,8 @@ def load_taxonomicUnitTypes(request):
     kingdomId = request.GET.get('id')
     
     kingdomName = Kingdom.objects.get(id=kingdomId)
-    kingdomName.taxonomicunit_set.all()
+    # kingdom_taxonomic_units = kingdomName.taxonomicunit_set.all()
+
     # print('test {}'.format(kingdomName))
     # taxonomicTypes = TaxonUnitType.objects.filter(kingdom=kingdomId)
     taxonomicUnits = TaxonomicUnit.objects.filter(kingdom=kingdomId)

@@ -36,16 +36,15 @@ class RefForm(forms.ModelForm):
             pass
 
         return self.cleaned_data['doi']
-parent_types = [('1', 'Animalia'), ('2', 'Archaebacteria'), ('3', 'Eubacteria'), ('4', 'Protista'), ('5', 'Chromista'), ('6', 'Fungi'), ('7', 'Plantae')]
-rank_type = [('test_1', 'test_1'), ('test_2', 'test_2'), ('3', 'test_3'), ('4', 'test_4')]
 
 class NameForm(forms.ModelForm):
     template_name = 'add_name.html'
-    # parent_name = forms.CharField(widget=forms.Select(choices=parent_types))
-    # rank_name = forms.CharField(widget=forms.Select(choices=rank_type))
 
-    parent_name = forms.ModelChoiceField(queryset=Kingdom.objects.all())
+    kingdom_name = forms.ModelChoiceField(queryset=Kingdom.objects.all())
     rank_name = forms.CharField(widget=forms.Select(choices=[]))
+
+    taxonnomic_types = forms.CharField(widget=forms.Select(choices=[]))
+    
     
     # FIX: In order to query database and set an author for new unit, add a suitable field 
     
@@ -53,10 +52,10 @@ class NameForm(forms.ModelForm):
 
     class Meta:
         model = TaxonomicUnit
-        fields = ['parent_name', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4']
+        fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4']
         exclude = ['unnamed_taxon_ind']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
         # self.fields['rank_name'].queryset = Kingdom.objects.none()
         # self.fields['parent_name'].queryset = Kingdom.objects.all().values_list('id', 'kingdom_name')

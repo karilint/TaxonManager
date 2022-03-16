@@ -5,7 +5,7 @@
 <p><a href="/taxons">Taxa list</a> | <a href=" ">Add taxon</a> </p>
 
 <h1>Add taxon</h1>
-  <form action="" method="post" id="parent-form", data-taxonomic-url="/load_taxonomicUnitTypes" novalidate>
+  <form action="" method="post" id="parent-form", data-taxonomic-url="/load_taxonomicUnitTypes" data_chosenTaxonLevel-url="/load_chosenTaxonLevel" novalidate>
     {% csrf_token %}
     <table>
     {{ form.as_table }}
@@ -16,7 +16,7 @@
 <script>
   $(document).ready(function() {
     
-    $('#id_parent_name').select2({
+    $('#id_kingdom_name').select2({
       minimumResultsForSearch: -1
     });
     $('#id_rank_name').select2();
@@ -25,7 +25,7 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
-  $("#id_parent_name").change(function (e) {
+  $("#id_kingdom_name").change(function (e) {
     e.preventDefault();
     // alert('hepp')
     // var parent_name="#data-select2-id";
@@ -43,6 +43,31 @@
       success: function(data) {
           // alert(data);
           $('#id_rank_name').html(data);
+      },
+      error: function(data) {
+          alert('errors');
+      }
+    });
+
+
+  });
+</script>
+
+<script>
+  $("#id_rank_name").change(function (e) {
+    e.preventDefault();
+    // alert('hepp')
+    var url = $( '#parent-form' ).attr( 'data_chosenTaxonLevel-url' );
+    var rankId = $(this).val();
+
+    $.ajax({
+      url: url,
+      data: {
+        'id': rankId
+      },
+      success: function(data) {
+          alert(data);
+          $('#id_taxonnomic_types').html(data);
       },
       error: function(data) {
           alert('errors');

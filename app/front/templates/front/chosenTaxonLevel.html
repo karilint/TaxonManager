@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for type in taxonLevels %}
+<option value="{{ type.rank_name }}">{{ type.rank_name }}</option>
+{% endfor %}

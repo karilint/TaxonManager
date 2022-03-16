@@ -19,5 +19,6 @@ urlpatterns = [
     path('taxons/', views.view_taxons, name='taxons'),
     re_path(r'hierarchy/(?:(?P<parent_id>\d+))?$', views.view_hierarchy, name='hierarchy'),
     path("favicon.ico", RedirectView.as_view(url=staticfiles_storage.url("favicon.ico"))),
-    path('load_taxonomicUnitTypes/', views.load_taxonomicUnitTypes, name='load_taxonomicUnitTypes')
+    path('load_taxonomicUnitTypes/', views.load_taxonomicUnitTypes, name='load_taxonomicUnitTypes'),
+    path('load_chosenTaxonLevel/', views.load_chosenTaxonLevel, name='load_chosenTaxonLevel')
 ]

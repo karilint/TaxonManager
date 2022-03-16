@@ -33,11 +33,30 @@ def load_taxonomicUnitTypes(request):
     kingdomId = request.GET.get('id')
     
     kingdomName = Kingdom.objects.get(id=kingdomId)
-    print('test {}'.format(kingdomName))
+    # kingdom_taxons = kingdomName.taxonomicunit_set.all()
+    # print('test {}'.format(kingdomName))
     # taxonomicTypes = TaxonUnitType.objects.filter(kingdom=kingdomId)
-    taxonomicUnits = TaxonomicUnit.objects.filter(kingdom=kingdomId)
-    print('testes {}'.format(taxonomicUnits))
-    return render(request, 'front/taxonomic_unit_types.html', {'taxonomicTypes': taxonomicUnits})
+    rankTypes = TaxonomicUnit.objects.filter(kingdom=kingdomId)
+    # print('testes {}'.format(taxonomicUnits[0].rank_id))
+    # # test_unitType = TaxonUnitType.objects.get(id=taxonomicUnits[0].rank_id)
+    # test_unitType = TaxonUnitType.objects.get(dir_parent_rank_id=kingdomId)
+    # print('tulostus {}'.format(test_unitType))
+    # # tulostus Kingdom: Animalia, rank_name: Phylum, rank_id:30
+
+    # TaxonomicUnitsSearchedbyRank = TaxonomicUnit.objects.filter(rank = test_unitType)
+    # print('tulostus2 {}'.format(TaxonomicUnitsSearchedbyRank))
+    # # tulostus2 <QuerySet [<TaxonomicUnit: Myxozoa, Kingdom: Animalia (taxon_id: 1, parent_id: 10)>, <TaxonomicUnit: Chordata, Kingdom: Animalia (taxon_id: 2, parent_id: 10)>]>
+
+    return render(request, 'front/rankTypes.html', {'rankTypes': rankTypes})
+
+def load_chosenTaxonLevel(request):
+    kingdomName = request.GET.get('id')
+    kingdom = Kingdom.objects.get(kingdom_name=kingdomName)
+    # print(kingdomName)
+    taxonLevels = TaxonUnitType.objects.filter(kingdom = kingdom)
+    print('taxonLevels: {}'.format(taxonLevels))
+    return render(request, 'front/chosenTaxonLevel.html', {'taxonLevels': taxonLevels})
+
 
 def taxon_add(request):
     # if this is a POST request we need to process the form data
@@ -55,10 +74,32 @@ def taxon_add(request):
             try:
                 # save names from Modelform, but don't admit new unit to db yet
                 new_unit = form.save(commit=False)
-                
                 # handle custom fields and db dependencies:
                 # get parent id by parent's name + set it to be the new unit's parent
-                parent =TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data['parent_name'])                
+                # print('2: {}'.format(form.cleaned_data['parent_name']))
+                # 2: Animalia
+
+                
+                # parent: Animalia, Kingdom: Animalia (taxon_id: 5, parent_id: 0)
+                # print(new_unit)
+                rank_of_new_taxon = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data['rank_name'])# new_unit.unit_name1)
+                print('chosen_rank: {}'.format(rank_of_new_taxon))
+                # chosen_rank: Bilateria, Kingdom: Animalia (taxon_id: 3, parent_id: 10)
+
+                # Get the chosen kingdom
+                kingdom = Kingdom.objects.get(kingdom_name=form.cleaned_data['kingdom_name'])
+                # Get the taxon unit types related to a given kingdom.
+                taxon_unit_types = TaxonUnitType.objects.filter(kingdom_id=kingdom.id)
+                print('unit_types: {}'.format(taxon_unit_types))
+                # unit_types: <QuerySet [<TaxonUnitType: Kingdom: Animalia, rank_name: Kingdom, rank_id:10>, <TaxonUnitType: Kingdom: Animalia, rank_name: Subkingdom, rank_id:20>, <TaxonUnitType: Kingdom: Animalia, rank_name: Infrakingdom, rank_id:25>, <TaxonUnitType: Kingdom: Animalia, rank_name: Superphylum, rank_id:27>, <TaxonUnitType: Kingdom: Animalia, rank_name: Phylum, rank_id:30>, <TaxonUnitType: Kingdom: Animalia, rank_name: Subphylum, rank_id:40>, <TaxonUnitType: Kingdom: Animalia, rank_name: Infraphylum, rank_id:45>, <TaxonUnitType: Kingdom: Animalia, rank_name: Superclass, rank_id:50>, <TaxonUnitType: Kingdom: Animalia, rank_name: Class, rank_id:60>, <TaxonUnitType: Kingdom: Animalia, rank_name: Subclass, rank_id:70>, <TaxonUnitType: Kingdom: Animalia, rank_name: Infraclass, rank_id:80>, <TaxonUnitType: Kingdom: Animalia, rank_name: Superorder, rank_id:90>, <TaxonUnitType: Kingdom: Animalia, rank_name: Order, rank_id:100>, <TaxonUnitType: Kingdom: Animalia, rank_name: Suborder, rank_id:110>, <TaxonUnitType: Kingdom: Animalia, rank_name: Infraorder, rank_id:120>, <TaxonUnitType: Kingdom: Animalia, rank_name: Section, rank_id:124>, <TaxonUnitType: Kingdom: Animalia, rank_name: Subsection, rank_id:126>, <TaxonUnitType: Kingdom: Animalia, rank_name: Superfamily, rank_id:130>, <TaxonUnitType: Kingdom: Animalia, rank_name: Family, rank_id:140>, <TaxonUnitType: Kingdom: Animalia, rank_name: Subfamily, rank_id:150>, '...(remaining elements truncated)...']>
+
+
+
+
+                parent = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data['rank_name'])   
+                print('parent: {}'.format(parent))
+
+                # parent: Animalia, Kingdom: Animalia (taxon_id: 5, parent_id: 0)           
                 new_unit.parent_id = parent.taxon_id
 
                 # set new unit's kingdom based on parent's kingdom
@@ -72,8 +113,12 @@ def taxon_add(request):
 
                 #else if there's no author:
                 #get rank by kingdom name and rank name + set rank to new unit
-                rank = TaxonUnitType.objects.get(rank_name = form.cleaned_data['rank_name'], kingdom = new_unit.kingdom)
-                new_unit.rank_id = rank
+                # rank = TaxonUnitType.objects.get(rank_name = form.cleaned_data['rank_name'], kingdom = new_unit.kingdom)
+                new_unit.rank_id = rank_of_new_taxon.taxon_id
+
+                hierarchy_string = str(parent.taxon_id) + str(rank_of_new_taxon.taxon_id)
+                print('hierarkia: {}'.format(hierarchy_string))
+                # hierarkia: 56
 
                 #save new unit =name
                 new_unit.save()

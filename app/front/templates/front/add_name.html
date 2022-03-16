@@ -5,7 +5,7 @@
 <p><a href="/taxons">Taxa list</a> | <a href=" ">Add taxon</a> </p>
 
 <h1>Add taxon</h1>
-  <form action="" method="post">
+  <form action="" method="post" id="parent-form", data-taxonomic-url="/load_taxonomicUnitTypes" novalidate>
     {% csrf_token %}
     <table>
     {{ form.as_table }}
@@ -22,5 +22,36 @@
     $('#id_rank_name').select2();
 });
 </script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  $("#id_parent_name").change(function (e) {
+    e.preventDefault();
+    // alert('hepp')
+    // var parent_name="#data-select2-id";
+    // const parent = document.querySelector('#data-select2-id');
+    var url = $( '#parent-form' ).attr( 'data-taxonomic-url' );
+    var parentId = $(this).val();
+    // alert(url);
+    // alert(parentId);
+
+    $.ajax({
+      url: url,
+      data: {
+        'id': parentId
+      },
+      success: function(data) {
+          // alert(data);
+          $('#id_rank_name').html(data);
+      },
+      error: function(data) {
+          alert('errors');
+      }
+    });
+
+
+  });
+</script>
+
 </body>
 {% endblock %}

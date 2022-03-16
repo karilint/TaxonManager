@@ -219,9 +219,9 @@ describe("TaxonManager", () => {
     cy.contains("0 Results");
 
     // Search reference with DOI
-    cy.get("#id_title").clear();
-    cy.get("#id_doi").type("10.1109/SMC.2016.7844781");
-    cy.get(".btn").click();
-    cy.contains("1 Results");
+    //cy.get("#id_title").clear();
+    //cy.get("#id_doi").type("10.1109/SMC.2016.7844781");
+    //cy.get(".btn").click();
+    //cy.contains("1 Results");
   });
 });

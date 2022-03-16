@@ -85,6 +85,7 @@ def load_taxonomicUnitTypes(request):
     kingdomId = request.GET.get('id')
     
     kingdomName = Kingdom.objects.get(id=kingdomId)
+    kingdomName.taxonomicunit_set.all()
     # print('test {}'.format(kingdomName))
     # taxonomicTypes = TaxonUnitType.objects.filter(kingdom=kingdomId)
     taxonomicUnits = TaxonomicUnit.objects.filter(kingdom=kingdomId)
@@ -157,6 +158,8 @@ def refs_add(request, pk=None):
 def delete(request, pk):
     ref = get_object_or_404(Reference, pk=pk)
     ref.visible = 0
+    ref.doi = ''
+    ref.title = ref.title + ' (removed)'
     ref.save()
     return HttpResponseRedirect('/references')
 

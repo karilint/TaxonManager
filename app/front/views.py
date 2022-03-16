@@ -90,11 +90,9 @@ def taxon_add(request):
             try:
                 # save names from Modelform, but don't admit new unit to db yet
                 new_unit = form.save(commit=False)
-                # handle custom fields and db dependencies:
-                # get parent id by parent's name + set it to be the new unit's parent
-                # print('2: {}'.format(form.cleaned_data['parent_name']))
-                # 2: Animalia
-
+                # taxonnomic_types dropdown = parent lisättävälle taxonille
+                # rank_name = taso, jolla uusi taxon lisätään
+                # unit_name1 etc = lisättävän tason nimet yms
                 
                 # parent: Animalia, Kingdom: Animalia (taxon_id: 5, parent_id: 0)
                 # print(new_unit)

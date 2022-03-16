@@ -32,7 +32,9 @@ def login(request):
 def load_taxonomicUnitTypes(request):
     kingdomId = request.GET.get('id')
     
+
     kingdomName = Kingdom.objects.get(id=kingdomId)
+    taxonLevels = TaxonUnitType.objects.filter(kingdom = kingdomName)
     # kingdom_taxons = kingdomName.taxonomicunit_set.all()
     # print('test {}'.format(kingdomName))
     # taxonomicTypes = TaxonUnitType.objects.filter(kingdom=kingdomId)
@@ -47,15 +49,29 @@ def load_taxonomicUnitTypes(request):
     # print('tulostus2 {}'.format(TaxonomicUnitsSearchedbyRank))
     # # tulostus2 <QuerySet [<TaxonomicUnit: Myxozoa, Kingdom: Animalia (taxon_id: 1, parent_id: 10)>, <TaxonomicUnit: Chordata, Kingdom: Animalia (taxon_id: 2, parent_id: 10)>]>
 
-    return render(request, 'front/rankTypes.html', {'rankTypes': rankTypes})
+    return render(request, 'front/rankTypes.html', {'rankTypes': taxonLevels})
 
 def load_chosenTaxonLevel(request):
-    kingdomName = request.GET.get('id')
-    kingdom = Kingdom.objects.get(kingdom_name=kingdomName)
-    # print(kingdomName)
-    taxonLevels = TaxonUnitType.objects.filter(kingdom = kingdom)
-    print('taxonLevels: {}'.format(taxonLevels))
-    return render(request, 'front/chosenTaxonLevel.html', {'taxonLevels': taxonLevels})
+    taxonnomicTypeName = request.GET.get('id')
+    kingdomId = request.GET.get('kingdomId')
+    kingdom = Kingdom.objects.get(pk=kingdomId)
+
+    taxonnomicType = TaxonUnitType.objects.get(rank_name=taxonnomicTypeName, kingdom=kingdom)
+    # print("Taxonomic type: {}".format(taxonnomicType))
+    # Taxonomic type: <QuerySet [<TaxonUnitType: Kingdom: Animalia, rank_name: Subkingdom, rank_id:20>]>
+    taxontype = TaxonUnitType.objects.get(rank_id=taxonnomicType.rank_id, kingdom=taxonnomicType.kingdom)
+    # print('taxontype {}'.format(taxontype.dir_parent_rank_id))
+    prev_taxontype = TaxonUnitType.objects.get(rank_id=taxontype.dir_parent_rank_id, kingdom=taxonnomicType.kingdom)
+    # print('prev_taxontype {}'.format(prev_taxontype))
+    #
+
+    # print(TaxonomicUnit.objects.filter(rank=taxontype.dir_parent_rank_id).filter(kingdom=kingdom))
+    previous_taxonomic_unit = TaxonomicUnit.objects.filter(rank=prev_taxontype)
+    
+
+    # print('testii {}'.format(previous_taxonomic_unit))
+
+    return render(request,  'front/chosenTaxonLevel.html', {'taxonLevels': previous_taxonomic_unit})
 
 
 def taxon_add(request):
@@ -93,8 +109,8 @@ def taxon_add(request):
                 print('unit_types: {}'.format(taxon_unit_types))
                 # unit_types: <QuerySet [<TaxonUnitType: Kingdom: Animalia, rank_name: Kingdom, rank_id:10>, <TaxonUnitType: Kingdom: Animalia, rank_name: Subkingdom, rank_id:20>, <TaxonUnitType: Kingdom: Animalia, rank_name: Infrakingdom, rank_id:25>, <TaxonUnitType: Kingdom: Animalia, rank_name: Superphylum, rank_id:27>, <TaxonUnitType: Kingdom: Animalia, rank_name: Phylum, rank_id:30>, <TaxonUnitType: Kingdom: Animalia, rank_name: Subphylum, rank_id:40>, <TaxonUnitType: Kingdom: Animalia, rank_name: Infraphylum, rank_id:45>, <TaxonUnitType: Kingdom: Animalia, rank_name: Superclass, rank_id:50>, <TaxonUnitType: Kingdom: Animalia, rank_name: Class, rank_id:60>, <TaxonUnitType: Kingdom: Animalia, rank_name: Subclass, rank_id:70>, <TaxonUnitType: Kingdom: Animalia, rank_name: Infraclass, rank_id:80>, <TaxonUnitType: Kingdom: Animalia, rank_name: Superorder, rank_id:90>, <TaxonUnitType: Kingdom: Animalia, rank_name: Order, rank_id:100>, <TaxonUnitType: Kingdom: Animalia, rank_name: Suborder, rank_id:110>, <TaxonUnitType: Kingdom: Animalia, rank_name: Infraorder, rank_id:120>, <TaxonUnitType: Kingdom: Animalia, rank_name: Section, rank_id:124>, <TaxonUnitType: Kingdom: Animalia, rank_name: Subsection, rank_id:126>, <TaxonUnitType: Kingdom: Animalia, rank_name: Superfamily, rank_id:130>, <TaxonUnitType: Kingdom: Animalia, rank_name: Family, rank_id:140>, <TaxonUnitType: Kingdom: Animalia, rank_name: Subfamily, rank_id:150>, '...(remaining elements truncated)...']>
 
-
-
+                # ??????
+                # prev_taxon_unit = TaxonomicUnit.objects.filter(rank_id=)
 
                 parent = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data['rank_name'])   
                 print('parent: {}'.format(parent))

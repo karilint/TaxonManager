@@ -42,7 +42,7 @@
       },
       success: function(data) {
           // alert(data);
-          $('#id_rank_name').html(data);
+          $('#id_taxonnomic_types').html(data);
       },
       error: function(data) {
           alert('errors');
@@ -54,20 +54,23 @@
 </script>
 
 <script>
-  $("#id_rank_name").change(function (e) {
+  $("#id_taxonnomic_types").change(function (e) {
     e.preventDefault();
     // alert('hepp')
+    
     var url = $( '#parent-form' ).attr( 'data_chosenTaxonLevel-url' );
     var rankId = $(this).val();
+    var kingdomId = $('#id_kingdom_name').val();
 
     $.ajax({
       url: url,
       data: {
-        'id': rankId
+        'id': rankId,
+        'kingdomId': kingdomId
       },
       success: function(data) {
           alert(data);
-          $('#id_taxonnomic_types').html(data);
+          $('#id_rank_name').html(data);
       },
       error: function(data) {
           alert('errors');

@@ -13,7 +13,7 @@
 #   limitations under the License.
 
 from django import forms
-from .models import Reference, TaxonomicUnit
+from .models import Reference, TaxonomicUnit, Kingdom
 
 class RefForm(forms.ModelForm):
     class Meta:
@@ -40,8 +40,12 @@ parent_types = [('1', 'Animalia'), ('2', 'Archaebacteria'), ('3', 'Eubacteria'),
 rank_type = [('test_1', 'test_1'), ('test_2', 'test_2'), ('3', 'test_3'), ('4', 'test_4')]
 class NameForm(forms.ModelForm):
     template_name = 'add_name.html'
-    parent_name = forms.CharField(widget=forms.Select(choices=parent_types))
-    rank_name = forms.CharField(widget=forms.Select(choices=rank_type))
+    parent_name = forms.CharField(
+        widget=forms.Select(
+            choices=Kingdom.objects.all().values_list('id', 'kingdom_name')
+        )
+    )
+    rank_name = forms.CharField(widget=forms.Select(choices=[]))
     
     # FIX: In order to query database and set an author for new unit, add a suitable field 
     
@@ -49,5 +53,9 @@ class NameForm(forms.ModelForm):
 
     class Meta:
         model = TaxonomicUnit
-        fields = ['unit_name1', 'unit_name2', 'unit_name3', 'unit_name4']
+        fields = ['parent_name', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4']
         exclude = ['unnamed_taxon_ind']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['rank_name'].queryset = Kingdom.objects.none()

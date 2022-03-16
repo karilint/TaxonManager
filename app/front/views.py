@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import user_passes_test
 from front.models import Reference, get_ref_from_doi
-from .models import TaxonomicUnit, TaxonUnitType
+from .models import TaxonomicUnit, TaxonUnitType, Kingdom
 from front.utils import canonicalize_doi
 from front.forms import RefForm, NameForm
 from front.filters import RefFilter
@@ -80,6 +80,16 @@ def taxon_add(request):
         form = NameForm()
     return render(request, 'front/add_name.html', {'form': form})
 
+
+def load_taxonomicUnitTypes(request):
+    kingdomId = request.GET.get('id')
+    
+    kingdomName = Kingdom.objects.get(id=kingdomId)
+    # print('test {}'.format(kingdomName))
+    # taxonomicTypes = TaxonUnitType.objects.filter(kingdom=kingdomId)
+    taxonomicUnits = TaxonomicUnit.objects.filter(kingdom=kingdomId)
+    print('testes {}'.format(taxonomicUnits))
+    return render(request, 'front/taxonomic_unit_types.html', {'taxonomicTypes': taxonomicUnits})
 
 def view_reference(request):
     refs = Reference.objects.all().filter(visible=1)

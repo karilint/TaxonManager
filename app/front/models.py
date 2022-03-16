@@ -375,9 +375,7 @@ class Reference(models.Model):
         """
         Return a shortened list of authors, limited to nret names plus "et al."
         if there are more than nmax authors associated with a Ref object.
-
         If nmax is None, then return all author names.
-
         """
 
         if nmax == None:
@@ -651,4 +649,3 @@ def get_ref_from_doi(doi, ref=None, query_ads=True):
     citeproc_json = get_citeproc_json_from_doi(doi)
     ref = parse_citeproc_json(citeproc_json, ref, query_ads)
     return ref
-

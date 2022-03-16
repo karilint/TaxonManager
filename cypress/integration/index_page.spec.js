@@ -15,8 +15,19 @@ describe("TaxonManager", () => {
     cy.contains("Features");
     cy.contains("Help");
     cy.contains("2022");
-    cy.contains("Add reference")
+    cy.contains("Add reference");
+    cy.contains("Welcome");
     cy.get("#mySidebar");
+
+    cy.contains("TaxonManger is a tool for classifying fossil species.");
+    cy.contains("In the scientific classification of fossil species, organisms are organized into hierarchical categories, taxa. Different taxon levels include, for example, class, order, tribe, genus, and species. As research progresses, knowledge about the relationships of the species also increases, which may lead to changes in their taxonomy.");
+    cy.contains("2022 - TaxonManager");
+
+    // images shown with credits on frontpage
+    cy.get(".image_text").should("exist");
+    cy.contains("Picture © Luonnontieteellinen Keskusmuseo");
+    cy.get("#header_image");
+    cy.contains("Picture_©_Noira_Martiskainen");
 
   });
   it("Menu shows up on sidebar and adapts to logging in and out, on small screens", () => {
@@ -25,9 +36,11 @@ describe("TaxonManager", () => {
 
     // menu shows on small screen
     cy.viewport(990, 660);
+    cy.get("Welcome").should("not.exist");
     cy.get(".header-left .header-button").click();
+    cy.get("#header_image");
     cy.contains("Menu");
-
+    
     // menu contains login 
     cy.get("#menuForSmallScreen")
     cy.contains("Login")
@@ -48,7 +61,12 @@ describe("TaxonManager", () => {
     cy.contains("Login")
 
   });
+
+
   it("Front page adapts to logging in and logging out", () => {
+    // front page contains information about login in
+    cy.contains("Hello guest! Log in with your ORCID account. Upon the first time of use we will send an e-mail to you for verification. Please follow the link provided to finalize the signup process.");
+
     // front page contains login button but no logout button
     cy.get("#loginButton").should("exist");
     cy.get("#logout-button").should("not.exist");
@@ -63,6 +81,9 @@ describe("TaxonManager", () => {
     // front page contains logout button but no login button
     cy.get("#logoutButton").should("exist");
     cy.get("#login-button").should("not.exist");
+
+    // front page shows username
+    cy.contains("Hello, testaaja! You are logged in.");
 
     // logout through logout button
     cy.contains("Logout").click();
@@ -101,9 +122,11 @@ describe("TaxonManager", () => {
 
     cy.visit("http://localhost:8000/add-references/");
 
-    // Add references page contains Add or Edit Reference
+    // Add references page contains Add or Edit Reference and other tags
     cy.contains("Add or Edit Reference");
-
+    cy.contains("Reference List");
+    cy.contains("Add a reference");
+    cy.contains("Search");
     // Add references page contains form for adding or editing
     // cy.get("#add-ref-form").should("exist");
 
@@ -120,7 +143,40 @@ describe("TaxonManager", () => {
 
     // Check if reference can be found on page
     cy.contains("Testi Kirjoittaja");
+
+    // Add reference using DOI
+    cy.visit("http://localhost:8000/add-references/");
+    cy.get("#id_doi").type("10.1109/SMC.2016.7844781");
+    cy.contains("Submit").click();
+
     cy.contains("Logout").click({ force: true });
+  });
+  it("Edit and delete reference", () => {
+    // login via the admin page to bypass orcid authentication
+    cy.visit("http://localhost:8000/admin/login/?next=/admin/");
+    cy.get("#id_username").type("testaaja");
+    cy.get("#id_password").type("cypress");
+    cy.contains("Log in").click();
+
+    cy.visit("http://localhost:8000/add-references/1");
+
+    // Edit reference
+    cy.get("#id_title").clear();
+    cy.get("#id_title").type("Another Title");
+    cy.contains("Submit").click();
+    cy.visit("http://localhost:8000/references/");
+
+    // Check if reference has been updated
+    cy.contains("Another Title");
+
+    // revert back
+    cy.visit("http://localhost:8000/add-references/1");
+    cy.get("#id_title").clear();
+    cy.get("#id_title").type("Testi otsikko");
+    cy.contains("Submit").click();
+
+    //Delete reference
+
   });
   it("Logged in user that not part of group contributors", () => {
     // login via the admin page to bypass orcid authentication
@@ -138,6 +194,31 @@ describe("TaxonManager", () => {
     //check view when user not part of group
     cy.visit("http://localhost:8000/add-references/");
     cy.contains("Add or Edit Reference").should("not.exist");
+  });
+
+  it("Search references", () => { 
+    cy.contains("References").click();
+    cy.contains("Search").click();
+
+    // Search reference with no input
+    cy.get(".btn").click();
+    cy.contains("2 Results");
+
+    // Search reference with correct input
+    cy.get("#id_title").type("Testi otsikko");
+    cy.get(".btn").click();
+    cy.contains("1 Results");
+
+    // Search reference with wrong input
+    cy.get("#id_title").type("0");
+    cy.get(".btn").click();
+    cy.contains("0 Results");
+
+    // Search reference with DOI
+    cy.get("#id_title").clear();
+    cy.get("#id_doi").type("10.1109/SMC.2016.7844781");
+    cy.get(".btn").click();
+    cy.contains("1 Results");
   });
 });
 

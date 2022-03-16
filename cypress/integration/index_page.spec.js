@@ -38,8 +38,13 @@ describe("TaxonManager", () => {
     cy.viewport(990, 660);
     cy.get("Welcome").should("not.exist");
     cy.get(".header-left .header-button").click();
-    cy.get("#header_image");
     cy.contains("Menu");
+
+    // images shown on small screen
+    cy.get(".image_text").should("exist");
+    cy.contains("Picture © Luonnontieteellinen Keskusmuseo");
+    cy.get("#header_image");
+    cy.contains("Picture_©_Noira_Martiskainen");
     
     // menu contains login 
     cy.get("#menuForSmallScreen")
@@ -138,16 +143,15 @@ describe("TaxonManager", () => {
     // Submit
     cy.contains("Submit").click();
 
-    // Visit
-    cy.visit("http://localhost:8000/references/");
-
-    // Check if reference can be found on page
-    cy.contains("Testi Kirjoittaja");
-
     // Add reference using DOI
     cy.visit("http://localhost:8000/add-references/");
     cy.get("#id_doi").type("10.1109/SMC.2016.7844781");
     cy.contains("Submit").click();
+
+    // check that added references are listed
+    cy.visit("http://localhost:8000/references/");
+    cy.contains("Testi Kirjoittaja");
+    cy.contains("10.1109/SMC.2016.7844781");
 
     cy.contains("Logout").click({ force: true });
   });
@@ -221,4 +225,3 @@ describe("TaxonManager", () => {
     //cy.contains("1 Results");
   });
 });
-

@@ -1,3 +1,4 @@
+from xxlimited import new
 from django import template
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -11,7 +12,7 @@ from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import user_passes_test
 from front.models import Reference, get_ref_from_doi
-from .models import TaxonomicUnit, TaxonUnitType
+from .models import Hierarchy, TaxonomicUnit, TaxonUnitType, Kingdom
 from front.utils import canonicalize_doi
 from front.forms import RefForm, NameForm
 from front.filters import RefFilter
@@ -30,30 +31,49 @@ def login(request):
     return render(request, 'front/login.html')
 
 
-
-def taxon_add(request):
-    # if this is a POST request we need to process the form data
+def load_rankOfTaxonToBeAdded(request):
+    kingdomId = request.GET.get('id')
+    kingdomName = Kingdom.objects.get(id=kingdomId)
     
+    rankOfTaxonToBeAdded = TaxonUnitType.objects.exclude(rank_name='Kingdom').filter(kingdom = kingdomName)
+
+    return render(request, 'front/rankOfTaxonToBeAdded.html', {'rankOfTaxonToBeAdded': rankOfTaxonToBeAdded})
+
+def load_parentTaxon(request):
+    taxonnomicTypeName = request.GET.get('id')
+    kingdomId = request.GET.get('kingdomId')
+    kingdom = Kingdom.objects.get(pk=kingdomId)
+
+    taxontype = TaxonUnitType.objects.get(rank_name=taxonnomicTypeName, kingdom=kingdom)
+    prev_taxontype = TaxonUnitType.objects.get(rank_id=taxontype.dir_parent_rank_id, kingdom=taxontype.kingdom)
+
+    parentTaxon = TaxonomicUnit.objects.filter(rank=prev_taxontype)
+
+    return render(request,  'front/parentTaxon.html', {'parentTaxon': parentTaxon})
+
+
+def taxon_add(request):   
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = NameForm(request.POST)
                 
         # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            
+        if form.is_valid():            
             try:
                 # save names from Modelform, but don't admit new unit to db yet
                 new_unit = form.save(commit=False)
-                
-                # handle custom fields and db dependencies:
-                # get parent id by parent's name + set it to be the new unit's parent
-                parent =TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data['parent_name'])                
-                new_unit.parent_id = parent.taxon_id
+                kingdom = Kingdom.objects.get(kingdom_name=form.cleaned_data['kingdom_name'])
+                rank_of_new_taxon = TaxonUnitType.objects.get(rank_name = form.cleaned_data['taxonnomic_types'], kingdom = kingdom)
 
-                # set new unit's kingdom based on parent's kingdom
+                #if rank_of_new_taxon.rank_name=='Subkingdom':
+                 #   parent = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data['kingdom_name'])
+                #else:
+                
+                parent = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data['rank_name'])   
+                
+                # set new unit's parent
+                new_unit.parent_id = parent.taxon_id
+                # and kingdom based on parent
                 new_unit.kingdom = parent.kingdom
             
                 #FIX: set author (can be something or null)
@@ -64,22 +84,49 @@ def taxon_add(request):
 
                 #else if there's no author:
                 #get rank by kingdom name and rank name + set rank to new unit
-                rank = TaxonUnitType.objects.get(rank_name = form.cleaned_data['rank_name'], kingdom = new_unit.kingdom)
-                new_unit.rank_id = rank
+                new_unit.rank = rank_of_new_taxon
 
                 #save new unit =name
+                
                 new_unit.save()
+                create_hierarchystring(new_unit)
             except TaxonomicUnit.DoesNotExist:
                 # form was filled incorrectly
                 print("saving new unit did not workout; do something")
-
-            return HttpResponseRedirect('/addName')
-
+            return HttpResponseRedirect('/taxons')
+            
     # if a GET (or any other method) we'll create a blank form
     else:
         form = NameForm()
     return render(request, 'front/add_name.html', {'form': form})
 
+
+def create_hierarchystring(taxon):
+    hierarchystring = []
+
+    hierarchyParentId = str(taxon.parent_id)
+    hierarchyTaxonId = taxon
+
+    while (True):
+        hierarchystring.append(str(taxon.taxon_id))
+        if taxon.parent_id == 0:
+            break
+        taxon = TaxonomicUnit.objects.get(taxon_id=taxon.parent_id)        
+    
+    hierarchystring.reverse()
+    hierarchystringFinal = '-'.join(hierarchystring)
+    hierarchyLevel = len(hierarchystring) - 1
+    
+    new_hierarchy = Hierarchy(
+        hierarchy_string=hierarchystringFinal,
+        taxon=hierarchyTaxonId,
+        parent_id=hierarchyParentId,
+        level=hierarchyLevel
+        #TODO: childrencount?
+    )
+    
+    new_hierarchy.save()
+    
 
 def view_reference(request):
     refs = Reference.objects.all().filter(visible=1)
@@ -122,7 +169,7 @@ def search(request):
               'paginator': paginator})
     return render(request, 'front/search.html', c)
 
-# @login_required
+
 def refs_add(request, pk=None):
     c = {'pk': pk if pk else ''}
     if request.method == 'POST':
@@ -143,10 +190,11 @@ def refs_add(request, pk=None):
     c['form'] = form
     return render(request, 'front/add_reference.html', c)
 
-#@user_passes_test(user_can_edit)
 def delete(request, pk):
     ref = get_object_or_404(Reference, pk=pk)
     ref.visible = 0
+    ref.doi = ''
+    ref.title = ref.title + ' (removed)'
     ref.save()
     return HttpResponseRedirect('/references')
 
@@ -178,15 +226,17 @@ def view_taxons(request):
     return render(request, 'front/taxons.html', context)
 
 def view_hierarchy(request, parent_id=None):
-    hierarchies = []
-    try:
-        root = TaxonomicUnit.objects.get(parent_id=parent_id)
-        hierarchies.append(root)
-        while (root.parent_id != 0):
-            root = TaxonomicUnit.objects.get(taxon_id=root.parent_id)
-            hierarchies.append(root)
-        hierarchies.reverse()
-    except:
-        pass
-    context = {'hierarchies': hierarchies}
+    chosenTaxon = TaxonomicUnit.objects.get(taxon_id=parent_id)
+    hierarchyObject = Hierarchy.objects.get(taxon=chosenTaxon)
+
+    hierarchy = hierarchyObject.hierarchy_string.split('-')
+
+    result = []
+
+    while (len(hierarchy) != 0):
+        index = hierarchy.pop(0)
+        root = TaxonomicUnit.objects.get(taxon_id=index)
+        result.append(root)
+
+    context = {'hierarchies': result}
     return render(request, 'front/hierarchy.html', context)

@@ -94,6 +94,7 @@ class TaxonomicUnit(models.Model):
     n_usage = models.CharField(max_length=12, null=True, blank=True)
     complete_name = models.CharField(max_length=300, null=True, blank=True)
 
+
     # Relationships
     comments = models.ManyToManyField(
         'Comment', through='TuCommentLink'
@@ -115,7 +116,7 @@ class Hierarchy(models.Model):
     childrencount = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return f"hiearchy_string: {self.hierarchy_string})"
+        return f"hierarchy_string: {self.hierarchy_string}"
 
 
 class TuCommentLink(models.Model):
@@ -375,9 +376,7 @@ class Reference(models.Model):
         """
         Return a shortened list of authors, limited to nret names plus "et al."
         if there are more than nmax authors associated with a Ref object.
-
         If nmax is None, then return all author names.
-
         """
 
         if nmax == None:
@@ -651,4 +650,3 @@ def get_ref_from_doi(doi, ref=None, query_ads=True):
     citeproc_json = get_citeproc_json_from_doi(doi)
     ref = parse_citeproc_json(citeproc_json, ref, query_ads)
     return ref
-

@@ -41,10 +41,9 @@ class NameForm(forms.ModelForm):
     template_name = 'add_name.html'
 
     kingdom_name = forms.ModelChoiceField(queryset=Kingdom.objects.all())
-    rank_name = forms.CharField(widget=forms.Select(choices=[]))
+    rank_name = forms.CharField(widget=forms.Select(choices=[]), label="Rank of new taxon's parent")
 
-    taxonnomic_types = forms.CharField(widget=forms.Select(choices=[]))
-    
+    taxonnomic_types = forms.CharField(widget=forms.Select(choices=[]), label="Rank of the new taxon")
     
     # FIX: In order to query database and set an author for new unit, add a suitable field 
     
@@ -54,8 +53,3 @@ class NameForm(forms.ModelForm):
         model = TaxonomicUnit
         fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4']
         exclude = ['unnamed_taxon_ind']
-
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-        # self.fields['rank_name'].queryset = Kingdom.objects.none()
-        # self.fields['parent_name'].queryset = Kingdom.objects.all().values_list('id', 'kingdom_name')

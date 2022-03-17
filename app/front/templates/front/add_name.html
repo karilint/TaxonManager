@@ -4,8 +4,11 @@
 <body>
 <p><a href="/taxons">Taxa list</a> | <a href=" ">Add taxon</a> </p>
 
+{% with test=user.groups.all|length %}
+{% if test > 0 %}
+
 <h1>Add taxon</h1>
-  <form action="" method="post" id="parent-form", data-taxonomic-url="/load_taxonomicUnitTypes" data_chosenTaxonLevel-url="/load_chosenTaxonLevel" novalidate>
+  <form action="" method="post" id="parent-form", data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded" data_parentTaxon-url="/load_parentTaxon" novalidate>
     {% csrf_token %}
     <table>
     {{ form.as_table }}
@@ -27,13 +30,8 @@
 <script>
   $("#id_kingdom_name").change(function (e) {
     e.preventDefault();
-    // alert('hepp')
-    // var parent_name="#data-select2-id";
-    // const parent = document.querySelector('#data-select2-id');
-    var url = $( '#parent-form' ).attr( 'data-taxonomic-url' );
+    var url = $( '#parent-form' ).attr( 'data-rankOfTaxonToBeAdded-url' );
     var parentId = $(this).val();
-    // alert(url);
-    // alert(parentId);
 
     $.ajax({
       url: url,
@@ -41,24 +39,20 @@
         'id': parentId
       },
       success: function(data) {
-          // alert(data);
           $('#id_taxonnomic_types').html(data);
       },
       error: function(data) {
           alert('errors');
       }
     });
-
-
   });
 </script>
 
 <script>
   $("#id_taxonnomic_types").change(function (e) {
     e.preventDefault();
-    // alert('hepp')
-    
-    var url = $( '#parent-form' ).attr( 'data_chosenTaxonLevel-url' );
+
+    var url = $( '#parent-form' ).attr( 'data_parentTaxon-url' );
     var rankId = $(this).val();
     var kingdomId = $('#id_kingdom_name').val();
 
@@ -69,17 +63,26 @@
         'kingdomId': kingdomId
       },
       success: function(data) {
-          alert(data);
-          $('#id_rank_name').html(data);
+        // alert(data);
+        $('#id_rank_name').html(data);
       },
       error: function(data) {
           alert('errors');
       }
     });
-
-
   });
 </script>
+
+
+{% else %}
+
+<head>
+  <meta http-equiv="Refresh" content="0;url=/">
+</head>
+
+{% endif %}
+{% endwith %}
+
 
 </body>
 {% endblock %}

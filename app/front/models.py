@@ -94,6 +94,7 @@ class TaxonomicUnit(models.Model):
     n_usage = models.CharField(max_length=12, null=True, blank=True)
     complete_name = models.CharField(max_length=300, null=True, blank=True)
 
+
     # Relationships
     comments = models.ManyToManyField(
         'Comment', through='TuCommentLink'
@@ -115,7 +116,7 @@ class Hierarchy(models.Model):
     childrencount = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return f"hiearchy_string: {self.hierarchy_string})"
+        return f"hierarchy_string: {self.hierarchy_string}"
 
 
 class TuCommentLink(models.Model):

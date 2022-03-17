@@ -93,7 +93,7 @@ def taxon_add(request):
             except TaxonomicUnit.DoesNotExist:
                 # form was filled incorrectly
                 print("saving new unit did not workout; do something")
-            return HttpResponseRedirect('/taxons')
+            return HttpResponseRedirect('/taxa')
             
     # if a GET (or any other method) we'll create a blank form
     else:

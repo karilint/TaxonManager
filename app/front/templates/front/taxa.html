@@ -4,29 +4,71 @@
 <body>
 <p><a href="">Taxa list</a> | <a href="/addName">Add taxon</a> | <a href="/taxa-search">Search</a></p>
 
-<h1>Taxa list</h1>
+<div class="container">
+
+    <h1>Taxa list</h1>
+
+    <form method="get">
+        <div class="card card-body search-card">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_any_field"></label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.any_field }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12 text-center">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
 {% if taxa %}
-<ul>
-{% for taxon in taxa %}
 
-{% if taxon.complete_name and taxon.rank_id.rank_name %}
-<li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.complete_name }}</a> ({{ taxon.rank_id.rank_name }})</li>
-{% elif taxon.complete_name %}
-<li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.complete_name }}</a></li>
-{% elif taxon.rank_id.rank_name %}
-<li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.unit_name1 }}</a> ({{ taxon.rank_id.rank_name }})</li>
-{% else %}
-<li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.unit_name1 }}</a></li>
+    <h2 class="text-center">{{ nresults }} results</h2>
+    <ul>
+    {% for taxon in taxa %}
 
-<!-- href="{% url 'front:add-references' ref.pk %}" -->
+        {% if taxon.complete_name and taxon.rank_id.rank_name %}
+            <li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.complete_name }}</a> ({{ taxon.rank_id.rank_name }})</li>
+        {% elif taxon.complete_name %}
+            <li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.complete_name }}</a></li>
+        {% elif taxon.rank_id.rank_name %}
+            <li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.unit_name1 }}</a> ({{ taxon.rank_id.rank_name }})</li>
+        {% else %}
+            <li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.unit_name1 }}</a></li>
 
+        {% endif %}
+    {% endfor %}
+    </ul>
+
+<!-- {% if taxa.has_previous %}
+    <a href="?page=1">&laquo First</a>
+    <a href="?page={{ taxa.previous_page_number}}">Previous</a>
 {% endif %}
-{% endfor %}
-</ul>
+
+Page {{ taxa.number }} of {{ taxa.paginator.num_pages }}
+
+{% if taxa.has_next %}
+    <a href="?page={{ taxa.next_page_number }}">Next</a>
+    <a href="?page={{ taxa.paginator.num_pages }}">Last &raquo</a>
+{% endif %} -->
 
 {% else %}
-There are no taxa in the database.
+No results.
 {% endif %}
+
+
+</div>
+
   
 </body>
 

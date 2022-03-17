@@ -1,13 +1,4 @@
 {% extends "front/base.html" %}
-<!-- <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:100,100i,400,400i,700,700i" rel="stylesheet"> -->
-<!-- {% load static pyref_tags %} -->
-<!-- {% block extra_css %} -->
-<!-- <link rel="stylesheet" type="text/css" href="{% static 'refs/css/refs.css' %}" /> -->
-<!-- {% endblock %} -->
-
-
-
-
 {% block content %}
 
 <body>
@@ -15,7 +6,7 @@
 <div class="container content-container">
 <p><a href="/taxa">Taxa list</a> | <a href="/addName">Add taxon</a> | <a href="">Search</a></p>
 
-<h1>Taxon Search</h1>
+<h1>Advanced Search</h1>
 
 
 
@@ -62,6 +53,24 @@
                 </div>
 
                 <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_kingdom">{{ filter.form.kingdom.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.kingdom }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_rank_name">{{ filter.form.rank_name.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.rank_name }}
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="form-group col-md-12 text-center">
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
@@ -79,7 +88,7 @@
 
     
     {% for taxon in filtered_taxa %}
-    <p>
+    
     {% if taxon.complete_name and taxon.rank_id.rank_name %}
     <li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.complete_name }}</a> ({{ taxon.rank_id.rank_name }})</li>
     {% elif taxon.complete_name %}
@@ -88,15 +97,14 @@
     <li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.unit_name1 }}</a> ({{ taxon.rank_id.rank_name }})</li>
     {% else %}
     <li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.unit_name1 }}</a></li>
-    </p>
+    
+    
     {% endif %}
     {% endfor %}
 
 
     {% endif %}
     {% endif %}
-
-
 
 
 </div>

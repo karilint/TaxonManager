@@ -171,21 +171,43 @@ def resolve(request, pk=None):
         return render(request, 'front/add_reference.html', c)
     raise Http404
 
-
+#TEMPORARILY SHOWS ONLY THE FIRST 20 SEARCH RESULTS BECAUSE PAGINATOR NOT FULLY IMPLEMENTED
 def view_taxa(request):
-    taxa = TaxonomicUnit.objects.all()[:20]
-    context = {'taxa': taxa}
+    # Get all the taxa
+    taxa_all = TaxonomicUnit.objects.all()
+    # Set up Pagination, 20 taxa per page
+    paginator = Paginator(taxa_all, 20)
+    # Track current page
+    page_number = request.GET.get('page')
+    taxa = paginator.get_page(page_number)
+
+    # Set up filter
+    taxon_filter = TaxonFilter(request.GET, queryset=taxa_all)
+    filtered_taxa = taxon_filter.qs[:20]
+    # Total amount of results
+    nresults = filtered_taxa.count()
+
+    context = {'taxa': filtered_taxa,
+     'page_number': page_number, 
+     'filter': taxon_filter,
+     'nresults': nresults}
     return render(request, 'front/taxa.html', context)
 
+#TEMPORARILY SHOWS ONLY THE FIRST 20 SEARCH RESULTS BECAUSE PAGINATOR NOT FULLY IMPLEMENTED
 def search_taxa(request):
-    taxa = TaxonomicUnit.objects.all()
-    taxon_filter = TaxonFilter(request.GET, queryset=taxa)
+    # Get all the taxa
+    taxa_all = TaxonomicUnit.objects.all()
+    # Set up filter
+    taxon_filter = TaxonFilter(request.GET, queryset=taxa_all)
+    # Total amount of results
     nresults = taxon_filter.qs.count()
+    # Sort by pk
     filtered_qs = sorted(taxon_filter.qs, key=lambda objects: objects.pk)
+    # Set up Pagination, 20 taxa per page
+    paginator = Paginator(filtered_qs, 20)
 
-    paginator = Paginator(filtered_qs, 10)
 
-    content = {}
+    context = {}
     if request.GET:
         page = request.GET.get('page')
         try:
@@ -200,15 +222,15 @@ def search_taxa(request):
             del querydict['page']
         except KeyError:
             pass
-        content['querystring'] = '&' + querydict.urlencode()
+        context['querystring'] = '&' + querydict.urlencode()
     else:
         response = None
 
-    content.update({'filter': taxon_filter,
+    context.update({'filter': taxon_filter,
               'filtered_taxa': response,
               'nresults': nresults,
               'paginator': paginator})
-    return render(request, 'front/taxa-search.html', content)
+    return render(request, 'front/taxa-search.html', context)
 
 def view_hierarchy(request, parent_id=None):
     hierarchies = []

@@ -41,7 +41,7 @@ class NameForm(forms.ModelForm):
     template_name = 'add_name.html'
 
     kingdom_name = forms.ModelChoiceField(queryset=Kingdom.objects.all())
-    rank_name = forms.CharField(widget=forms.Select(choices=[]), label="Rank of new taxon's parent")
+    rank_name = forms.CharField(widget=forms.Select(choices=[]), label="New taxon's parent")
 
     taxonnomic_types = forms.CharField(widget=forms.Select(choices=[]), label="Rank of the new taxon")
     

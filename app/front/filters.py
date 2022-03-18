@@ -1,5 +1,6 @@
-from front.models import Reference
+from front.models import Reference, TaxonomicUnit
 from front.utils import canonicalize_doi
+from django.db.models import Q
 import django_filters
 
 
@@ -20,4 +21,29 @@ class RefFilter(django_filters.FilterSet):
 
     class Meta:
         model = Reference
+        fields = []
+
+class TaxonFilter(django_filters.FilterSet):
+
+    unit_name1 = django_filters.CharFilter(field_name='unit_name1', label='Unit name 1',
+                    lookup_expr='icontains')
+    unit_name2 = django_filters.CharFilter(field_name='unit_name2', label='Unit name 2',
+                    lookup_expr='icontains')
+    unit_name3 = django_filters.CharFilter(field_name='unit_name3', label='Unit name 3',
+                    lookup_expr='icontains')
+    unit_name4 = django_filters.CharFilter(field_name='unit_name4', label='Unit name 4',
+                    lookup_expr='icontains')
+    kingdom = django_filters.CharFilter(field_name='kingdom__kingdom_name', label='Kingdom',
+                    lookup_expr='icontains')
+    rank_name = django_filters.CharFilter(field_name='rank__rank_name', label='Rank name',
+                    lookup_expr='icontains')
+    any_field = django_filters.CharFilter(method='filter_by_any_field', label="Search")
+
+    def filter_by_any_field(self, queryset, name, value):
+        return queryset.filter(
+            Q(unit_name1__icontains=value) | Q(unit_name2__icontains=value) | Q(unit_name3__icontains=value) | Q(unit_name4__icontains=value)
+            | Q(kingdom__kingdom_name__icontains=value) | Q(rank__rank_name__icontains=value))
+
+    class Meta:
+        model = TaxonomicUnit
         fields = []

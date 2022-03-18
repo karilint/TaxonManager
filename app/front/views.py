@@ -15,7 +15,7 @@ from front.models import Reference, get_ref_from_doi
 from .models import Hierarchy, TaxonomicUnit, TaxonUnitType, Kingdom
 from front.utils import canonicalize_doi
 from front.forms import RefForm, NameForm
-from front.filters import RefFilter
+from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from .models import TaxonomicUnit
 
@@ -93,7 +93,7 @@ def taxon_add(request):
             except TaxonomicUnit.DoesNotExist:
                 # form was filled incorrectly
                 print("saving new unit did not workout; do something")
-            return HttpResponseRedirect('/taxons')
+            return HttpResponseRedirect('/taxa')
             
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -219,11 +219,66 @@ def resolve(request, pk=None):
         return render(request, 'front/add_reference.html', c)
     raise Http404
 
+#TEMPORARILY SHOWS ONLY THE FIRST 20 SEARCH RESULTS BECAUSE PAGINATOR NOT FULLY IMPLEMENTED
+def view_taxa(request):
+    # Get all the taxa
+    taxa_all = TaxonomicUnit.objects.all()
+    # Set up Pagination, 20 taxa per page
+    paginator = Paginator(taxa_all, 20)
+    # Track current page
+    page_number = request.GET.get('page')
+    taxa = paginator.get_page(page_number)
 
-def view_taxons(request):
-    taxons = TaxonomicUnit.objects.all()
-    context = {'taxons': taxons}
-    return render(request, 'front/taxons.html', context)
+    # Set up filter
+    taxon_filter = TaxonFilter(request.GET, queryset=taxa_all)
+    filtered_taxa = taxon_filter.qs[:20]
+    # Total amount of results
+    nresults = filtered_taxa.count()
+
+    context = {'taxa': filtered_taxa,
+     'page_number': page_number, 
+     'filter': taxon_filter,
+     'nresults': nresults}
+    return render(request, 'front/taxa.html', context)
+
+#TEMPORARILY SHOWS ONLY THE FIRST 20 SEARCH RESULTS BECAUSE PAGINATOR NOT FULLY IMPLEMENTED
+def search_taxa(request):
+    # Get all the taxa
+    taxa_all = TaxonomicUnit.objects.all()
+    # Set up filter
+    taxon_filter = TaxonFilter(request.GET, queryset=taxa_all)
+    # Total amount of results
+    nresults = taxon_filter.qs.count()
+    # Sort by pk
+    filtered_qs = sorted(taxon_filter.qs, key=lambda objects: objects.pk)
+    # Set up Pagination, 20 taxa per page
+    paginator = Paginator(filtered_qs, 20)
+
+
+    context = {}
+    if request.GET:
+        page = request.GET.get('page')
+        try:
+            response = paginator.page(page)
+        except PageNotAnInteger:
+            response = paginator.page(1)
+        except EmptyPage:
+            response = paginator.page(paginator.num_pages)
+
+        querydict = request.GET.copy()
+        try:
+            del querydict['page']
+        except KeyError:
+            pass
+        context['querystring'] = '&' + querydict.urlencode()
+    else:
+        response = None
+
+    context.update({'filter': taxon_filter,
+              'filtered_taxa': response,
+              'nresults': nresults,
+              'paginator': paginator})
+    return render(request, 'front/taxa-search.html', context)
 
 def view_hierarchy(request, parent_id=None):
     chosenTaxon = TaxonomicUnit.objects.get(taxon_id=parent_id)

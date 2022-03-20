@@ -2,7 +2,7 @@
 
 {% block content %}
 <body>
-<p><a href="/taxons">Taxa list</a> | <a href=" ">Add taxon</a> </p>
+<p><a href="/taxa">Taxa list</a> | <a href=" ">Add taxon</a> | <a href="/taxa-search">Search</a></p>
 
 {% with test=user.groups.all|length %}
 {% if test > 0 %}
@@ -53,7 +53,7 @@
       },
       success: function(data) {
         // alert(data);
-        $('#id_rank_name').html(data).select2();
+        $('#id_rank_name').html(data);
       },
       error: function(data) {
           alert('errors');

@@ -191,12 +191,15 @@ def refs_add(request, pk=None):
     return render(request, 'front/add_reference.html', c)
 
 def delete(request, pk):
-    ref = get_object_or_404(Reference, pk=pk)
-    ref.visible = 0
-    ref.doi = ''
-    ref.title = ref.title + ' (removed)'
-    ref.save()
+    if request.user.groups.filter(name='contributors').exists():
+        ref = get_object_or_404(Reference, pk=pk)
+        ref.visible = 0
+        ref.doi = ''
+        ref.title = ref.title + ' (removed)'
+        ref.save()
+        return HttpResponseRedirect('/references')
     return HttpResponseRedirect('/references')
+
 
 def resolve(request, pk=None):
     # Look up DOI and pre-populate form, render to front/add.html

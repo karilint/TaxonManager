@@ -45,8 +45,8 @@ def load_parentTaxon(request):
     kingdom = Kingdom.objects.get(pk=kingdomId)
 
     taxontype = TaxonUnitType.objects.get(rank_name=taxonnomicTypeName, kingdom=kingdom)
-    all_prev_taxons = TaxonUnitType.objects.filter(rank_id__range=(taxontype.req_parent_rank_id, taxontype.dir_parent_rank_id), kingdom=taxontype.kingdom)
 
+    all_prev_taxons = TaxonUnitType.objects.filter(rank_id__range=(taxontype.req_parent_rank_id, taxontype.dir_parent_rank_id), kingdom=taxontype.kingdom)
     all_prev_taxons_rank = [taxon for taxon in all_prev_taxons]
 
     parentTaxon = TaxonomicUnit.objects.filter(rank__in=all_prev_taxons_rank)

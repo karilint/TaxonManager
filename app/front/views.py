@@ -1,3 +1,4 @@
+from random import paretovariate
 from xxlimited import new
 from django import template
 from django.shortcuts import render
@@ -19,6 +20,7 @@ from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from .models import TaxonomicUnit
 import csv
+from itertools import chain
 
 
 
@@ -34,7 +36,7 @@ def login(request):
 def load_rankOfTaxonToBeAdded(request):
     kingdomId = request.GET.get('id')
     kingdomName = Kingdom.objects.get(id=kingdomId)
-    
+
     rankOfTaxonToBeAdded = TaxonUnitType.objects.exclude(rank_name='Kingdom').filter(kingdom = kingdomName)
 
     return render(request, 'front/rankOfTaxonToBeAdded.html', {'rankOfTaxonToBeAdded': rankOfTaxonToBeAdded})
@@ -45,9 +47,13 @@ def load_parentTaxon(request):
     kingdom = Kingdom.objects.get(pk=kingdomId)
 
     taxontype = TaxonUnitType.objects.get(rank_name=taxonnomicTypeName, kingdom=kingdom)
-    prev_taxontype = TaxonUnitType.objects.get(rank_id=taxontype.dir_parent_rank_id, kingdom=taxontype.kingdom)
 
+    prev_taxontype = TaxonUnitType.objects.get(rank_id=taxontype.dir_parent_rank_id, kingdom=taxontype.kingdom)
+    
     parentTaxon = TaxonomicUnit.objects.filter(rank=prev_taxontype)
+    while not parentTaxon:
+        prev_taxontype = TaxonUnitType.objects.get(rank_id=prev_taxontype.dir_parent_rank_id, kingdom=taxontype.kingdom)
+        parentTaxon = TaxonomicUnit.objects.filter(rank=prev_taxontype)
 
     return render(request,  'front/parentTaxon.html', {'parentTaxon': parentTaxon})
 

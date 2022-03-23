@@ -1,4 +1,3 @@
-from random import paretovariate
 from xxlimited import new
 from django import template
 from django.shortcuts import render
@@ -20,7 +19,6 @@ from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from .models import TaxonomicUnit
 import csv
-from itertools import chain
 
 
 

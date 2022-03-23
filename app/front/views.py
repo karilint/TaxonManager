@@ -383,11 +383,33 @@ def view_hierarchy(request, parent_id=None):
     hierarchy = hierarchyObject.hierarchy_string.split('-')
 
     result = []
+    name_list = []
+    grow = 0
+
+    pituus = 15
+    apuspace = " "
 
     while (len(hierarchy) != 0):
         index = hierarchy.pop(0)
         root = TaxonomicUnit.objects.get(taxon_id=index)
-        result.append(root)
 
+        rank = root.rank.rank_name
+        #vertailu
+        if (len(rank) < pituus):
+            apuspace = " " * (pituus - len(rank) +1)
+
+    
+        space = " " * grow
+        space2 = " " * (30 - len(root.rank.rank_name))
+        data= rank
+        name= "{:20}{}".format(data, root.unit_name1)
+        
+        name_list.append(name)
+        result.append(root)
+        grow +=2
+    
+
+    print(name_list)
     context = {'hierarchies': result}
-    return render(request, 'front/hierarchy.html', context)
+    context2 = { 'name_list': name_list }
+    return render(request, 'front/hierarchy.html', context2)

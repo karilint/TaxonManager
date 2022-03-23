@@ -3,18 +3,21 @@
 
 <body>
 
-{% if hierarchies %} 
+
 <h1>Hierarchy</h1>
-{% for hierarchy in hierarchies %}
 
-<li>{{ hierarchy.unit_name1 }}</li>
 
+{% for name in name_list %}
+<p>{{ name }}</p>
+
+<style>
+       p {
+    	white-space: pre;
+    }
+</style>
 {% endfor %}
 
-{% else %}
-There are no taxa in the database. 
-{% endif %}
-  
+
 </body>
 
 {% endblock %} 

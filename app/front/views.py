@@ -34,7 +34,7 @@ def login(request):
 def load_rankOfTaxonToBeAdded(request):
     kingdomId = request.GET.get('id')
     kingdomName = Kingdom.objects.get(id=kingdomId)
-    
+
     rankOfTaxonToBeAdded = TaxonUnitType.objects.exclude(rank_name='Kingdom').filter(kingdom = kingdomName)
 
     return render(request, 'front/rankOfTaxonToBeAdded.html', {'rankOfTaxonToBeAdded': rankOfTaxonToBeAdded})
@@ -45,9 +45,11 @@ def load_parentTaxon(request):
     kingdom = Kingdom.objects.get(pk=kingdomId)
 
     taxontype = TaxonUnitType.objects.get(rank_name=taxonnomicTypeName, kingdom=kingdom)
-    prev_taxontype = TaxonUnitType.objects.get(rank_id=taxontype.dir_parent_rank_id, kingdom=taxontype.kingdom)
 
-    parentTaxon = TaxonomicUnit.objects.filter(rank=prev_taxontype)
+    all_prev_taxons = TaxonUnitType.objects.filter(rank_id__range=(taxontype.req_parent_rank_id, taxontype.dir_parent_rank_id), kingdom=taxontype.kingdom)
+    all_prev_taxons_rank = [taxon for taxon in all_prev_taxons]
+
+    parentTaxon = TaxonomicUnit.objects.filter(rank__in=all_prev_taxons_rank)
 
     return render(request,  'front/parentTaxon.html', {'parentTaxon': parentTaxon})
 

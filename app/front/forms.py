@@ -45,7 +45,7 @@ class NameForm(forms.ModelForm):
 
     taxonnomic_types = forms.CharField(widget=forms.Select(choices=[]), label="Rank of the new taxon")
 
-    reference = forms.ModelChoiceField(queryset=Reference.objects.all(), label="Reference where taxon is mentioned", empty_label="Please choose reference for this taxon")
+    reference = forms.ModelChoiceField(queryset=Reference.objects.all(), label="References where the taxon is mentioned", empty_label="Please choose reference for this taxon")
     # https://stackoverflow.com/a/8538923
 
 

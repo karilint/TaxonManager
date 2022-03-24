@@ -388,7 +388,10 @@ def view_hierarchy(request, parent_id=None):
     while (len(hierarchy) != 0):
         index = hierarchy.pop(0)
         root = TaxonomicUnit.objects.get(taxon_id=index)
+        print('root on {}'.format(root.reference))
         result.append(root)
+
+
 
     context = {'hierarchies': result}
     return render(request, 'front/hierarchy.html', context)

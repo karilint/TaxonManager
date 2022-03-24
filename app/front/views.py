@@ -51,7 +51,7 @@ def load_parentTaxon(request):
 
     parentTaxon = TaxonomicUnit.objects.filter(rank__in=all_prev_taxons_rank)
 
-    return render(request,  'front/parentTaxon.html', {'parentTaxon': parentTaxon})
+    return render(request, 'front/parentTaxon.html', {'parentTaxon': parentTaxon})
 
 
 def taxon_add(request):   
@@ -101,7 +101,6 @@ def taxon_add(request):
     else:
         form = NameForm()
     return render(request, 'front/add_name.html', {'form': form})
-
 
 def create_hierarchystring(taxon):
     hierarchystring = []

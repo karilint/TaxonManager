@@ -44,11 +44,15 @@ class NameForm(forms.ModelForm):
     rank_name = forms.CharField(widget=forms.Select(choices=[]), label="New taxon's parent")
 
     taxonnomic_types = forms.CharField(widget=forms.Select(choices=[]), label="Rank of the new taxon")
-    
+
+    reference = forms.ModelChoiceField(queryset=Reference.objects.all(), label="Reference where taxon is mentioned", empty_label="Please choose reference for this taxon")
+    # https://stackoverflow.com/a/8538923
+
+
     # FIX: In order to query database and set an author for new unit, add a suitable field 
     # other later deemed necessary fields can also be added here
 
     class Meta:
         model = TaxonomicUnit
-        fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4']
+        fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'reference']
         exclude = ['unnamed_taxon_ind']

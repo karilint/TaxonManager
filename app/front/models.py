@@ -1,6 +1,5 @@
 from django.db import models  # pylint:disable=W0611
 
-from email.policy import default
 from django.db import models
 import json
 import urllib.request

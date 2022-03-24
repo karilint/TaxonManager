@@ -397,11 +397,13 @@ def view_hierarchy(request, parent_id=None):
     while (len(hierarchy) != 0):
         index = hierarchy.pop(0)
         root = TaxonomicUnit.objects.get(taxon_id=index)
-        if root.references.all():
+        if (len(hierarchy) == 0):
+            # This takes only the reference for the selected taxon. 
+            # E.G. User chooses Deuterostomia -> this takes the refenences for deuterostomia and not for the parent taxons
             references.append(root.references.all())
+        # if root.references.all():
+        #     references.append(root.references.all())
         hierarchies.append(root)
 
-
-    print('saatu references: {}'.format(references))
-    context = {'hierarchies': hierarchies, 'references': references}
+    context = {'hierarchies': hierarchies, 'references': references[0]}
     return render(request, 'front/hierarchy.html', context)

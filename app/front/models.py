@@ -485,7 +485,7 @@ class TaxonomicUnit(models.Model):
     uncertain_prnt_ind = models.CharField(max_length=3, null=True, blank=True)
     n_usage = models.CharField(max_length=12, null=True, blank=True)
     complete_name = models.CharField(max_length=300, null=True, blank=True)
-    reference = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True, blank=True)
+    references = models.ManyToManyField(Reference)
 
 
     # Relationships

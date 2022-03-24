@@ -58,9 +58,10 @@ def taxon_add(request):
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = NameForm(request.POST)
-                
+        print('ennen is_valid() nykyinen formi: {}'.format(form))               
         # check whether it's valid:
-        if form.is_valid():            
+        if form.is_valid():  
+            print('nykyinen formi: {}'.format(form))          
             try:
                 # save names from Modelform, but don't admit new unit to db yet
                 new_unit = form.save(commit=False)
@@ -77,6 +78,8 @@ def taxon_add(request):
                 new_unit.parent_id = parent.taxon_id
                 # and kingdom based on parent
                 new_unit.kingdom = parent.kingdom
+
+                
             
                 #FIX: set author (can be something or null)
                 # if it is something:
@@ -89,8 +92,13 @@ def taxon_add(request):
                 new_unit.rank = rank_of_new_taxon
 
                 #save new unit =name
-                
+                print('formin ref tiedot: {}'.format(form.cleaned_data['references']))
                 new_unit.save()
+                print('luotu new_unit : {}'.format(new_unit))
+                refs = form.cleaned_data['references']
+                for ref in refs:
+                    print('pyöritään')
+                    new_unit.references.add(ref)
                 create_hierarchystring(new_unit)
             except TaxonomicUnit.DoesNotExist:
                 # form was filled incorrectly
@@ -383,15 +391,17 @@ def view_hierarchy(request, parent_id=None):
 
     hierarchy = hierarchyObject.hierarchy_string.split('-')
 
-    result = []
+    hierarchies = []
+    references = []
 
     while (len(hierarchy) != 0):
         index = hierarchy.pop(0)
         root = TaxonomicUnit.objects.get(taxon_id=index)
-        print('root on {}'.format(root.reference))
-        result.append(root)
+        if root.references.all():
+            references.append(root.references.all())
+        hierarchies.append(root)
 
 
-
-    context = {'hierarchies': result}
+    print('saatu references: {}'.format(references))
+    context = {'hierarchies': hierarchies, 'references': references}
     return render(request, 'front/hierarchy.html', context)

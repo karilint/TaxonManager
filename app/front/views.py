@@ -53,6 +53,10 @@ def load_parentTaxon(request):
 
     return render(request,  'front/parentTaxon.html', {'parentTaxon': parentTaxon})
 
+def load_seniorSynonym(request):
+    seniorSynonym = TaxonomicUnit.objects.exclude(name_usage__in=['invalid', 'not accepted'])
+    return render(request, 'front/seniorSynonym.html', {'seniorSynonym': seniorSynonym})
+
 
 def taxon_add(request):   
     if request.method == 'POST':

@@ -175,36 +175,35 @@ def import_data_from_excel(request):
         for row in animaliaunittypes:
             rankorder[row[1].lower()] = row[0]
         taxons.sort(key=lambda a : rankorder[a["taxon_level"]])
-        # Here we create the top level of the hierarchy, since our database doesn't have it
-        TaxonomicUnit.objects.get_or_create(unit_name1="Animalia", kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
-                                                    parent_id=0, rank=TaxonUnitType.objects.get(rank_name = "Kingdom"))[0].save()
-        TaxonomicUnit.objects.get_or_create(unit_name1="Bilateria", kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
-                                                    parent_id=getattr(TaxonomicUnit.objects.get(unit_name1="Animalia"),"taxon_id"),
-                                                    rank=TaxonUnitType.objects.get(rank_name = "Subkingdom"))[0].save()
-        TaxonomicUnit.objects.get_or_create(unit_name1="Deuterostomia", kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
-                                                    parent_id=getattr(TaxonomicUnit.objects.get(unit_name1="Bilateria"),"taxon_id"),
-                                                    rank=TaxonUnitType.objects.get(rank_name = "Infrakingdom"))[0].save()
-        TaxonomicUnit.objects.get_or_create(unit_name1="Chordata", kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
-                                                    parent_id=getattr(TaxonomicUnit.objects.get(unit_name1="Deuterostomia"),"taxon_id"),
-                                                    rank=TaxonUnitType.objects.get(rank_name = "Phylum"))[0].save()
-        TaxonomicUnit.objects.get_or_create(unit_name1="Vertebrata", kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
-                                                    parent_id=getattr(TaxonomicUnit.objects.get(unit_name1="Chordata"),"taxon_id"),
-                                                    rank=TaxonUnitType.objects.get(rank_name = "Subphylum"))[0].save()
-        TaxonomicUnit.objects.get_or_create(unit_name1="Gnathostomata", kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
-                                                    parent_id=getattr(TaxonomicUnit.objects.get(unit_name1="Vertebrata"),"taxon_id"),
-                                                    rank=TaxonUnitType.objects.get(rank_name = "Infraphylum"))[0].save()
-        TaxonomicUnit.objects.get_or_create(unit_name1="Tetrapoda", kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
-                                                    parent_id=getattr(TaxonomicUnit.objects.get(unit_name1="Gnathostomata"),"taxon_id"),
-                                                    rank=TaxonUnitType.objects.get(rank_name = "Superclass"))[0].save()
-        TaxonomicUnit.objects.get_or_create(unit_name1="Mammalia", kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
-                                                    parent_id=getattr(TaxonomicUnit.objects.get(unit_name1="Tetrapoda"),"taxon_id"),
-                                                    rank=TaxonUnitType.objects.get(rank_name = "Class"))[0].save()
+        # Here we create the top few levels of the hierarchy, since our database doesn't have it
+        taxonunit = TaxonomicUnit.objects.get_or_create(unit_name1="Animalia", kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
+                                                    parent_id=0, rank=TaxonUnitType.objects.get(rank_name = "Kingdom"))
+        if taxonunit[1]:
+            taxonunit[0].save()
+            create_hierarchystring(taxonunit[0])
+
+        
+        tophierarchy = [("Bilateria", "Animalia", "Subkingdom"), ("Deuterostomia", "Bilateria", "Infrakingdom"),
+                        ("Chordata", "Deuterostomia", "Phylum"), ("Vertebrata", "Chordata", "Subphylum"),
+                        ("Gnathostomata", "Vertebrata", "Infraphylum"), ("Tetrapoda", "Gnathostomata", "Superclass"),
+                        ("Mammalia", "Tetrapoda", "Class")]
+
+        for taxon in tophierarchy:
+            taxonunit = TaxonomicUnit.objects.get_or_create(unit_name1=taxon[0], kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
+                                                        parent_id=getattr(TaxonomicUnit.objects.get(unit_name1=taxon[1]),"taxon_id"),
+                                                        rank=TaxonUnitType.objects.get(rank_name = taxon[2]))
+            if taxonunit[1]:
+                taxonunit[0].save()
+                create_hierarchystring(taxonunit[0])
 
         for taxon in taxons:
             namelist = [taxon["class_name"], taxon["subclass_or_superorder_name"], taxon["order_name"],
                         taxon["suborder_name"], taxon["superfamily_name"], taxon["family_name"],
                         taxon["subfamily_name"], taxon["tribe_name"], taxon["genus_name"], taxon["species_name"]]
             namelist = [i.lower().capitalize() for i in namelist if i is not None]
+
+            if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2])) > 1:
+                print(namelist[-2], namelist[-1])
 
             if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2])) != 1: #Makes sure there is a unique parent
                 continue

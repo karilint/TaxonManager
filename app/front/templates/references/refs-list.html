@@ -21,8 +21,12 @@ $(function() {
 
 {% for ref in page_obj %}
     <p>
+    {% with test=user.groups.all|length %}
+    {% if test > 0 %}
     <a class="delete-ref" href="{% url "front:delete" ref.pk %}"><img src="{% static 'refs/images/trashcan.svg' %}"/></a>
     <a href="{% url 'front:add-references' ref.pk %}"><img src="{% static 'refs/images/pencil.svg' %}"/></a>
+    {% endif %}
+    {% endwith %}
     {% ref_html ref 3 %}
    </p>
 {% endfor %}

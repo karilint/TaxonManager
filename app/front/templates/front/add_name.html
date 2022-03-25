@@ -16,15 +16,8 @@
     <input type="submit" value="Submit">
   </form>
 
-<script>
-  $(document).ready(function() {
-    
-    $('#id_kingdom_name').select2();
-    $('#id_taxonnomic_types').select2();
-});
-</script>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
 <script>
   $("#id_kingdom_name").change(function (e) {
     e.preventDefault();
@@ -53,7 +46,6 @@
     var url = $( '#parent-form' ).attr( 'data_parentTaxon-url' );
     var rankId = $(this).val();
     var kingdomId = $('#id_kingdom_name').val();
-
     $.ajax({
       url: url,
       data: {
@@ -70,7 +62,19 @@
     });
   });
 </script>
-
+<script>
+  $(document).ready(function(){
+    $("#id_taxonnomic_types").select2({
+      width: '200px'
+    });
+    $("#id_rank_name").select2({
+      width: '200px'
+    });
+    $("#id_kingdom_name").select2({
+      width: '200px'
+    });
+  });
+</script>
 
 {% else %}
 
@@ -80,7 +84,6 @@
 
 {% endif %}
 {% endwith %}
-
 
 </body>
 {% endblock %}

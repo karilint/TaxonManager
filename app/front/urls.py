@@ -21,5 +21,7 @@ urlpatterns = [
     re_path(r'hierarchy/(?:(?P<parent_id>\d+))?$', views.view_hierarchy, name='hierarchy'),
     path("favicon.ico", RedirectView.as_view(url=staticfiles_storage.url("favicon.ico"))),
     path('load_rankOfTaxonToBeAdded/', views.load_rankOfTaxonToBeAdded, name='load_rankOfTaxonToBeAdded'),
-    path('load_parentTaxon/', views.load_parentTaxon, name='load_parentTaxon')
+    path('load_parentTaxon/', views.load_parentTaxon, name='load_parentTaxon'),
+    path('import_data_from_excel/', views.import_data_from_excel, name='import_data_from_excel')
+
 ]

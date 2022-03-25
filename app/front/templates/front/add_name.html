@@ -8,7 +8,7 @@
 {% if test > 0 %}
 
 <h1>Add taxon</h1>
-  <form action="" method="post" id="parent-form", data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded" data_parentTaxon-url="/load_parentTaxon" data-seniorSynonym="/seniorSynonym" novalidate>
+  <form action="" method="post" id="parent-form", data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded" data_parentTaxon-url="/load_parentTaxon" novalidate>
     {% csrf_token %}
     <table>
     {{ form.as_table }}
@@ -62,12 +62,7 @@
     });
   });
 </script>
-<script>
-  $("#id_senior_synonym").change(function (e) {
-    e.preventDefault();
-    var url = $( '#parent-form' ).attr( 'data-seniorSynonym
-  });
-</script>
+
 <script>
   $(document).ready(function(){
     $("#id_taxonnomic_types").select2({
@@ -77,6 +72,9 @@
       width: '200px'
     });
     $("#id_kingdom_name").select2({
+      width: '200px'
+    });
+    $("#id_senior_synonym").select2({
       width: '200px'
     });
   });

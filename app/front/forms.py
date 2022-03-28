@@ -45,8 +45,11 @@ class NameForm(forms.ModelForm):
 
     taxonnomic_types = forms.CharField(widget=forms.Select(choices=[]), label="Rank of the new taxon")
 
-    choices = TaxonomicUnit.objects.all().values_list("taxon_id", "unit_name1")
-    senior_synonym = forms.CharField(widget=forms.Select(choices=choices), label="Senior synonym")
+    #choices = TaxonomicUnit.objects.all().values_list("taxon_id", "unit_name1")
+    #senior_synonym = forms.CharField(widget=forms.Select(choices=choices), label="Senior synonym")
+    is_junior_synonym = forms.BooleanField(required=False)
+    senior_synonym = forms.CharField(widget=forms.Select(choices=[]), label="Senior synonym", required = False)
+    
     
     # FIX: In order to query database and set an author for new unit, add a suitable field 
     # other later deemed necessary fields can also be added here

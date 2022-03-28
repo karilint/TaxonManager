@@ -8,7 +8,7 @@
 {% if test > 0 %}
 
 <h1>Add taxon</h1>
-  <form action="" method="post" id="parent-form", data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded" data_parentTaxon-url="/load_parentTaxon" novalidate>
+  <form action="" method="post" id="parent-form", data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded" data_parentTaxon-url="/load_parentTaxon" data-seniorSynonym-url="/load_seniorSynonym" novalidate>
     {% csrf_token %}
     <table>
     {{ form.as_table }}
@@ -55,6 +55,24 @@
       success: function(data) {
         // alert(data);
         $('#id_rank_name').html(data);
+      },
+      error: function(data) {
+          alert('errors');
+      }
+    });
+  });
+</script>
+
+<script>
+  $("#id_is_junior_synonym").change(function (e) {
+    e.preventDefault();
+    
+    var url = $( '#parent-form' ).attr( 'data-seniorSynonym-url' );
+    $.ajax({
+      url: url,
+      success: function(data) {
+        // alert(data);
+        $('#id_senior_synonym').html(data);
       },
       error: function(data) {
           alert('errors');

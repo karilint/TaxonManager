@@ -17,8 +17,9 @@ from front.utils import canonicalize_doi
 from front.forms import RefForm, NameForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
-from .models import TaxonomicUnit
+from .models import TaxonomicUnit, SynonymLink
 import csv
+from datetime import datetime
 
 
 
@@ -55,6 +56,7 @@ def load_parentTaxon(request):
 
 def load_seniorSynonym(request):
     seniorSynonym = TaxonomicUnit.objects.exclude(name_usage__in=['invalid', 'not accepted'])
+
     return render(request, 'front/seniorSynonym.html', {'seniorSynonym': seniorSynonym})
 
 
@@ -92,10 +94,29 @@ def taxon_add(request):
                 #get rank by kingdom name and rank name + set rank to new unit
                 new_unit.rank = rank_of_new_taxon
 
+                #Synonym stuff:
+                if form.cleaned_data["is_junior_synonym"] and form.cleaned_data["senior_synonym"] != "":
+                    if kingdom.kingdom_name in ["Chromista", "Fungi", "Plantae"]:
+                        new_unit.name_usage = "not accepted"
+                        new_unit.unaccept_reason= "synonym"
+                    else:
+                        new_unit.name_usage = "invalid"
+                        new_unit.unaccept_reason= "junior synonym"
+                else:
+                    if kingdom.kingdom_name in ["Chromista", "Fungi", "Plantae"]:
+                        new_unit.name_usage = "accepted"
+                    else:
+                        new_unit.name_usage = "valid"
+
                 #save new unit =name
                 
                 new_unit.save()
                 create_hierarchystring(new_unit)
+
+                #add SynonymLink
+                if form.cleaned_data["is_junior_synonym"] and form.cleaned_data["senior_synonym"] != "":
+                    SynonymLink.objects.create(synonym_id = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["unit_name1"]).taxon_id, taxon_id_accepted=TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["senior_synonym"]), update_date = datetime.now()).save()
+
             except TaxonomicUnit.DoesNotExist:
                 # form was filled incorrectly
                 print("saving new unit did not workout; do something")

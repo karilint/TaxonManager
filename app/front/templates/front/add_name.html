@@ -19,6 +19,7 @@
 
 
 <script>
+
   $("#id_kingdom_name").change(function (e) {
     e.preventDefault();
     var url = $( '#parent-form' ).attr( 'data-rankOfTaxonToBeAdded-url' );
@@ -37,12 +38,9 @@
       }
     });
   });
-</script>
 
-<script>
   $("#id_taxonnomic_types").change(function (e) {
     e.preventDefault();
-
     var url = $( '#parent-form' ).attr( 'data_parentTaxon-url' );
     var rankId = $(this).val();
     var kingdomId = $('#id_kingdom_name').val();
@@ -61,8 +59,7 @@
       }
     });
   });
-</script>
-<script>
+
   $(document).ready(function(){
     $("#id_taxonnomic_types").select2({
       width: '200px'
@@ -73,7 +70,18 @@
     $("#id_kingdom_name").select2({
       width: '200px'
     });
+    $('#id_references').select2({
+      width: '400px'
+    });
+    // $("#id_reference").select2({
+    //   width: '200px'
+    // });  
+    // $('#id_reference').select2( { 
+    //   placeholder: "Select here", 
+    //   maximumSelectionSize: 100  
+    // } ); 
   });
+
 </script>
 
 {% else %}

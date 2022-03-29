@@ -488,7 +488,7 @@ class GeographicDiv(models.Model):
 
     # TODO: This causes a warning, but this is left as is
     # until we understand the requirements better.
-    taxon = models.ManyToManyField(
+    geographic_taxon = models.ManyToManyField(
         TaxonomicUnit,
         # on_delete=models.CASCADE,
         # unique=True

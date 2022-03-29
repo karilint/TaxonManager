@@ -439,20 +439,6 @@ class TaxonUnitType(models.Model):
         return f"Kingdom: {self.kingdom}, rank_name: {self.rank_name}, rank_id:{self.rank_id}"
 
 
-class TaxonAuthorLkp(models.Model):
-    class Meta:
-        unique_together = (('taxon_author_id', 'kingdom_id'))
-
-    taxon_author_id = models.IntegerField(primary_key=True)
-    taxon_author = models.CharField(max_length=100, null=True, blank=True)
-    update_date = models.DateTimeField(null=True, blank=True)
-    kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
-    short_author = models.CharField(max_length=100, null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.taxon_author}"
-
-
 class TaxonomicUnit(models.Model):
     """
     Taxonomic Units
@@ -495,6 +481,44 @@ class TaxonomicUnit(models.Model):
     def __str__(self):
         return f"{self.unit_name1}, Kingdom: {self.kingdom} (taxon_id: {self.taxon_id}, parent_id: {self.parent_id})"
 
+class GeographicDiv(models.Model):
+    """ Model of a geographical division """
+
+    class Meta:
+        unique_together = (('taxon', 'geographic_value'))
+
+    # TODO: This causes a warning, but this is left as is
+    # until we understand the requirements better.
+    taxon = models.ForeignKey(
+        TaxonomicUnit,
+        on_delete=models.CASCADE,
+        unique=True
+    )
+    geographic_value = models.CharField(max_length=45, null=True, blank=True)
+    update_date = models.DateTimeField(null=True, blank=True)
+
+    # Relationship defining experts for a given geographical area
+    experts = models.ManyToManyField(
+        'Expert', through='ExpertsGeographicDiv'
+    )
+
+    def __str__(self):
+        return f"{self.geographic_value}"
+
+class TaxonAuthorLkp(models.Model):
+    class Meta:
+        unique_together = (('taxon_author_id', 'kingdom_id'))
+
+    taxon_author_id = models.IntegerField(primary_key=True)
+    taxon_author = models.CharField(max_length=100, null=True, blank=True)
+    update_date = models.DateTimeField(null=True, blank=True)
+    kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
+    short_author = models.CharField(max_length=100, null=True, blank=True)
+    geographic_div = models.ManyToManyField(GeographicDiv)
+
+
+    def __str__(self):
+        return f"{self.taxon_author}"
 
 class Hierarchy(models.Model):
     """
@@ -590,31 +614,6 @@ class Expert(models.Model):
 
     def __str__(self):
         return f"Expert name: {self.expert}"
-
-
-class GeographicDiv(models.Model):
-    """ Model of a geographical division """
-
-    class Meta:
-        unique_together = (('taxon', 'geographic_value'))
-
-    # TODO: This causes a warning, but this is left as is
-    # until we understand the requirements better.
-    taxon = models.ForeignKey(
-        TaxonomicUnit,
-        on_delete=models.CASCADE,
-        unique=True
-    )
-    geographic_value = models.CharField(max_length=45, null=True, blank=True)
-    update_date = models.DateTimeField(null=True, blank=True)
-
-    # Relationship defining experts for a given geographical area
-    experts = models.ManyToManyField(
-        'Expert', through='ExpertsGeographicDiv'
-    )
-
-    def __str__(self):
-        return f"{self.geographic_value}"
 
 
 class ExpertsGeographicDiv(models.Model):

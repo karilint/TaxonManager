@@ -13,7 +13,7 @@
 #   limitations under the License.
 
 from django import forms
-from .models import Reference, TaxonomicUnit, Kingdom
+from .models import GeographicDiv, Reference, TaxonAuthorLkp, TaxonomicUnit, Kingdom
 from django_select2.forms import Select2MultipleWidget, ModelSelect2MultipleWidget
 
 class RefForm(forms.ModelForm):
@@ -61,3 +61,20 @@ class NameForm(forms.ModelForm):
         model = TaxonomicUnit
         fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references']
         exclude = ['unnamed_taxon_ind']
+
+class AuthorForm(forms.ModelForm):
+    template_name = 'add_author.html'
+
+    # taxon_author = models.CharField(max_length=100, null=True, blank=True)
+    # update_date = models.DateTimeField(null=True, blank=True)
+    # kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
+    # short_author = models.CharField(max_length=100, null=True, blank=True)
+    # geographic_div = models.ManyToManyField(GeographicDiv)
+
+    kingdom = forms.ModelChoiceField(queryset=Kingdom.objects.all())
+
+    geographic_div = forms.ModelChoiceField(queryset=GeographicDiv.objects.all())
+
+    class Meta:
+        model = TaxonAuthorLkp
+        fields = ['taxon_author', 'kingdom', 'geographic_div']

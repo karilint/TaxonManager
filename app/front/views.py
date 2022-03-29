@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import user_passes_test
 from front.models import Reference, get_ref_from_doi
 from .models import Hierarchy, TaxonomicUnit, TaxonUnitType, Kingdom
 from front.utils import canonicalize_doi
-from front.forms import RefForm, NameForm
+from front.forms import RefForm, NameForm, AuthorForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from .models import TaxonomicUnit
@@ -407,3 +407,18 @@ def view_hierarchy(request, parent_id=None):
 
     context = {'hierarchies': hierarchies, 'references': references[0]}
     return render(request, 'front/hierarchy.html', context)
+
+def view_authors(request):
+    
+    return render(request, 'front/authors.html')
+
+def add_author(request):
+    # if request.method == 'POST':
+    #     # create a form instance and populate it with data from the request:
+    #     form = AuthorForm(request.POST)
+               
+    #     if form.is_valid():  
+    #         pass
+    # else:
+    form = AuthorForm()
+    return render(request, 'front/add_author.html', {'form': form})

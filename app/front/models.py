@@ -418,7 +418,7 @@ class Comment(models.Model):
 
 class Kingdom(models.Model):
     kingdom_name = models.CharField(max_length=20)
-    update_date = models.DateTimeField(null=True, blank=True)
+    update_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.kingdom_name}"
@@ -433,7 +433,7 @@ class TaxonUnitType(models.Model):
     rank_name = models.CharField(max_length=15)
     dir_parent_rank_id = models.IntegerField(null=True, blank=True)
     req_parent_rank_id = models.IntegerField(null=True, blank=True)
-    update_date = models.DateTimeField(null=True, blank=True)
+    update_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Kingdom: {self.kingdom}, rank_name: {self.rank_name}, rank_id:{self.rank_id}"
@@ -466,7 +466,7 @@ class TaxonomicUnit(models.Model):
     kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
     rank = models.ForeignKey(TaxonUnitType, on_delete=models.CASCADE, null=True)
     hybrid_author_id = models.IntegerField(null=True, blank=True)
-    update_date = models.DateTimeField(null=True, blank=True)
+    update_date = models.DateTimeField(auto_now_add=True)
     uncertain_prnt_ind = models.CharField(max_length=3, null=True, blank=True)
     n_usage = models.CharField(max_length=12, null=True, blank=True)
     complete_name = models.CharField(max_length=300, null=True, blank=True)
@@ -482,24 +482,24 @@ class TaxonomicUnit(models.Model):
 
 class GeographicDiv(models.Model):
     """ Model of a geographical division """
-
-    class Meta:
-        unique_together = (('taxon', 'geographic_value'))
+    # geographic_div_id = models.AutoField(primary_key=True)
+    # class Meta:
+    #     unique_together = (('taxon', 'geographic_value'))
 
     # TODO: This causes a warning, but this is left as is
     # until we understand the requirements better.
-    taxon = models.ForeignKey(
+    taxon = models.ManyToManyField(
         TaxonomicUnit,
-        on_delete=models.CASCADE,
-        unique=True
+        # on_delete=models.CASCADE,
+        # unique=True
     )
     geographic_value = models.CharField(max_length=45, null=True, blank=True)
     update_date = models.DateTimeField(null=True, blank=True)
 
     # Relationship defining experts for a given geographical area
-    experts = models.ManyToManyField(
-        'Expert', through='ExpertsGeographicDiv'
-    )
+    # experts = models.ManyToManyField(
+    #     'Expert', through='ExpertsGeographicDiv'
+    # )
 
     def __str__(self):
         return f"{self.geographic_value}"
@@ -508,9 +508,9 @@ class TaxonAuthorLkp(models.Model):
     class Meta:
         unique_together = (('taxon_author_id', 'kingdom_id'))
 
-    taxon_author_id = models.IntegerField(primary_key=True)
+    taxon_author_id = models.AutoField(primary_key=True)
     taxon_author = models.CharField(max_length=100, null=True, blank=True)
-    update_date = models.DateTimeField(null=True, blank=True)
+    update_date = models.DateTimeField(auto_now_add=True)
     kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
     short_author = models.CharField(max_length=100, null=True, blank=True)
     geographic_div = models.ManyToManyField(GeographicDiv)
@@ -569,7 +569,7 @@ class Publication(models.Model):
     issn = models.CharField(max_length=40, null=True, blank=True)
     pages = models.CharField(max_length=15, null=True, blank=True)
     pub_comment = models.CharField(max_length=500, null=True, blank=True)
-    update_date = models.DateTimeField(null=True, blank=True)
+    update_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Title: {self.title} Author: {self.reference_author}, Publication name: {self.publication_name}"
@@ -599,7 +599,7 @@ class ReferenceLink(models.Model):
     init_itis_desc_ind = models.CharField(max_length=1)
     change_track_id = models.IntegerField()
     vernacular_name = models.CharField(max_length=80)
-    update_date = models.DateTimeField()
+    update_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"taxon_id: {self.taxon}, documentation_id = {self.documentation}"
@@ -611,7 +611,7 @@ class Expert(models.Model):
     # that only contains EXP presumably for all rows.
     expert = models.CharField(max_length=100)
     exp_comment = models.CharField(max_length=500)
-    update_date = models.DateTimeField()
+    update_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Expert name: {self.expert}"
@@ -637,7 +637,7 @@ class SynonymLink(models.Model):
     # tsn column in TaxonomicUnit table
     synonym_id = models.IntegerField()
     taxon_id_accepted = models.ForeignKey(TaxonomicUnit, on_delete=models.CASCADE)
-    update_date = models.DateTimeField()
+    update_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return "synonym_id: {}, taxon_id_accepted: {}, update_date: {}".format(

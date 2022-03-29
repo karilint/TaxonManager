@@ -404,7 +404,7 @@ def view_hierarchy(request, parent_id=None):
 
 def view_authors(request):
     authors = TaxonAuthorLkp.objects.all()
-    paginator = Paginator(authors, 2)
+    paginator = Paginator(authors, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

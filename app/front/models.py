@@ -646,5 +646,3 @@ class SynonymLink(models.Model):
             self.update_date
         )
 
-
-

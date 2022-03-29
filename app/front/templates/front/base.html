@@ -95,6 +95,15 @@
                         {% endif %}
                     </th>
                     </tr>
+                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/authors"> Authors </a></th></tr>
+                    <tr>
+                        <th>{% if user.is_authenticated %}
+                        <a class="w3-bar-item w3-button" id="sideButton" href="/add_author"> Add new author </a>
+                        {% else %}
+                        <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/add_author"> Add new author </a>
+                        {% endif %}
+                    </th>
+                    </tr>
                     <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/references"> References </a></th></tr>
                     <tr><th>{% if user.is_authenticated %}
                         <a class="w3-bar-item w3-button" id="sideButton" href="/add-references"> Add reference </a>

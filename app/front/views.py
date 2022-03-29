@@ -12,9 +12,9 @@ from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import user_passes_test
 from front.models import Reference, get_ref_from_doi
-from .models import Hierarchy, TaxonomicUnit, TaxonUnitType, Kingdom
+from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom
 from front.utils import canonicalize_doi
-from front.forms import RefForm, NameForm
+from front.forms import RefForm, NameForm, AuthorForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from .models import TaxonomicUnit
@@ -51,16 +51,15 @@ def load_parentTaxon(request):
 
     parentTaxon = TaxonomicUnit.objects.filter(rank__in=all_prev_taxons_rank)
 
-    return render(request,  'front/parentTaxon.html', {'parentTaxon': parentTaxon})
+    return render(request, 'front/parentTaxon.html', {'parentTaxon': parentTaxon})
 
 
 def taxon_add(request):   
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = NameForm(request.POST)
-                
         # check whether it's valid:
-        if form.is_valid():            
+        if form.is_valid():  
             try:
                 # save names from Modelform, but don't admit new unit to db yet
                 new_unit = form.save(commit=False)
@@ -77,6 +76,8 @@ def taxon_add(request):
                 new_unit.parent_id = parent.taxon_id
                 # and kingdom based on parent
                 new_unit.kingdom = parent.kingdom
+
+                
             
                 #FIX: set author (can be something or null)
                 # if it is something:
@@ -88,9 +89,10 @@ def taxon_add(request):
                 #get rank by kingdom name and rank name + set rank to new unit
                 new_unit.rank = rank_of_new_taxon
 
-                #save new unit =name
-                
                 new_unit.save()
+                refs = form.cleaned_data['references']
+                for ref in refs:
+                    new_unit.references.add(ref)
                 create_hierarchystring(new_unit)
             except TaxonomicUnit.DoesNotExist:
                 # form was filled incorrectly
@@ -101,7 +103,6 @@ def taxon_add(request):
     else:
         form = NameForm()
     return render(request, 'front/add_name.html', {'form': form})
-
 
 def create_hierarchystring(taxon):
     hierarchystring = []
@@ -383,12 +384,46 @@ def view_hierarchy(request, parent_id=None):
 
     hierarchy = hierarchyObject.hierarchy_string.split('-')
 
-    result = []
+    hierarchies = []
+    references = []
 
     while (len(hierarchy) != 0):
         index = hierarchy.pop(0)
         root = TaxonomicUnit.objects.get(taxon_id=index)
-        result.append(root)
+        if (len(hierarchy) == 0):
+            # This takes only the reference for the selected taxon. 
+            # E.G. User chooses Deuterostomia -> this takes the refenences for deuterostomia and not for the parent taxons
+            references.append(root.references.all())
+        # if root.references.all():
+        #     references.append(root.references.all())
+        hierarchies.append(root)
 
-    context = {'hierarchies': result}
+    context = {'hierarchies': hierarchies, 'references': references[0]}
     return render(request, 'front/hierarchy.html', context)
+
+def view_authors(request):
+    authors = TaxonAuthorLkp.objects.all()
+    paginator = Paginator(authors, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {'paginator': paginator, 'page_obj': page_obj}
+    return render(request, 'front/authors.html', context)
+
+def add_author(request):
+    if request.method == 'POST':
+        form = AuthorForm(request.POST)   
+        if form.is_valid():  
+            try:
+                new_author = form.save(commit=False)
+                new_author.save()
+
+                geos = form.cleaned_data['geographic_div']
+                for geo in geos:
+                    new_author.geographic_div.add(geo)
+            except TaxonAuthorLkp.DoesNotExist:
+                print("saving new author did not workout; do something")
+            return HttpResponseRedirect('/add_author')
+    else:
+        form = AuthorForm()
+    return render(request, 'front/add_author.html', {'form': form})

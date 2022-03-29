@@ -462,7 +462,7 @@ class TaxonomicUnit(models.Model):
     initial_time_stamp = models.DateTimeField(null=True, blank=True)
     parent_id = models.IntegerField()
     taxon_author = models.ForeignKey(
-        TaxonAuthorLkp, on_delete=models.CASCADE, null=True, blank=True)
+        'TaxonAuthorLkp', on_delete=models.CASCADE, null=True, blank=True)
     kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
     rank = models.ForeignKey(TaxonUnitType, on_delete=models.CASCADE, null=True)
     hybrid_author_id = models.IntegerField(null=True, blank=True)
@@ -471,7 +471,6 @@ class TaxonomicUnit(models.Model):
     n_usage = models.CharField(max_length=12, null=True, blank=True)
     complete_name = models.CharField(max_length=300, null=True, blank=True)
     references = models.ManyToManyField(Reference)
-
 
     # Relationships
     comments = models.ManyToManyField(
@@ -516,9 +515,11 @@ class TaxonAuthorLkp(models.Model):
     short_author = models.CharField(max_length=100, null=True, blank=True)
     geographic_div = models.ManyToManyField(GeographicDiv)
 
-
     def __str__(self):
         return f"{self.taxon_author}"
+
+
+
 
 class Hierarchy(models.Model):
     """

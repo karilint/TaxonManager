@@ -409,8 +409,15 @@ def view_hierarchy(request, parent_id=None):
     return render(request, 'front/hierarchy.html', context)
 
 def view_authors(request):
+    authors = TaxonAuthorLkp.objects.all()
+    paginator = Paginator(authors, 2)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    # c = {'page_obj': page_obj, 'paginator': paginator}
     
-    return render(request, 'front/authors.html')
+    context = {'paginator': paginator, 'page_obj': page_obj}
+
+    return render(request, 'front/authors.html', context)
 
 def add_author(request):
     if request.method == 'POST':

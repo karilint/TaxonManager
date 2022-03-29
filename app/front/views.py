@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import user_passes_test
 from front.models import Reference, get_ref_from_doi
-from .models import Hierarchy, TaxonomicUnit, TaxonUnitType, Kingdom
+from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom
 from front.utils import canonicalize_doi
 from front.forms import RefForm, NameForm, AuthorForm
 from front.filters import RefFilter, TaxonFilter
@@ -413,12 +413,20 @@ def view_authors(request):
     return render(request, 'front/authors.html')
 
 def add_author(request):
-    # if request.method == 'POST':
-    #     # create a form instance and populate it with data from the request:
-    #     form = AuthorForm(request.POST)
-               
-    #     if form.is_valid():  
-    #         pass
-    # else:
-    form = AuthorForm()
+    if request.method == 'POST':
+        form = AuthorForm(request.POST)   
+        if form.is_valid():  
+            try:
+                new_author = form.save(commit=False)
+                new_author.save()
+
+                geos = form.cleaned_data['geographic_div']
+                for geo in geos:
+                    new_author.geographic_div.add(geo)
+            except TaxonAuthorLkp.DoesNotExist:
+                # form was filled incorrectly
+                print("saving new author did not workout; do something")
+            return HttpResponseRedirect('/add_author')
+    else:
+        form = AuthorForm()
     return render(request, 'front/add_author.html', {'form': form})

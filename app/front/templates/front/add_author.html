@@ -7,8 +7,8 @@
 {% with test=user.groups.all|length %}
 {% if test > 0 %}
 
-<h1>Add taxon</h1>
-  <form action="" method="post" id="parent-form", data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded" data_parentTaxon-url="/load_parentTaxon" novalidate>
+<h1>Add author</h1>
+  <form action="" method="post" id="parent-form" novalidate>
     {% csrf_token %}
     <table>
     {{ form.as_table }}
@@ -16,6 +16,16 @@
     <input type="submit" value="Submit">
   </form>
 
+<script>
+  $(document).ready(function(){
+    $("#id_geographic_div").select2({
+      width: '200px'
+    });
+    $("#id_kingdom").select2({
+      width: '200px'
+    });
+  });
+</script>
 
   {% else %}
 

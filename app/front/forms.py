@@ -65,15 +65,13 @@ class NameForm(forms.ModelForm):
 class AuthorForm(forms.ModelForm):
     template_name = 'add_author.html'
 
-    # taxon_author = models.CharField(max_length=100, null=True, blank=True)
-    # update_date = models.DateTimeField(null=True, blank=True)
-    # kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
-    # short_author = models.CharField(max_length=100, null=True, blank=True)
-    # geographic_div = models.ManyToManyField(GeographicDiv)
-
     kingdom = forms.ModelChoiceField(queryset=Kingdom.objects.all())
+    # geographic_div = forms.ModelChoiceField(queryset=GeographicDiv.objects.all())
 
-    geographic_div = forms.ModelChoiceField(queryset=GeographicDiv.objects.all())
+    geographic_div = forms.ModelMultipleChoiceField(
+        queryset=GeographicDiv.objects.all(),
+        widget=Select2MultipleWidget,
+    )
 
     class Meta:
         model = TaxonAuthorLkp

@@ -58,10 +58,8 @@ def taxon_add(request):
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = NameForm(request.POST)
-        print('ennen is_valid() nykyinen formi: {}'.format(form))               
         # check whether it's valid:
         if form.is_valid():  
-            print('nykyinen formi: {}'.format(form))          
             try:
                 # save names from Modelform, but don't admit new unit to db yet
                 new_unit = form.save(commit=False)
@@ -91,13 +89,9 @@ def taxon_add(request):
                 #get rank by kingdom name and rank name + set rank to new unit
                 new_unit.rank = rank_of_new_taxon
 
-                #save new unit =name
-                print('formin ref tiedot: {}'.format(form.cleaned_data['references']))
                 new_unit.save()
-                print('luotu new_unit : {}'.format(new_unit))
                 refs = form.cleaned_data['references']
                 for ref in refs:
-                    print('pyöritään')
                     new_unit.references.add(ref)
                 create_hierarchystring(new_unit)
             except TaxonomicUnit.DoesNotExist:
@@ -409,13 +403,11 @@ def view_hierarchy(request, parent_id=None):
 
 def view_authors(request):
     authors = TaxonAuthorLkp.objects.all()
-    paginator = Paginator(authors, 2)
+    paginator = Paginator(authors, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    # c = {'page_obj': page_obj, 'paginator': paginator}
     
     context = {'paginator': paginator, 'page_obj': page_obj}
-
     return render(request, 'front/authors.html', context)
 
 def add_author(request):
@@ -430,7 +422,6 @@ def add_author(request):
                 for geo in geos:
                     new_author.geographic_div.add(geo)
             except TaxonAuthorLkp.DoesNotExist:
-                # form was filled incorrectly
                 print("saving new author did not workout; do something")
             return HttpResponseRedirect('/add_author')
     else:

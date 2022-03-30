@@ -234,8 +234,6 @@ describe("TaxonManager", () => {
     cy.visit("http://localhost:8000/add_author/");
     cy.contains("Add author")
 
-
-
   })
 
   it("Viewing Authors", () => {
@@ -246,6 +244,6 @@ describe("TaxonManager", () => {
 
     cy.visit("http://localhost:8000/authors/");
     cy.contains("Authors")
-    
+  
   })
 });

@@ -4,8 +4,6 @@
 <body>
 <p><a href=" ">Author list</a> | <a href="/add_author">Add author</a> </p>
 
-{% with test=user.groups.all|length %}
-{% if test > 0 %}
 
 <h1>Authors</h1>
 
@@ -27,14 +25,7 @@ Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
     <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo</a>
 {% endif %}
 
-{% else %}
 
-<head>
-  <meta http-equiv="Refresh" content="0;url=/">
-</head>
-
-{% endif %}
-{% endwith %}
 
 </body>
 {% endblock %}

@@ -438,61 +438,9 @@ class TaxonUnitType(models.Model):
     def __str__(self):
         return f"Kingdom: {self.kingdom}, rank_name: {self.rank_name}, rank_id:{self.rank_id}"
 
-
-class TaxonomicUnit(models.Model):
-    """
-    Taxonomic Units
-    """
-    taxon_id = models.AutoField(primary_key=True)
-    unit_ind1 = models.CharField(max_length=1, null=True, blank=True)
-    unit_name1 = models.CharField(max_length=35)
-    unit_ind2 = models.CharField(max_length=1, null=True, blank=True)
-    unit_name2 = models.CharField(max_length=35, null=True, blank=True)
-    unit_ind3 = models.CharField(max_length=7, null=True, blank=True)
-    unit_name3 = models.CharField(max_length=35, null=True, blank=True)
-    unit_ind4 = models.CharField(max_length=7, null=True, blank=True)
-    unit_name4 = models.CharField(max_length=35, null=True, blank=True)
-    unnamed_taxon_ind = models.CharField(max_length=1, null=True, blank=True)
-    name_usage = models.CharField(max_length=12, null=True, blank=True)
-    unaccept_reason = models.CharField(max_length=50, null=True, blank=True)
-    credibility_rtng = models.CharField(max_length=40, null=True, blank=True)
-    completeness_rtng = models.CharField(max_length=10, null=True, blank=True)
-    currency_rating = models.CharField(max_length=7, null=True, blank=True)
-    phylo_sort_seq = models.IntegerField(null=True, blank=True)
-    initial_time_stamp = models.DateTimeField(null=True, blank=True)
-    parent_id = models.IntegerField()
-    taxon_author = models.ForeignKey(
-        'TaxonAuthorLkp', on_delete=models.CASCADE, null=True, blank=True)
-    kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
-    rank = models.ForeignKey(TaxonUnitType, on_delete=models.CASCADE, null=True)
-    hybrid_author_id = models.IntegerField(null=True, blank=True)
-    update_date = models.DateTimeField(null=True, blank=True)
-    uncertain_prnt_ind = models.CharField(max_length=3, null=True, blank=True)
-    n_usage = models.CharField(max_length=12, null=True, blank=True)
-    complete_name = models.CharField(max_length=300, null=True, blank=True)
-    references = models.ManyToManyField(Reference)
-
-    # Relationships
-    comments = models.ManyToManyField(
-        'Comment', through='TuCommentLink'
-    )
-
-    def __str__(self):
-        return f"{self.unit_name1}, Kingdom: {self.kingdom} (taxon_id: {self.taxon_id}, parent_id: {self.parent_id})"
-
 class GeographicDiv(models.Model):
     """ Model of a geographical division """
-    # geographic_div_id = models.AutoField(primary_key=True)
-    # class Meta:
-    #     unique_together = (('taxon', 'geographic_value'))
 
-    # TODO: This causes a warning, but this is left as is
-    # until we understand the requirements better.
-    geographic_taxon = models.ManyToManyField(
-        TaxonomicUnit,
-        # on_delete=models.CASCADE,
-        # unique=True
-    )
     geographic_value = models.CharField(max_length=45, null=True, blank=True)
     update_date = models.DateTimeField(null=True, blank=True)
 
@@ -518,8 +466,47 @@ class TaxonAuthorLkp(models.Model):
     def __str__(self):
         return f"{self.taxon_author}"
 
+class TaxonomicUnit(models.Model):
+    """
+    Taxonomic Units
+    """
+    taxon_id = models.AutoField(primary_key=True)
+    unit_ind1 = models.CharField(max_length=1, null=True, blank=True)
+    unit_name1 = models.CharField(max_length=35)
+    unit_ind2 = models.CharField(max_length=1, null=True, blank=True)
+    unit_name2 = models.CharField(max_length=35, null=True, blank=True)
+    unit_ind3 = models.CharField(max_length=7, null=True, blank=True)
+    unit_name3 = models.CharField(max_length=35, null=True, blank=True)
+    unit_ind4 = models.CharField(max_length=7, null=True, blank=True)
+    unit_name4 = models.CharField(max_length=35, null=True, blank=True)
+    unnamed_taxon_ind = models.CharField(max_length=1, null=True, blank=True)
+    name_usage = models.CharField(max_length=12, null=True, blank=True)
+    unaccept_reason = models.CharField(max_length=50, null=True, blank=True)
+    credibility_rtng = models.CharField(max_length=40, null=True, blank=True)
+    completeness_rtng = models.CharField(max_length=10, null=True, blank=True)
+    currency_rating = models.CharField(max_length=7, null=True, blank=True)
+    phylo_sort_seq = models.IntegerField(null=True, blank=True)
+    initial_time_stamp = models.DateTimeField(null=True, blank=True)
+    parent_id = models.IntegerField()
+    taxon_author = models.ForeignKey(
+        TaxonAuthorLkp, on_delete=models.CASCADE, null=True, blank=True)
+    kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
+    rank = models.ForeignKey(TaxonUnitType, on_delete=models.CASCADE, null=True)
+    hybrid_author_id = models.IntegerField(null=True, blank=True)
+    update_date = models.DateTimeField(null=True, blank=True)
+    uncertain_prnt_ind = models.CharField(max_length=3, null=True, blank=True)
+    n_usage = models.CharField(max_length=12, null=True, blank=True)
+    complete_name = models.CharField(max_length=300, null=True, blank=True)
+    references = models.ManyToManyField(Reference)
+    geographic_div = models.ManyToManyField(GeographicDiv)
 
+    # Relationships
+    comments = models.ManyToManyField(
+        'Comment', through='TuCommentLink'
+    )
 
+    def __str__(self):
+        return f"{self.unit_name1}, Kingdom: {self.kingdom} (taxon_id: {self.taxon_id}, parent_id: {self.parent_id})"
 
 class Hierarchy(models.Model):
     """

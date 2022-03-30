@@ -18,6 +18,10 @@ class StatuscodeTest(TestCase):
     def test_taxa_page_returns_ok(self):
         response = self.client.get('/taxa/')
         self.assertEqual(response.status_code, 200)
+
+    def test_authors_page_returns_ok_after_logging_in(self):
+        response = self.client.get('/authors/')
+        self.assertEqual(response.status_code, 200)
     
     def test_taxa_search_page_returns_ok(self):
         response = self.client.get('/taxa-search/')
@@ -32,6 +36,12 @@ class StatuscodeTest(TestCase):
         self.client.force_login(self.test_user)
         response = self.client.get('/addName/')
         self.assertEqual(response.status_code, 200)
+
+    def test_add_author_page_returns_ok_after_logging_in(self):
+        self.client.force_login(self.test_user)
+        response = self.client.get('/add_author/')
+        self.assertEqual(response.status_code, 200)
+
 
 class TemplateTest(TestCase):
 
@@ -50,6 +60,10 @@ class TemplateTest(TestCase):
         response = self.client.get('/taxa/')
         self.assertTemplateUsed(response, 'front/taxa.html')
 
+    def test_authors_page_uses_correct_template(self):
+        response = self.client.get('/authors/')
+        self.assertTemplateUsed(response, 'front/authors.html')
+
     def test_taxa_search_page_uses_correct_template(self):
         response = self.client.get('/taxa-search/')
         self.assertTemplateUsed(response, 'front/taxa-search.html')
@@ -63,5 +77,10 @@ class TemplateTest(TestCase):
         self.client.force_login(self.test_user)
         response = self.client.get('/addName/')
         self.assertTemplateUsed(response, 'front/add_name.html')
+
+    def test_add_author_page_uses_correct_template(self):
+        self.client.force_login(self.test_user)
+        response = self.client.get('/add_author/')
+        self.assertTemplateUsed(response, 'front/add_author.html')
 
 

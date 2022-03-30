@@ -93,6 +93,9 @@ def taxon_add(request):
                 refs = form.cleaned_data['references']
                 for ref in refs:
                     new_unit.references.add(ref)
+                geos = form.cleaned_data['geographic_div']
+                for geo in geos:
+                    new_unit.geographic_div.add(geo)
                 create_hierarchystring(new_unit)
             except TaxonomicUnit.DoesNotExist:
                 # form was filled incorrectly

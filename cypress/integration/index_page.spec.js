@@ -224,4 +224,28 @@ describe("TaxonManager", () => {
     //cy.get(".btn").click();
     //cy.contains("1 Results");
   });
+
+  it("Adding Authors", () => {
+    cy.visit("http://localhost:8000/admin/login/?next=/admin/");
+    cy.get("#id_username").type("testaaja");
+    cy.get("#id_password").type("cypress");
+    cy.contains("Log in").click();
+
+    cy.visit("http://localhost:8000/add_author/");
+    cy.contains("Add author")
+
+
+
+  })
+
+  it("Viewing Authors", () => {
+    cy.visit("http://localhost:8000/admin/login/?next=/admin/");
+    cy.get("#id_username").type("testaaja");
+    cy.get("#id_password").type("cypress");
+    cy.contains("Log in").click();
+
+    cy.visit("http://localhost:8000/authors/");
+    cy.contains("Authors")
+    
+  })
 });

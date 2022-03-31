@@ -8,7 +8,7 @@
 
 <figure data-title="Taxonomy and Nomenclature">
     <figcaption>
-        <p>Kingdom:{{taxonomic_unit.kingdom}}	<br>Taxonomic Rank: {{taxonomic_unit.rank.rank_name}}<br>Synonyms: </p>
+        <p>Kingdom:{{taxonomic_unit.kingdom}}	<br>Taxonomic Rank: {{taxonomic_unit.rank.rank_name}}<br>Synonyms: <br>Author: {{taxonomic_unit.taxon_author}}<br</p>
     </figcaption>
 </figure>
 
@@ -21,7 +21,6 @@
 </figure>
 <figure data-title="References">
     <figcaption>
-        <h3>References</h3>
         {% for ref in references %}
         <table>
           <tr>

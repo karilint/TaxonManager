@@ -3,33 +3,69 @@
 
 <body>
 
-{% if hierarchies %} 
-<h1>Hierarchy</h1>
-{% for hierarchy in hierarchies %}
 
-<li>{{ hierarchy.unit_name1 }}</li>
+<h1>{{taxonomic_unit.unit_name1}}</h1>
 
-{% endfor %}
+<figure data-title="Taxonomy and Nomenclature">
+    <figcaption>
+        <p>Kingdom:{{taxonomic_unit.kingdom}}	<br>Taxonomic Rank: {{taxonomic_unit.rank.rank_name}}<br>Synonyms: </p>
+    </figcaption>
+</figure>
 
-<h3>References</h3>
-{% for ref in references %}
-<table>
-  <tr>
-    <td><b>Authors:</b></td>
-    <td>{{ ref.authors }}</td>
-  </tr>
-  <tr>
-    <td><b>Title:</b></td>
-    <td>{{ref.title }}</td>
-  </tr>
-</table>
+<figure data-title="Taxonomic Hierarchy">
+    <figcaption>
+        {% for name in name_list %}
+        <p>{{ name }}</p>
+        {% endfor %}
+    </figcaption>
+</figure>
+<figure data-title="References">
+    <figcaption>
+        <h3>References</h3>
+        {% for ref in references %}
+        <table>
+          <tr>
+            <td><b>Authors:</b></td>
+            <td>{{ ref.authors }}</td>
+          </tr>
+          <tr>
+          <td><b>Title:</b></td>
+          <td>{{ref.title }}</td>
+          </tr>
+        </table>
+        {% endfor %}
+    </figcaption>
+</figure>
 
-{% endfor %}
+<style>
+    p {
+     white-space: pre;
+ }
+ 
+ 
+ figure{
+    width:400px;
+    border-radius:4px;
+    border:2px solid #ccc;
+    position:relative;
+    left: -50px;
+    padding:48px 10px 10px;
+    z-index: -1;
+}
 
-{% else %}
-There are no taxa in the database. 
-{% endif %}
-  
+figure:before {
+    content: attr(data-title);
+    position: absolute;
+    top: 0px;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    text-indent: 10px;
+    border-bottom: 2px solid #ccc;
+}
+</style>
+
 </body>
 
 {% endblock %} 

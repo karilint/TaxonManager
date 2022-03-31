@@ -387,21 +387,35 @@ def view_hierarchy(request, parent_id=None):
 
     hierarchy = hierarchyObject.hierarchy_string.split('-')
 
-    hierarchies = []
+    result = []
+    name_list = []
+    grow = 0
+    
     references = []
-
+    
     while (len(hierarchy) != 0):
         index = hierarchy.pop(0)
-        root = TaxonomicUnit.objects.get(taxon_id=index)
+        root = TaxonomicUnit.objects.get(taxon_id=index)     
+
         if (len(hierarchy) == 0):
             # This takes only the reference for the selected taxon. 
             # E.G. User chooses Deuterostomia -> this takes the refenences for deuterostomia and not for the parent taxons
             references.append(root.references.all())
-        # if root.references.all():
-        #     references.append(root.references.all())
-        hierarchies.append(root)
+        
+        space = " " * grow
+        name = space  + root.rank.rank_name + ": " + root.unit_name1
 
-    context = {'hierarchies': hierarchies, 'references': references[0]}
+        name_list.append(name)
+        result.append(root)
+        grow +=2
+    
+    context = {
+        'taxonomic_unit': chosenTaxon,
+        'hierarchies': result,
+        'name_list': name_list,
+        'references': references[0]
+    }
+    
     return render(request, 'front/hierarchy.html', context)
 
 def view_authors(request):

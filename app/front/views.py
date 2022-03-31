@@ -387,7 +387,8 @@ def view_hierarchy(request, parent_id=None):
 
     hierarchy = hierarchyObject.hierarchy_string.split('-')
 
-    result = []
+    #TODO result array seems useless?
+    # result = []
     name_list = []
     grow = 0
     
@@ -403,15 +404,15 @@ def view_hierarchy(request, parent_id=None):
             references.append(root.references.all())
         
         space = " " * grow
-        name = space  + root.rank.rank_name + ": " + root.unit_name1
+        name = space + root.rank.rank_name
 
-        name_list.append(name)
-        result.append(root)
+        name_list.append((name, root))
+        # result.append(root)
         grow +=2
     
     context = {
         'taxonomic_unit': chosenTaxon,
-        'hierarchies': result,
+        # 'hierarchies': result,
         'name_list': name_list,
         'references': references[0]
     }

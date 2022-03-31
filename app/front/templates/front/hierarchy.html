@@ -4,68 +4,107 @@
 <body>
 
 
-<h1>{{taxonomic_unit.unit_name1}}</h1>
+    <h1>{{taxonomic_unit.unit_name1}}</h1>
 
-<figure data-title="Taxonomy and Nomenclature">
-    <figcaption>
-        <p>Kingdom:{{taxonomic_unit.kingdom}}	<br>Taxonomic Rank: {{taxonomic_unit.rank.rank_name}}<br>Synonyms: </p>
-    </figcaption>
-</figure>
+    <table style="width:60%">
+        <th align="left">Taxonomy and Nomenclature</th>
+        <tr>
+            <td>
+                <p>Kingdom:{{taxonomic_unit.kingdom}} <br>Taxonomic Rank: {{taxonomic_unit.rank.rank_name}}<br>Synonyms: </p>
+            </td>
+        </tr>
+    </table>
 
-<figure data-title="Taxonomic Hierarchy">
-    <figcaption>
-        {% for name in name_list %}
-        <p>{{ name }}</p>
+    <table style="width:60%">
+        <th align="left">Taxonomic Hierarchy</th>
+        {% for name, root in name_list %}
+        
+        <tr>
+            <td>
+                <p>{{ name }}: <a href="{% url 'front:hierarchy' root.taxon_id %}">{{ root.unit_name1 }}</a></p>
+            </td>
+        </tr>
+
         {% endfor %}
-    </figcaption>
-</figure>
-<figure data-title="References">
-    <figcaption>
+    </table>
+
+<!-- 
+    <figure data-title="References">
+        <figcaption>
         <h3>References</h3>
         {% for ref in references %}
         <table>
-          <tr>
-            <td><b>Authors:</b></td>
-            <td>{{ ref.authors }}</td>
-          </tr>
-          <tr>
-          <td><b>Title:</b></td>
-          <td>{{ref.title }}</td>
-          </tr>
+            <tr>
+
+                <td><b>Authors:</b></td>
+                <td>{{ ref.authors }}</td>
+            </tr>
+            <tr>
+                <td><b>Title:</b></td>
+                <td>{{ref.title }}</td>
+            </tr>
         </table>
         {% endfor %}
-    </figcaption>
-</figure>
+        </figcaption>
+    </figure> -->
 
-<style>
-    p {
-     white-space: pre;
- }
- 
- 
- figure{
-    width:400px;
-    border-radius:4px;
-    border:2px solid #ccc;
-    position:relative;
-    left: -50px;
-    padding:48px 10px 10px;
-    z-index: -1;
-}
+    <table style="width:60%">
+        <th align="left">References1</th>
+        {% for ref in references %}
+        
+        <tr>
+            <td>
+                <!-- <tr> -->
+                    <b>Authors:</b>
+                    {{ ref.authors }}
+                    <br>
+                <!-- </tr> -->
+                <!-- <tr> -->
+                    <b>Title:</b>
+                    {{ref.title }}
+                <!-- </tr> -->
+            </td>
+        </tr>
 
-figure:before {
-    content: attr(data-title);
-    position: absolute;
-    top: 0px;
-    left: 0;
-    width: 100%;
-    height: 40px;
-    line-height: 40px;
-    text-indent: 10px;
-    border-bottom: 2px solid #ccc;
-}
-</style>
+        {% endfor %}
+    </table>
+
+
+    <style>
+        p {
+            white-space: pre;
+        }
+
+        table,
+        th
+         {
+            border: 2px solid grey;
+            border-collapse: collapse;
+        }
+
+        figure {
+            width: 400px;
+            border-radius: 4px;
+            border: 2px solid #ccc;
+            position: relative;
+            left: -50px;
+            padding: 48px 10px 10px;
+            z-index: -1;
+        }
+
+        figure:before {
+            content: attr(data-title);
+            position: absolute;
+            top: 0px;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-indent: 10px;
+            border-bottom: 2px solid #ccc;
+        }
+    </style>
 
 </body>
 
-{% endblock %} 
+{% endblock %}

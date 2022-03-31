@@ -223,6 +223,7 @@ describe("TaxonManager", () => {
     //cy.get("#id_doi").type("10.1109/SMC.2016.7844781");
     //cy.get(".btn").click();
     //cy.contains("1 Results");
+    
   });
 
   it("Adding Authors", () => {

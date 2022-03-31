@@ -25,6 +25,7 @@ admin.site.register(TuCommentLink)
 # Django-simple-history history tracking for a third-party model
 from simple_history import register
 register(Reference)
+register(TaxonAuthorLkp)
 
 class RefAdmin(SimpleHistoryAdmin):
 

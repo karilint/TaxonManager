@@ -6,7 +6,6 @@
 
 <h1>{{taxonomic_unit.unit_name1}}</h1>
 
-
 <figure data-title="Taxonomy and Nomenclature">
     <figcaption>
         <p>Kingdom:{{taxonomic_unit.kingdom}}	<br>Taxonomic Rank: {{taxonomic_unit.rank.rank_name}}<br>Synonyms: </p>
@@ -22,7 +21,19 @@
 </figure>
 <figure data-title="References">
     <figcaption>
-        <p>Refrences here</p>
+        <h3>References</h3>
+        {% for ref in references %}
+        <table>
+          <tr>
+            <td><b>Authors:</b></td>
+            <td>{{ ref.authors }}</td>
+          </tr>
+          <tr>
+          <td><b>Title:</b></td>
+          <td>{{ref.title }}</td>
+          </tr>
+        </table>
+        {% endfor %}
     </figcaption>
 </figure>
 
@@ -54,6 +65,7 @@ figure:before {
     border-bottom: 2px solid #ccc;
 }
 </style>
+
 </body>
 
 {% endblock %} 

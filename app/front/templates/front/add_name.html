@@ -1,82 +1,136 @@
 {% extends "front/base.html" %}
 
 {% block content %}
+
 <body>
-<p><a href="/taxa">Taxa list</a> | <a href=" ">Add taxon</a> | <a href="/taxa-search">Search</a></p>
+  <p><a href="/taxa">Taxa list</a> | <a href=" ">Add taxon</a> | <a href="/taxa-search">Search</a></p>
 
-{% with test=user.groups.all|length %}
-{% if test > 0 %}
+  {% with test=user.groups.all|length %}
+  {% if test > 0 %}
 
-<h1>Add taxon</h1>
-  <form action="" method="post" id="parent-form", data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded" data_parentTaxon-url="/load_parentTaxon" novalidate>
+  <h1>Add taxon</h1>
+  <form action="" method="post" id="parent-form" , data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded"
+    data_parentTaxon-url="/load_parentTaxon" novalidate>
     {% csrf_token %}
     <table>
-    {{ form.as_table }}
+      {{ form.as_table }}
     </table>
     <input type="submit" value="Submit">
   </form>
 
 
-<script>
-  $("#id_kingdom_name").change(function (e) {
-    e.preventDefault();
-    var url = $( '#parent-form' ).attr( 'data-rankOfTaxonToBeAdded-url' );
-    var parentId = $(this).val();
 
-    $.ajax({
-      url: url,
-      data: {
-        'id': parentId
-      },
-      success: function(data) {
-          $('#id_taxonnomic_types').html(data);
-      },
-      error: function(data) {
-          alert('errors');
+  <script>
+    // check form before submitting
+    const form = document.getElementById("parent-form");
+
+    form.addEventListener("submit", (e) => {
+      var kingdom_name = document.getElementById("id_kingdom_name");
+      var taxonnomic_types = document.getElementById("id_taxonnomic_types");
+      var rank_name = document.getElementById("id_rank_name");
+      var unit_name1 = document.getElementById("id_unit_name1");
+      let error = [];
+
+      if (kingdom_name.value.length === 0) {
+        error.push("Kingdom cannot be empty")
+      }
+      if (taxonnomic_types.value.length === 0) {
+        error.push("Rank of new taxon cannot be empty")
+      }
+      if (rank_name.value.length === 0) {
+        error.push("Parent cannot be empty")
+      }
+      if (unit_name1.value.length === 0) {
+        error.push("Unit name1 cannot be empty")
+      }
+      if (error.length > 0) {
+        e.preventDefault()
+        window.alert(error.join(", "));
+      }
+    })
+
+
+    $("#id_kingdom_name").change(function (e) {
+      e.preventDefault();
+      var url = $('#parent-form').attr('data-rankOfTaxonToBeAdded-url');
+      var parentId = $(this).val();
+
+      if (parentId) {
+        $.ajax({
+          url: url,
+          data: {
+            'id': parentId
+
+          },
+          success: function (data) {
+            $('#id_taxonnomic_types').html(data);
+          },
+          error: function (data) {
+            alert('errors');
+          }
+        });
+      } else {
+        $('#id_taxonnomic_types').empty();
+        $('#id_rank_name').empty();
       }
     });
-  });
-</script>
 
-<script>
-  $("#id_taxonnomic_types").change(function (e) {
-    e.preventDefault();
 
-    var url = $( '#parent-form' ).attr( 'data_parentTaxon-url' );
-    var rankId = $(this).val();
-    var kingdomId = $('#id_kingdom_name').val();
-    $.ajax({
-      url: url,
-      data: {
-        'id': rankId,
-        'kingdomId': kingdomId
-      },
-      success: function(data) {
-        // alert(data);
-        $('#id_rank_name').html(data);
-      },
-      error: function(data) {
-          alert('errors');
+    $("#id_taxonnomic_types").change(function (e) {
+      e.preventDefault();
+      var url = $('#parent-form').attr('data_parentTaxon-url');
+      var rankId = $(this).val();
+      var kingdomId = $('#id_kingdom_name').val();
+      if (rankId && kingdomId) {
+
+        $.ajax({
+          url: url,
+          data: {
+            'id': rankId,
+            'kingdomId': kingdomId
+          },
+          success: function (data) {
+            // alert(data);
+            $('#id_rank_name').html(data);
+          },
+          error: function (data) {
+            alert('errors');
+          }
+        });
+      } else {
+        $('#id_rank_name').empty();
       }
     });
-  });
-</script>
-<script>
-  $(document).ready(function(){
-    $("#id_taxonnomic_types").select2({
-      width: 'auto'
+
+    $(document).ready(function () {
+      $("#id_taxonnomic_types").select2({
+        width: '200px'
+      });
+      $("#id_rank_name").select2({
+        width: '200px'
+      });
+      $("#id_kingdom_name").select2({
+        width: '200px'
+      });
+      $('#id_references').select2({
+        width: '400px'
+      });
+      $('#id_geographic_div').select2({
+        width: '400px'
+      });
     });
-  });
-</script>
 
-{% else %}
 
-<head>
-  <meta http-equiv="Refresh" content="0;url=/">
-</head>
+  </script>
 
-{% endif %}
-{% endwith %}
+  {% else %}
+
+  <head>
+    <meta http-equiv="Refresh" content="0;url=/">
+  </head>
+
+  {% endif %}
+  {% endwith %}
 
 </body>
 {% endblock %}

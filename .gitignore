@@ -7,3 +7,4 @@ venv/
 videos/
 .pytest_cache/
 __pycache__/
+screenshots/

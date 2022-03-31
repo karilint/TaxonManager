@@ -12,8 +12,10 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+from cProfile import label
 from django import forms
-from .models import Reference, TaxonomicUnit, Kingdom
+from .models import GeographicDiv, Reference, TaxonAuthorLkp, TaxonomicUnit, Kingdom
+from django_select2.forms import Select2MultipleWidget, ModelSelect2MultipleWidget
 
 class RefForm(forms.ModelForm):
     class Meta:
@@ -44,11 +46,41 @@ class NameForm(forms.ModelForm):
     rank_name = forms.CharField(widget=forms.Select(choices=[]), label="New taxon's parent")
 
     taxonnomic_types = forms.CharField(widget=forms.Select(choices=[]), label="Rank of the new taxon")
-    
+
+    # reference = forms.ModelChoiceField(queryset=Reference.objects.all(), label="References where the taxon is mentioned", empty_label="Please choose reference for this taxon")
+    # https://stackoverflow.com/a/8538923
+    references = forms.ModelMultipleChoiceField(
+        queryset=Reference.objects.all(),
+        widget=Select2MultipleWidget,
+    )
+
+    geographic_div = forms.ModelMultipleChoiceField(
+        queryset=GeographicDiv.objects.all(),
+        widget=Select2MultipleWidget,
+        label='Geographic location'
+    )
+
+    # Maybe multiplechoicefield from this advice: https://stackoverflow.com/a/56823482
+
     # FIX: In order to query database and set an author for new unit, add a suitable field 
     # other later deemed necessary fields can also be added here
 
     class Meta:
         model = TaxonomicUnit
-        fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4']
+        fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div']
         exclude = ['unnamed_taxon_ind']
+
+class AuthorForm(forms.ModelForm):
+    template_name = 'add_author.html'
+
+    kingdom = forms.ModelChoiceField(queryset=Kingdom.objects.all())
+    # geographic_div = forms.ModelChoiceField(queryset=GeographicDiv.objects.all())
+
+    geographic_div = forms.ModelMultipleChoiceField(
+        queryset=GeographicDiv.objects.all(),
+        widget=Select2MultipleWidget,
+    )
+
+    class Meta:
+        model = TaxonAuthorLkp
+        fields = ['taxon_author', 'kingdom', 'geographic_div']

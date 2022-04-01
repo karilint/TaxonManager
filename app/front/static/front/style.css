@@ -368,3 +368,9 @@ select[name="reference"] {
     top: -15px;
     left:-5px;
 }
+
+.hierarchy
+{
+   border: 2px solid grey;
+   border-collapse: collapse;
+}

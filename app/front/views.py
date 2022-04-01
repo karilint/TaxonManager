@@ -134,97 +134,99 @@ def create_hierarchystring(taxon):
     new_hierarchy.save()
     
 def import_data_from_excel(request):
-    try:
-        taxons = []
-        with open('import_excel.csv', encoding='latin-1') as csvfile:
-            file = csv.DictReader(csvfile)
-            for row in file:
-                pass
-                revisedrow = {}
-                uncertain = False
-                for key in row:
-                    if (row[key].__contains__(",")  and row[key] != "author") or row[key].__contains__("incertae sedis"):
-                        uncertain = True
-                    if row[key] == "\\N":
-                        revisedrow[key] = None
-                    else:
-                        revisedrow[key] = row[key]
-                if uncertain:
-                    continue
-                taxons.append(revisedrow)
+    if request.user.groups.filter(name='contributors').exists():
+        try:
+            taxons = []
+            with open('import_excel.csv', encoding='latin-1') as csvfile:
+                file = csv.DictReader(csvfile)
+                for row in file:
+                    pass
+                    revisedrow = {}
+                    uncertain = False
+                    for key in row:
+                        if (row[key].__contains__(",")  and row[key] != "author") or row[key].__contains__("incertae sedis"):
+                            uncertain = True
+                        if row[key] == "\\N":
+                            revisedrow[key] = None
+                        else:
+                            revisedrow[key] = row[key]
+                    if uncertain:
+                        continue
+                    taxons.append(revisedrow)
 
 
-        animaliatuple = Kingdom.objects.get_or_create(kingdom_name="Animalia") #Returns a tuple (model, bool) where the bool is true if the model did not previously exist
-        if animaliatuple[1]:# Creates entry for the kingdom animalia
-            animaliatuple[0].save()
-        animaliaunittypes = [(10, "Kingdom", 10, 10), (20, "Subkingdom", 10, 10), (25, "Infrakingdom", 20, 10),
-                             (27, "Superphylum", 25, 10), (30, "Phylum", 27, 10), (40, "Subphylum", 30, 30),
-                             (45, "Infraphylum", 40, 30), (50, "Superclass", 45, 30), (60, "Class", 50, 30),
-                             (70, "Subclass", 60, 60), (80, "Infraclass", 70, 60), (90, "Superorder", 80, 60),
-                             (100, "Order", 90, 60), (110, "Suborder", 100, 100), (120, "Infraorder", 110, 100),
-                             (124, "Section", 120, 100), (126, "Subsection", 124, 100), (130, "Superfamily", 126, 100),
-                             (140, "Family", 130, 100), (150, "Subfamily", 140, 140), (160, "Tribe", 150, 140),
-                             (170, "Subtribe", 160, 140), (180, "Genus", 170, 140), (190, "Subgenus", 180, 180),
-                             (220, "Species", 190, 180), (230, "Subspecies", 220, 220), (240, "Variety", 220, 220),
-                             (245, "Form", 220, 220), (250, "Race", 220, 220), (255, "Stirp", 220, 220),
-                             (260, "Morph", 220, 220), (265, "Aberration", 220, 220), (300, "Unspecified", 220, 220)]
-        for tut in animaliaunittypes:
-            tutple = TaxonUnitType.objects.get_or_create(kingdom=Kingdom.objects.get(kingdom_name = "Animalia"), rank_id=tut[0],
-                                                         rank_name=tut[1], dir_parent_rank_id=tut[2], req_parent_rank_id=tut[3])
+            animaliatuple = Kingdom.objects.get_or_create(kingdom_name="Animalia") #Returns a tuple (model, bool) where the bool is true if the model did not previously exist
+            if animaliatuple[1]:# Creates entry for the kingdom animalia
+                animaliatuple[0].save()
+            animaliaunittypes = [(10, "Kingdom", 10, 10), (20, "Subkingdom", 10, 10), (25, "Infrakingdom", 20, 10),
+                                (27, "Superphylum", 25, 10), (30, "Phylum", 27, 10), (40, "Subphylum", 30, 30),
+                                (45, "Infraphylum", 40, 30), (50, "Superclass", 45, 30), (60, "Class", 50, 30),
+                                (70, "Subclass", 60, 60), (80, "Infraclass", 70, 60), (90, "Superorder", 80, 60),
+                                (100, "Order", 90, 60), (110, "Suborder", 100, 100), (120, "Infraorder", 110, 100),
+                                (124, "Section", 120, 100), (126, "Subsection", 124, 100), (130, "Superfamily", 126, 100),
+                                (140, "Family", 130, 100), (150, "Subfamily", 140, 140), (160, "Tribe", 150, 140),
+                                (170, "Subtribe", 160, 140), (180, "Genus", 170, 140), (190, "Subgenus", 180, 180),
+                                (220, "Species", 190, 180), (230, "Subspecies", 220, 220), (240, "Variety", 220, 220),
+                                (245, "Form", 220, 220), (250, "Race", 220, 220), (255, "Stirp", 220, 220),
+                                (260, "Morph", 220, 220), (265, "Aberration", 220, 220), (300, "Unspecified", 220, 220)]
+            for tut in animaliaunittypes:
+                tutple = TaxonUnitType.objects.get_or_create(kingdom=Kingdom.objects.get(kingdom_name = "Animalia"), rank_id=tut[0],
+                                                            rank_name=tut[1], dir_parent_rank_id=tut[2], req_parent_rank_id=tut[3])
 
 
-            if tutple[1]:
-                tutple[0].save() #Creates taxon unit types
-        rankorder = {}
-        for row in animaliaunittypes:
-            rankorder[row[1].lower()] = row[0]
-        taxons.sort(key=lambda a : rankorder[a["taxon_level"]])
-        # Here we create the top few levels of the hierarchy, since our database doesn't have it
-        taxonunit = TaxonomicUnit.objects.get_or_create(unit_name1="Animalia", kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
-                                                    parent_id=0, rank=TaxonUnitType.objects.get(rank_name = "Kingdom"))
-        if taxonunit[1]:
-            taxonunit[0].save()
-            create_hierarchystring(taxonunit[0])
-
-        
-        tophierarchy = [("Bilateria", "Animalia", "Subkingdom"), ("Deuterostomia", "Bilateria", "Infrakingdom"),
-                        ("Chordata", "Deuterostomia", "Phylum"), ("Vertebrata", "Chordata", "Subphylum"),
-                        ("Gnathostomata", "Vertebrata", "Infraphylum"), ("Tetrapoda", "Gnathostomata", "Superclass"),
-                        ("Mammalia", "Tetrapoda", "Class")]
-
-        for taxon in tophierarchy:
-            taxonunit = TaxonomicUnit.objects.get_or_create(unit_name1=taxon[0], kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
-                                                        parent_id=getattr(TaxonomicUnit.objects.get(unit_name1=taxon[1]),"taxon_id"),
-                                                        rank=TaxonUnitType.objects.get(rank_name = taxon[2]))
+                if tutple[1]:
+                    tutple[0].save() #Creates taxon unit types
+            rankorder = {}
+            for row in animaliaunittypes:
+                rankorder[row[1].lower()] = row[0]
+            taxons.sort(key=lambda a : rankorder[a["taxon_level"]])
+            # Here we create the top few levels of the hierarchy, since our database doesn't have it
+            taxonunit = TaxonomicUnit.objects.get_or_create(unit_name1="Animalia", kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
+                                                        parent_id=0, rank=TaxonUnitType.objects.get(rank_name = "Kingdom"))
             if taxonunit[1]:
                 taxonunit[0].save()
                 create_hierarchystring(taxonunit[0])
 
-        for taxon in taxons:
-            namelist = [taxon["class_name"], taxon["subclass_or_superorder_name"], taxon["order_name"],
-                        taxon["suborder_name"], taxon["superfamily_name"], taxon["family_name"],
-                        taxon["subfamily_name"], taxon["tribe_name"], taxon["genus_name"], taxon["species_name"]]
-            namelist = [i.lower().capitalize() for i in namelist if i is not None]
-
-            if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2])) > 1:
-                print(namelist[-2], namelist[-1])
-
-            if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2])) != 1: #Makes sure there is a unique parent
-                continue
-
-            taxonunit = TaxonomicUnit.objects.get_or_create(unit_name1=namelist[-1], parent_id=getattr(TaxonomicUnit.objects.get_or_create(unit_name1=namelist[-2])[0],"taxon_id"),
-                                                        kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
-                                                        rank=TaxonUnitType.objects.get(rank_name=taxon["taxon_level"].capitalize()),
-                                                        complete_name=taxon["taxon_name"].lower().capitalize())
-
-            if taxonunit[1]:
-                taxonunit[0].save()
-                create_hierarchystring(taxonunit[0])
             
-        
-        return HttpResponseRedirect('/admin')
-    except:
-        return HttpResponseRedirect('/')
+            tophierarchy = [("Bilateria", "Animalia", "Subkingdom"), ("Deuterostomia", "Bilateria", "Infrakingdom"),
+                            ("Chordata", "Deuterostomia", "Phylum"), ("Vertebrata", "Chordata", "Subphylum"),
+                            ("Gnathostomata", "Vertebrata", "Infraphylum"), ("Tetrapoda", "Gnathostomata", "Superclass"),
+                            ("Mammalia", "Tetrapoda", "Class")]
+
+            for taxon in tophierarchy:
+                taxonunit = TaxonomicUnit.objects.get_or_create(unit_name1=taxon[0], kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
+                                                            parent_id=getattr(TaxonomicUnit.objects.get(unit_name1=taxon[1]),"taxon_id"),
+                                                            rank=TaxonUnitType.objects.get(rank_name = taxon[2]))
+                if taxonunit[1]:
+                    taxonunit[0].save()
+                    create_hierarchystring(taxonunit[0])
+
+            for taxon in taxons:
+                namelist = [taxon["class_name"], taxon["subclass_or_superorder_name"], taxon["order_name"],
+                            taxon["suborder_name"], taxon["superfamily_name"], taxon["family_name"],
+                            taxon["subfamily_name"], taxon["tribe_name"], taxon["genus_name"], taxon["species_name"]]
+                namelist = [i.lower().capitalize() for i in namelist if i is not None]
+
+                if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2])) > 1:
+                    print(namelist[-2], namelist[-1])
+
+                if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2])) != 1: #Makes sure there is a unique parent
+                    continue
+
+                taxonunit = TaxonomicUnit.objects.get_or_create(unit_name1=namelist[-1], parent_id=getattr(TaxonomicUnit.objects.get_or_create(unit_name1=namelist[-2])[0],"taxon_id"),
+                                                            kingdom=Kingdom.objects.get(kingdom_name = "Animalia"),
+                                                            rank=TaxonUnitType.objects.get(rank_name=taxon["taxon_level"].capitalize()),
+                                                            complete_name=taxon["taxon_name"].lower().capitalize())
+
+                if taxonunit[1]:
+                    taxonunit[0].save()
+                    create_hierarchystring(taxonunit[0])
+                
+            
+            return HttpResponseRedirect('/admin')
+        except:
+            return HttpResponseRedirect('/')
+    return HttpResponseRedirect('/')
 
 def view_reference(request):
     refs = Reference.objects.all().filter(visible=1)
@@ -387,7 +389,8 @@ def view_hierarchy(request, parent_id=None):
 
     hierarchy = hierarchyObject.hierarchy_string.split('-')
 
-    result = []
+    #TODO result array seems useless?
+    # result = []
     name_list = []
     grow = 0
     
@@ -403,15 +406,15 @@ def view_hierarchy(request, parent_id=None):
             references.append(root.references.all())
         
         space = " " * grow
-        name = space  + root.rank.rank_name + ": " + root.unit_name1
+        name = space + root.rank.rank_name
 
-        name_list.append(name)
-        result.append(root)
+        name_list.append((name, root))
+        # result.append(root)
         grow +=2
     
     context = {
         'taxonomic_unit': chosenTaxon,
-        'hierarchies': result,
+        # 'hierarchies': result,
         'name_list': name_list,
         'references': references[0]
     }

@@ -357,7 +357,7 @@ def view_taxa(request):
     filtered_qs = sorted(
         taxon_filter.qs, key=lambda objects: objects.unit_name1.lower())
     # Set up Pagination, 20 taxa per page
-    paginator = Paginator(filtered_qs, 2)
+    paginator = Paginator(filtered_qs, 20)
 
     context = {}
 

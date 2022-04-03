@@ -470,7 +470,9 @@ def view_hierarchy(request, parent_id=None):
 
 def view_authors(request):
     authors = TaxonAuthorLkp.objects.all()
-    paginator = Paginator(authors, 10)
+    sorted_authors = sorted(
+        authors, key=lambda objects: objects.taxon_author.lower())
+    paginator = Paginator(sorted_authors, 1)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

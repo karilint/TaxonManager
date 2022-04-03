@@ -43,6 +43,12 @@
       if (unit_name1.value.length === 0) {
         error.push("Unit name1 cannot be empty")
       }
+      if (id_references.value.length === 0) {
+        error.push("References cannot be empty")
+      }
+      if (id_geographic_div.value.length === 0) {
+        error.push("Geographic division cannot be empty")
+      }
       if (error.length > 0) {
         e.preventDefault()
         window.alert(error.join(", "));

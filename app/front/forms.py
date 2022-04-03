@@ -50,7 +50,7 @@ class NameForm(forms.ModelForm):
     # reference = forms.ModelChoiceField(queryset=Reference.objects.all(), label="References where the taxon is mentioned", empty_label="Please choose reference for this taxon")
     # https://stackoverflow.com/a/8538923
     references = forms.ModelMultipleChoiceField(
-        queryset=Reference.objects.all(),
+        queryset=Reference.objects.filter(visible=1),
         widget=Select2MultipleWidget,
     )
 

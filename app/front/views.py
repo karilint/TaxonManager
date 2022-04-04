@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import user_passes_test
 from front.models import Reference, get_ref_from_doi
 from .models import Hierarchy, TaxonomicUnit, TaxonUnitType, Kingdom
 from front.utils import canonicalize_doi
-from front.forms import RefForm, NameForm
+from front.forms import RefForm, NameForm, JuniorSynonymForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from .models import TaxonomicUnit, SynonymLink
@@ -58,6 +58,11 @@ def load_seniorSynonym(request):
     seniorSynonym = TaxonomicUnit.objects.exclude(name_usage__in=['invalid', 'not accepted'])
 
     return render(request, 'front/seniorSynonym.html', {'seniorSynonym': seniorSynonym})
+
+def load_juniorSynonym(request):
+    juniorSynonym = TaxonomicUnit.objects.exclude(name_usage__in=['invalid', 'not accepted'])
+
+    return render(request, 'front/juniorSynonym.html', {'juniorSynonym': juniorSynonym})
 
 
 def taxon_add(request):   
@@ -226,9 +231,8 @@ def import_data_from_excel(request):
                         taxon["suborder_name"], taxon["superfamily_name"], taxon["family_name"],
                         taxon["subfamily_name"], taxon["tribe_name"], taxon["genus_name"], taxon["species_name"]]
             namelist = [i.lower().capitalize() for i in namelist if i is not None]
-
-            if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2])) > 1:
-                print(namelist[-2], namelist[-1])
+            
+            
 
             if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2])) != 1: #Makes sure there is a unique parent
                 continue
@@ -417,3 +421,28 @@ def view_hierarchy(request, parent_id=None):
 
     context = {'hierarchies': result}
     return render(request, 'front/hierarchy.html', context)
+
+def add_junior_synonym(request, taxon_id=None):
+    #works similiarly to add_name
+    if request.method == 'POST':
+        form = JuniorSynonymForm(request.POST)
+                
+        if form.is_valid():
+            if True:
+                taxon = TaxonomicUnit.objects.get(taxon_id = form.cleaned_data['synonym_id'])
+                if taxon.kingdom in ["Chromista", "Fungi", "Plantae"]:
+                    taxon.name_usage = "not accepted"
+                    taxon.unaccept_reason = "synonym"
+                else:
+                    taxon.name_usage = "invalid"
+                    taxon.unaccept_reason= "junior synonym"
+                taxon.save()
+                SynonymLink.objects.create(synonym_id = taxon.taxon_id, taxon_id_accepted = TaxonomicUnit.objects.get(taxon_id = taxon_id), update_date = datetime.now()).save()
+            #except:
+                #print("error in adding junior synonym")
+            
+            return HttpResponseRedirect(f'/hierarchy/{taxon_id}')
+            
+    else:
+        form = JuniorSynonymForm()
+    return render(request, 'front/add_junior_synonym.html', {'form': form})

@@ -13,7 +13,7 @@
 #   limitations under the License.
 
 from django import forms
-from .models import Reference, TaxonomicUnit, Kingdom
+from .models import Reference, TaxonomicUnit, Kingdom, SynonymLink
 
 class RefForm(forms.ModelForm):
     class Meta:
@@ -58,3 +58,13 @@ class NameForm(forms.ModelForm):
         model = TaxonomicUnit
         fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4']
         exclude = ['unnamed_taxon_ind']
+
+
+class JuniorSynonymForm(forms.ModelForm):
+    template_name = 'add_junior_synonym.html'
+
+    synonym_id = forms.CharField(widget=forms.Select(choices=TaxonomicUnit.objects.exclude(name_usage__in=["invalid", "not accepted"]).values_list("taxon_id", "unit_name1")), label="Junior synonym")
+
+    class Meta:
+        model = SynonymLink
+        fields = ['synonym_id']

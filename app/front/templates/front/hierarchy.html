@@ -11,6 +11,12 @@
 
 {% endfor %}
 
+<p></p>
+
+{% with hierarchies|last as taxon %}
+  <a href="{% url 'front:add_junior_synonym' taxon_id=taxon.taxon_id %}">Add junior synonym</a>
+{% endwith %}
+
 {% else %}
 There are no taxa in the database. 
 {% endif %}

@@ -57,10 +57,16 @@ def load_parentTaxon(request):
     return render(request, 'front/parentTaxon.html', {'parentTaxon': parentTaxon})
 
 
-def taxon_add(request):
+def taxon_add(request, pk = None):
+    c = {'pk': pk if pk else ''}
+    form = NameForm()
     if request.method == 'POST':
+        taxon = None    
+        if pk:
+            taxon = TaxonomicUnit.objects.get(pk=pk)        
         # create a form instance and populate it with data from the request:
-        form = NameForm(request.POST)
+        form = NameForm(request.POST, instance=taxon) 
+            
         # check whether it's valid:
         if form.is_valid():
             try:
@@ -108,7 +114,22 @@ def taxon_add(request):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = NameForm()
+        try:
+            taxon = TaxonomicUnit.objects.get(pk=pk)
+
+            form = NameForm(initial={
+            'kingdom': taxon.kingdom,
+            'rank_name': taxon.rank.rank_name,
+            'unit_name1': taxon.unit_name1,
+            'unit_name2': taxon.unit_name2,
+            'unit_name3': taxon.unit_name3,
+            'unit_name4': taxon.unit_name4,
+            'references': taxon.references.values_list('id', flat=True),
+            'geographic_div': taxon.geographic_div.values_list('id', flat=True)
+             })
+        except TaxonomicUnit.DoesNotExist:
+            form = NameForm()
+    c['form'] = form
     return render(request, 'front/add_name.html', {'form': form})
 
 

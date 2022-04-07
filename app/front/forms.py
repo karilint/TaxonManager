@@ -14,7 +14,7 @@
 
 from cProfile import label
 from django import forms
-from .models import GeographicDiv, Reference, TaxonAuthorLkp, TaxonomicUnit, Kingdom
+from .models import GeographicDiv, Reference, TaxonAuthorLkp, TaxonomicUnit, Kingdom, Expert
 from django_select2.forms import Select2MultipleWidget, ModelSelect2MultipleWidget
 
 class RefForm(forms.ModelForm):
@@ -70,11 +70,8 @@ class NameForm(forms.ModelForm):
         fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div']
         exclude = ['unnamed_taxon_ind']
 
-class AuthorForm(forms.ModelForm):
-    template_name = 'add_author.html'
-
-    kingdom = forms.ModelChoiceField(queryset=Kingdom.objects.all())
-    # geographic_div = forms.ModelChoiceField(queryset=GeographicDiv.objects.all())
+class ExpertForm(forms.ModelForm):
+    template_name = 'add_expert.html'
 
     geographic_div = forms.ModelMultipleChoiceField(
         queryset=GeographicDiv.objects.all(),
@@ -82,5 +79,5 @@ class AuthorForm(forms.ModelForm):
     )
 
     class Meta:
-        model = TaxonAuthorLkp
-        fields = ['taxon_author', 'kingdom', 'geographic_div']
+        model = Expert
+        fields = ['expert', 'geographic_div']

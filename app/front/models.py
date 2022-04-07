@@ -461,7 +461,6 @@ class TaxonAuthorLkp(models.Model):
     update_date = models.DateTimeField(null=True, blank=True)
     kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
     short_author = models.CharField(max_length=100, null=True, blank=True)
-    geographic_div = models.ManyToManyField(GeographicDiv)
 
     def __str__(self):
         return f"{self.taxon_author}"
@@ -599,6 +598,7 @@ class Expert(models.Model):
     expert = models.CharField(max_length=100)
     exp_comment = models.CharField(max_length=500)
     update_date = models.DateTimeField(null=True, blank=True)
+    geographic_div = models.ManyToManyField(GeographicDiv)
 
     def __str__(self):
         return f"Expert name: {self.expert}"

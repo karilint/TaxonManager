@@ -12,9 +12,9 @@ from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import user_passes_test
 from front.models import Reference, get_ref_from_doi
-from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom
+from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom, Expert
 from front.utils import canonicalize_doi
-from front.forms import RefForm, NameForm, AuthorForm
+from front.forms import RefForm, NameForm, ExpertForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from .models import TaxonomicUnit
@@ -468,32 +468,32 @@ def view_hierarchy(request, parent_id=None):
     return render(request, 'front/hierarchy.html', context)
 
 
-def view_authors(request):
-    authors = TaxonAuthorLkp.objects.all()
-    sorted_authors = sorted(
-        authors, key=lambda objects: objects.taxon_author.lower())
-    paginator = Paginator(sorted_authors, 10)
+def view_experts(request):
+    experts = Expert.objects.all()
+    sorted_experts = sorted(
+        experts, key=lambda objects: objects.expert.lower())
+    paginator = Paginator(sorted_experts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     context = {'paginator': paginator, 'page_obj': page_obj}
-    return render(request, 'front/authors.html', context)
+    return render(request, 'front/experts.html', context)
 
 
-def add_author(request):
+def add_expert(request):
     if request.method == 'POST':
-        form = AuthorForm(request.POST)
+        form = ExpertForm(request.POST)
         if form.is_valid():
             try:
-                new_author = form.save(commit=False)
-                new_author.save()
+                new_expert = form.save(commit=False)
+                new_expert.save()
 
                 geos = form.cleaned_data['geographic_div']
                 for geo in geos:
-                    new_author.geographic_div.add(geo)
-            except TaxonAuthorLkp.DoesNotExist:
-                print("saving new author did not workout; do something")
-            return HttpResponseRedirect('/add_author')
+                    new_expert.geographic_div.add(geo)
+            except Expert.DoesNotExist:
+                print("Saving a new expert did not workout; do something")
+            return HttpResponseRedirect('/add_expert')
     else:
-        form = AuthorForm()
-    return render(request, 'front/add_author.html', {'form': form})
+        form = ExpertForm()
+    return render(request, 'front/add_expert.html', {'form': form})

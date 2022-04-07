@@ -100,6 +100,9 @@ def taxon_add(request):
                 geos = form.cleaned_data['geographic_div']
                 for geo in geos:
                     new_unit.geographic_div.add(geo)
+                experts = form.cleaned_data['expert']
+                for expert in experts:
+                    new_unit.expert.add(expert)
                 create_hierarchystring(new_unit)
             except TaxonomicUnit.DoesNotExist:
                 # form was filled incorrectly

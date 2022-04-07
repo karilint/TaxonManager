@@ -60,6 +60,12 @@ class NameForm(forms.ModelForm):
         label='Geographic location'
     )
 
+    expert = forms.ModelMultipleChoiceField(
+    queryset=Expert.objects.all(),
+    widget=Select2MultipleWidget,
+    label= 'Experts'
+    )
+
     # Maybe multiplechoicefield from this advice: https://stackoverflow.com/a/56823482
 
     # FIX: In order to query database and set an author for new unit, add a suitable field 
@@ -67,7 +73,7 @@ class NameForm(forms.ModelForm):
 
     class Meta:
         model = TaxonomicUnit
-        fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div']
+        fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div', 'expert']
         exclude = ['unnamed_taxon_ind']
 
 class ExpertForm(forms.ModelForm):

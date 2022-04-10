@@ -38,17 +38,17 @@ class StatuscodeTest(TestCase):
 
     def test_addname_page_returns_ok_after_logging_in(self):
         self.client.force_login(self.test_user)
-        response = self.client.get('/addName/')
+        response = self.client.get('/add-taxon/')
         self.assertEqual(response.status_code, 200)
 
     def test_add_author_page_returns_ok_after_logging_in(self):
         self.client.force_login(self.test_user)
-        response = self.client.get('/add_author/')
+        response = self.client.get('/add-author/')
         self.assertEqual(response.status_code, 200)
 
     def test_add_expert_page_returns_ok_after_logging_in(self):
         self.client.force_login(self.test_user)
-        response = self.client.get('/add_expert/')
+        response = self.client.get('/add-expert/')
         self.assertEqual(response.status_code, 200)
 
 
@@ -84,21 +84,21 @@ class TemplateTest(TestCase):
     def test_add_reference_page_uses_correct_template(self):
         self.client.force_login(self.test_user)
         response = self.client.get('/add-references/')
-        self.assertTemplateUsed(response, 'front/add_reference.html')
+        self.assertTemplateUsed(response, 'front/add-reference.html')
 
     def test_addname_page_uses_correct_template(self):
         self.client.force_login(self.test_user)
-        response = self.client.get('/addName/')
-        self.assertTemplateUsed(response, 'front/add_name.html')
+        response = self.client.get('/add-taxon/')
+        self.assertTemplateUsed(response, 'front/add-taxon.html')
 
     def test_add_author_page_uses_correct_template(self):
         self.client.force_login(self.test_user)
-        response = self.client.get('/add_author/')
-        self.assertTemplateUsed(response, 'front/add_author.html')
+        response = self.client.get('/add-author/')
+        self.assertTemplateUsed(response, 'front/add-author.html')
 
     def test_add_expert_page_uses_correct_template(self):
         self.client.force_login(self.test_user)
-        response = self.client.get('/add_expert/')
-        self.assertTemplateUsed(response, 'front/add_expert.html')
+        response = self.client.get('/add-expert/')
+        self.assertTemplateUsed(response, 'front/add-expert.html')
 
 

@@ -40,7 +40,7 @@ class RefForm(forms.ModelForm):
         return self.cleaned_data['doi']
 
 class NameForm(forms.ModelForm):
-    template_name = 'add_name.html'
+    template_name = 'add-taxon.html'
 
     kingdom_name = forms.ModelChoiceField(queryset=Kingdom.objects.all())
     rank_name = forms.CharField(widget=forms.Select(choices=[]), label="New taxon's parent")
@@ -82,7 +82,7 @@ class NameForm(forms.ModelForm):
         exclude = ['unnamed_taxon_ind']
 
 class ExpertForm(forms.ModelForm):
-    template_name = 'add_expert.html'
+    template_name = 'add-expert.html'
 
     geographic_div = forms.ModelMultipleChoiceField(
         queryset=GeographicDiv.objects.all(),
@@ -94,7 +94,7 @@ class ExpertForm(forms.ModelForm):
         fields = ['expert', 'geographic_div']
 
 class AuthorForm(forms.ModelForm):
-    template_name = 'add_author.html'
+    template_name = 'add-author.html'
 
     kingdom = forms.ModelChoiceField(queryset=Kingdom.objects.all())
 

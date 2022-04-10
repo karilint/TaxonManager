@@ -112,7 +112,7 @@ def taxon_add(request):
     # if a GET (or any other method) we'll create a blank form
     else:
         form = NameForm()
-    return render(request, 'front/add_name.html', {'form': form})
+    return render(request, 'front/add-taxon.html', {'form': form})
 
 
 def create_hierarchystring(taxon):
@@ -292,7 +292,7 @@ def search(request):
               'filtered_refs': response,
               'nresults': nresults,
               'paginator': paginator})
-    return render(request, 'front/search.html', c)
+    return render(request, 'front/reference-search.html', c)
 
 
 def refs_add(request, pk=None):
@@ -313,7 +313,7 @@ def refs_add(request, pk=None):
         form = RefForm(instance=ref)
 
     c['form'] = form
-    return render(request, 'front/add_reference.html', c)
+    return render(request, 'front/add-reference.html', c)
 
 
 def delete(request, pk):
@@ -337,7 +337,7 @@ def resolve(request, pk=None):
                 # We're trying to add a reference but one with the same DOI
                 # is in the database already.
                 ref = Reference.objects.get(doi=doi)
-                return HttpResponseRedirect(f'/front/add_reference/{ref.pk}')
+                return HttpResponseRedirect(f'/front/add-reference/{ref.pk}')
             except Reference.DoesNotExist:
                 ref = None
         else:
@@ -345,7 +345,7 @@ def resolve(request, pk=None):
         ref = get_ref_from_doi(doi, ref)
         form = RefForm(instance=Reference)
         c = {'form': form, 'pk': pk if pk else ''}
-        return render(request, 'front/add_reference.html', c)
+        return render(request, 'front/add-reference.html', c)
     raise Http404
 
 
@@ -496,10 +496,10 @@ def add_expert(request):
                     new_expert.geographic_div.add(geo)
             except Expert.DoesNotExist:
                 print("Saving a new expert did not workout; do something")
-            return HttpResponseRedirect('/add_expert')
+            return HttpResponseRedirect('/add-expert')
     else:
         form = ExpertForm()
-    return render(request, 'front/add_expert.html', {'form': form})
+    return render(request, 'front/add-expert.html', {'form': form})
 
 def view_authors(request):
     authors = TaxonAuthorLkp.objects.all()
@@ -522,7 +522,7 @@ def add_author(request):
                 new_author.save()
             except TaxonAuthorLkp.DoesNotExist:
                 print("saving new author did not workout; do something")
-            return HttpResponseRedirect('/add_author')
+            return HttpResponseRedirect('/add-author')
     else:
         form = AuthorForm()
-    return render(request, 'front/add_author.html', {'form': form})
+    return render(request, 'front/add-author.html', {'form': form})

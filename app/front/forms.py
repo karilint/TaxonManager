@@ -14,7 +14,7 @@
 
 from cProfile import label
 from django import forms
-from .models import GeographicDiv, Reference, TaxonAuthorLkp, TaxonomicUnit, Kingdom, Expert
+from .models import GeographicDiv, Reference, TaxonAuthorLkp, TaxonomicUnit, Kingdom, Expert, TaxonAuthorLkp
 from django_select2.forms import Select2MultipleWidget, ModelSelect2MultipleWidget
 
 class RefForm(forms.ModelForm):
@@ -66,6 +66,11 @@ class NameForm(forms.ModelForm):
     label= 'Experts'
     )
 
+    author = forms.ModelChoiceField(
+    queryset=TaxonAuthorLkp.objects.all()
+    )
+
+
     # Maybe multiplechoicefield from this advice: https://stackoverflow.com/a/56823482
 
     # FIX: In order to query database and set an author for new unit, add a suitable field 
@@ -73,7 +78,7 @@ class NameForm(forms.ModelForm):
 
     class Meta:
         model = TaxonomicUnit
-        fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div', 'expert']
+        fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div', 'expert', 'author']
         exclude = ['unnamed_taxon_ind']
 
 class ExpertForm(forms.ModelForm):
@@ -87,3 +92,12 @@ class ExpertForm(forms.ModelForm):
     class Meta:
         model = Expert
         fields = ['expert', 'geographic_div']
+
+class AuthorForm(forms.ModelForm):
+    template_name = 'add_author.html'
+
+    kingdom = forms.ModelChoiceField(queryset=Kingdom.objects.all())
+
+    class Meta:
+        model = TaxonAuthorLkp
+        fields = ['taxon_author', 'kingdom']

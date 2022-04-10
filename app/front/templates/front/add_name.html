@@ -52,6 +52,9 @@
       if (id_expert.value.length === 0) {
         error.push("Expert cannot be empty")
       }
+      if (id_author.value.length === 0) {
+        error.push("Author cannot be empty")
+      }
       if (error.length > 0) {
         // e.preventDefault()
         window.alert(error.join(", "));
@@ -128,6 +131,9 @@
         width: '400px'
       });
       $('#id_expert').select2({
+        width: '400px'
+      });
+      $('#id_author').select2({
         width: '400px'
       });
     });

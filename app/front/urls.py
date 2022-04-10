@@ -25,4 +25,6 @@ urlpatterns = [
     path('import_data_from_excel/', views.import_data_from_excel, name='import_data_from_excel'),
     path('experts/', views.view_experts, name='view_experts'),
     path('add_expert/', views.add_expert, name='add_expert'),
+    path('authors/', views.view_authors, name='view_authors'),
+    path('add_author/', views.add_author, name='add_author'),
 ]

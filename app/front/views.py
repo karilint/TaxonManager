@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import user_passes_test
 from front.models import Reference, get_ref_from_doi
 from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom, Expert
 from front.utils import canonicalize_doi
-from front.forms import RefForm, NameForm, ExpertForm
+from front.forms import RefForm, NameForm, ExpertForm, AuthorForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from .models import TaxonomicUnit
@@ -500,3 +500,29 @@ def add_expert(request):
     else:
         form = ExpertForm()
     return render(request, 'front/add_expert.html', {'form': form})
+
+def view_authors(request):
+    authors = TaxonAuthorLkp.objects.all()
+    sorted_authors = sorted(
+        authors, key=lambda objects: objects.taxon_author.lower())
+    paginator = Paginator(sorted_authors, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'paginator': paginator, 'page_obj': page_obj}
+    return render(request, 'front/authors.html', context)
+
+
+def add_author(request):
+    if request.method == 'POST':
+        form = AuthorForm(request.POST)
+        if form.is_valid():
+            try:
+                new_author = form.save(commit=False)
+                new_author.save()
+            except TaxonAuthorLkp.DoesNotExist:
+                print("saving new author did not workout; do something")
+            return HttpResponseRedirect('/add_author')
+    else:
+        form = AuthorForm()
+    return render(request, 'front/add_author.html', {'form': form})

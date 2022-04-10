@@ -475,7 +475,7 @@ class Expert(models.Model):
     geographic_div = models.ManyToManyField(GeographicDiv)
 
     def __str__(self):
-        return f"Expert name: {self.expert}"
+        return f"{self.expert}"
 
 class TaxonomicUnit(models.Model):
     """

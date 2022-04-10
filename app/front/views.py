@@ -116,10 +116,11 @@ def taxon_add(request, pk = None):
     else:
         try:
             taxon = TaxonomicUnit.objects.get(pk=pk)
-
+            
             form = NameForm(initial={
-            'kingdom': taxon.kingdom,
+            'kingdom_name': taxon.kingdom,
             'rank_name': taxon.rank.rank_name,
+            #parent
             'unit_name1': taxon.unit_name1,
             'unit_name2': taxon.unit_name2,
             'unit_name3': taxon.unit_name3,

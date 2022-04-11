@@ -57,17 +57,20 @@ class NameForm(forms.ModelForm):
     geographic_div = forms.ModelMultipleChoiceField(
         queryset=GeographicDiv.objects.all(),
         widget=Select2MultipleWidget,
-        label='Geographic location'
+        label='Geographic location',
+        required=False
     )
 
     expert = forms.ModelMultipleChoiceField(
-    queryset=Expert.objects.all(),
-    widget=Select2MultipleWidget,
-    label= 'Experts'
+        queryset=Expert.objects.all(),
+        widget=Select2MultipleWidget,
+        label= 'Experts',
+        required=False
     )
 
     author = forms.ModelChoiceField(
-    queryset=TaxonAuthorLkp.objects.all()
+    queryset=TaxonAuthorLkp.objects.all(),
+    required=False
     )
 
 

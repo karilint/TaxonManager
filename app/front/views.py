@@ -18,7 +18,7 @@ from front.forms import RefForm, NameForm, AuthorForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from .models import TaxonomicUnit
-import csv
+import csv, urllib.parse
 
 
 def index(request):
@@ -28,6 +28,9 @@ def index(request):
 # !! Temporary address for login page, references view and adding a reference
 def login(request):
     return render(request, 'front/login.html')
+
+def error(request, message):
+    return render(request, 'front/error.html', {'message' : message})
 
 
 def load_rankOfTaxonToBeAdded(request):
@@ -244,8 +247,10 @@ def import_data_from_excel(request):
                     create_hierarchystring(taxonunit[0])
 
             return HttpResponseRedirect('/admin')
-        except:
-            return HttpResponseRedirect('/')
+        except Exception as e:
+            print(e)
+            e = urllib.parse.quote(str(e), safe="")
+            return HttpResponseRedirect('/error/' + e)
     return HttpResponseRedirect('/')
 
 

@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import user_passes_test
 from front.models import Reference, get_ref_from_doi
 from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom, Expert
 from front.utils import canonicalize_doi
-from front.forms import RefForm, NameForm, ExpertForm, AuthorForm
+from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from .models import TaxonomicUnit
@@ -60,7 +60,7 @@ def load_parentTaxon(request):
 def taxon_add(request):
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = NameForm(request.POST)
+        form = TaxonForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
             try:
@@ -103,7 +103,10 @@ def taxon_add(request):
                 experts = form.cleaned_data['expert']
                 for expert in experts:
                     new_unit.expert.add(expert)
-                create_hierarchystring(new_unit)
+                author = form.cleaned_data['author']
+                new_unit.taxon_author_id=author
+                new_unit.save()
+                create_hierarchystring(new_unit)                
             except TaxonomicUnit.DoesNotExist:
                 # form was filled incorrectly
                 print("saving new unit did not workout; do something")
@@ -111,7 +114,7 @@ def taxon_add(request):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = NameForm()
+        form = TaxonForm()
     return render(request, 'front/add-taxon.html', {'form': form})
 
 

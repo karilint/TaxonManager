@@ -39,7 +39,7 @@ class RefForm(forms.ModelForm):
 
         return self.cleaned_data['doi']
 
-class NameForm(forms.ModelForm):
+class TaxonForm(forms.ModelForm):
     template_name = 'add-taxon.html'
 
     kingdom_name = forms.ModelChoiceField(queryset=Kingdom.objects.all())

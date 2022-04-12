@@ -104,3 +104,20 @@ class AuthorForm(forms.ModelForm):
     class Meta:
         model = TaxonAuthorLkp
         fields = ['taxon_author', 'kingdom']
+
+    # Prevent blank or duplicate authors
+    def clean_taxon_author(self):
+        taxon_author = self.cleaned_data['taxon_author']
+        if taxon_author is None or taxon_author.strip() == '':
+            raise forms.ValidationError('Taxon author cannot be left blank')
+        try:
+            author = TaxonAuthorLkp.objects.get(taxon_author=taxon_author)
+            if author is not None:
+                raise forms.ValidationError('An author with the name '\
+                             + taxon_author + ' already exists in the database')
+        except TaxonAuthorLkp.DoesNotExist:
+            # Good: an author with this name is not in the DB already
+            pass
+
+        return self.cleaned_data['taxon_author']
+

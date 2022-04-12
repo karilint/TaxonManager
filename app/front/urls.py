@@ -28,3 +28,4 @@ urlpatterns = [
     path('authors/', views.view_authors, name='view-authors'),
     path('add-author/', views.add_author, name='add-author'),
     path('error/<str:message>', views.error, name='error')
+]

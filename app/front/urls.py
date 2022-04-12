@@ -27,4 +27,4 @@ urlpatterns = [
     path('add-expert/', views.add_expert, name='add-expert'),
     path('authors/', views.view_authors, name='view-authors'),
     path('add-author/', views.add_author, name='add-author'),
-]
+    path('error/<str:message>', views.error, name='error')

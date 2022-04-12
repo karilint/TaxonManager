@@ -7,16 +7,22 @@
     <h1>{{taxonomic_unit.unit_name1}}</h1>
     <h3>{{taxonomic_unit.taxon_author}}</h3>
 
+    {% if taxonomic_unit.n_usage != invalid %}
+        <p>Valid name: {{taxonomic_unit.n_usage}}</p>
+    {% endif %}
+
     <table class="hierarchy" style="width:60%">
         <th align="left">Taxonomy and Nomenclature</th>
         <tr>
             <td>
-                <p>Kingdom:{{taxonomic_unit.kingdom}} <br>Taxonomic Rank: {{taxonomic_unit.rank.rank_name}}<br>Synonyms:
+                <p>Kingdom:{{taxonomic_unit.kingdom}} <br>Taxonomic Rank: {{taxonomic_unit.rank.rank_name}}<br>Synonyms:<br>Taxonomic status: {{taxonomic_unit.n_usage}}
                 </p>
             </td>
         </tr>
     </table>
 
+    
+    {% if taxonomic_unit.n_usage == valid %}
     <table class="hierarchy" style="width:60%">
         <th align="left">Taxonomic Hierarchy</th>
         <tr>
@@ -27,7 +33,9 @@
                 {% endfor %}
             </td>
         </tr>
-    </table>
+    </table>    
+    {% endif %}
+    
 
     <table class="hierarchy" style="width:60%">
         <th align="left">References</th>

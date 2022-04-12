@@ -65,7 +65,7 @@ def taxon_add(request, pk = None):
         if pk:
             taxon = TaxonomicUnit.objects.get(pk=pk)        
         # create a form instance and populate it with data from the request:
-        form = NameForm(request.POST, instance=taxon) 
+        form = NameForm(request.POST) 
             
         # check whether it's valid:
         if form.is_valid():
@@ -98,6 +98,13 @@ def taxon_add(request, pk = None):
                 # else if there's no author:
                 # get rank by kingdom name and rank name + set rank to new unit
                 new_unit.rank = rank_of_new_taxon
+                
+                # modify old taxon's name validity, if taxon is edited
+                if pk: #& new_unit.unit_name1 != taxon.unit_name1
+                    taxon.n_usage = "invalid"    
+                    taxon.save()
+                
+                new_unit.n_usage = "valid"
 
                 new_unit.save()
                 refs = form.cleaned_data['references']
@@ -114,6 +121,7 @@ def taxon_add(request, pk = None):
 
     # if a GET (or any other method) we'll create a blank form
     else:
+        # edit existing taxon
         try:
             taxon = TaxonomicUnit.objects.get(pk=pk)
             
@@ -128,10 +136,11 @@ def taxon_add(request, pk = None):
             'references': taxon.references.values_list('id', flat=True),
             'geographic_div': taxon.geographic_div.values_list('id', flat=True)
              })
+
         except TaxonomicUnit.DoesNotExist:
             form = NameForm()
     c['form'] = form
-    return render(request, 'front/add_name.html', {'form': form})
+    return render(request, 'front/add_name.html', c)
 
 
 def create_hierarchystring(taxon):

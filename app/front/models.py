@@ -461,10 +461,21 @@ class TaxonAuthorLkp(models.Model):
     update_date = models.DateTimeField(null=True, blank=True)
     kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
     short_author = models.CharField(max_length=100, null=True, blank=True)
-    geographic_div = models.ManyToManyField(GeographicDiv)
 
     def __str__(self):
         return f"{self.taxon_author}"
+
+class Expert(models.Model):
+    """ Database model of Experts table """
+    # TODO: expert_id_prefix left out, this is a char field
+    # that only contains EXP presumably for all rows.
+    expert = models.CharField(max_length=100)
+    exp_comment = models.CharField(max_length=500)
+    update_date = models.DateTimeField(null=True, blank=True)
+    geographic_div = models.ManyToManyField(GeographicDiv)
+
+    def __str__(self):
+        return f"{self.expert}"
 
 class TaxonomicUnit(models.Model):
     """
@@ -499,6 +510,7 @@ class TaxonomicUnit(models.Model):
     complete_name = models.CharField(max_length=300, null=True, blank=True)
     references = models.ManyToManyField(Reference)
     geographic_div = models.ManyToManyField(GeographicDiv)
+    expert = models.ManyToManyField(Expert, null=True, blank=True)
 
     # Relationships
     comments = models.ManyToManyField(
@@ -590,18 +602,6 @@ class ReferenceLink(models.Model):
 
     def __str__(self):
         return f"taxon_id: {self.taxon}, documentation_id = {self.documentation}"
-
-
-class Expert(models.Model):
-    """ Database model of Experts table """
-    # TODO: expert_id_prefix left out, this is a char field
-    # that only contains EXP presumably for all rows.
-    expert = models.CharField(max_length=100)
-    exp_comment = models.CharField(max_length=500)
-    update_date = models.DateTimeField(null=True, blank=True)
-
-    def __str__(self):
-        return f"Expert name: {self.expert}"
 
 
 class ExpertsGeographicDiv(models.Model):

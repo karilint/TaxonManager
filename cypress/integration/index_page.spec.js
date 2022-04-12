@@ -232,7 +232,7 @@ describe("TaxonManager", () => {
     cy.get("#id_password").type("cypress");
     cy.contains("Log in").click();
 
-    cy.visit("http://localhost:8000/add_author/");
+    cy.visit("http://localhost:8000/add-author/");
     cy.contains("Add author")
 
   })

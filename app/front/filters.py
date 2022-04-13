@@ -37,6 +37,12 @@ class TaxonFilter(django_filters.FilterSet):
                     lookup_expr='icontains')
     rank_name = django_filters.CharFilter(field_name='rank__rank_name', label='Rank name',
                     lookup_expr='icontains')
+    expert_name = django_filters.CharFilter(field_name='expert__expert', label='Expert',
+                    lookup_expr='icontains')
+    author_name = django_filters.CharFilter(field_name='taxon_author__taxon_author', label='Author',
+                    lookup_expr='icontains')
+    geo_location = django_filters.CharFilter(field_name='geographic_div__geographic_value', label='Geographic location',
+                    lookup_expr='icontains')
     any_field = django_filters.CharFilter(method='filter_by_any_field', label="Search")
 
     def filter_by_any_field(self, queryset, name, value):

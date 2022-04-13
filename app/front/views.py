@@ -12,13 +12,13 @@ from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import user_passes_test
 from front.models import Reference, get_ref_from_doi
-from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom
+from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom, Expert
 from front.utils import canonicalize_doi
-from front.forms import RefForm, NameForm, AuthorForm
+from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from .models import TaxonomicUnit
-import csv
+import csv, urllib.parse
 
 
 def index(request):
@@ -28,6 +28,9 @@ def index(request):
 # !! Temporary address for login page, references view and adding a reference
 def login(request):
     return render(request, 'front/login.html')
+
+def error(request, message):
+    return render(request, 'front/error.html', {'message' : message})
 
 
 def load_rankOfTaxonToBeAdded(request):
@@ -65,8 +68,7 @@ def taxon_add(request, pk = None):
         if pk:
             taxon = TaxonomicUnit.objects.get(pk=pk)        
         # create a form instance and populate it with data from the request:
-        form = NameForm(request.POST) 
-            
+        form = TaxonForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
             try:
@@ -113,7 +115,13 @@ def taxon_add(request, pk = None):
                 geos = form.cleaned_data['geographic_div']
                 for geo in geos:
                     new_unit.geographic_div.add(geo)
-                create_hierarchystring(new_unit)
+                experts = form.cleaned_data['expert']
+                for expert in experts:
+                    new_unit.expert.add(expert)
+                author = form.cleaned_data['author']
+                new_unit.taxon_author_id=author
+                new_unit.save()
+                create_hierarchystring(new_unit)                
             except TaxonomicUnit.DoesNotExist:
                 # form was filled incorrectly
                 print("saving new unit did not workout; do something")
@@ -125,7 +133,7 @@ def taxon_add(request, pk = None):
         try:
             taxon = TaxonomicUnit.objects.get(pk=pk)
             
-            form = NameForm(initial={
+            form = TaxonForm(initial={
             'kingdom_name': taxon.kingdom,
             'rank_name': taxon.rank.rank_name,
             #parent
@@ -138,9 +146,9 @@ def taxon_add(request, pk = None):
              })
 
         except TaxonomicUnit.DoesNotExist:
-            form = NameForm()
+            form = TaxonForm()
     c['form'] = form
-    return render(request, 'front/add_name.html', c)
+    return render(request, 'front/add-taxon.html', c)
 
 
 def create_hierarchystring(taxon):
@@ -275,8 +283,10 @@ def import_data_from_excel(request):
                     create_hierarchystring(taxonunit[0])
 
             return HttpResponseRedirect('/admin')
-        except:
-            return HttpResponseRedirect('/')
+        except Exception as e:
+            print(e)
+            e = urllib.parse.quote(str(e), safe="")
+            return HttpResponseRedirect('/error/' + e)
     return HttpResponseRedirect('/')
 
 
@@ -320,7 +330,7 @@ def search(request):
               'filtered_refs': response,
               'nresults': nresults,
               'paginator': paginator})
-    return render(request, 'front/search.html', c)
+    return render(request, 'front/reference-search.html', c)
 
 
 def refs_add(request, pk=None):
@@ -341,7 +351,7 @@ def refs_add(request, pk=None):
         form = RefForm(instance=ref)
 
     c['form'] = form
-    return render(request, 'front/add_reference.html', c)
+    return render(request, 'front/add-reference.html', c)
 
 
 def delete(request, pk):
@@ -365,7 +375,7 @@ def resolve(request, pk=None):
                 # We're trying to add a reference but one with the same DOI
                 # is in the database already.
                 ref = Reference.objects.get(doi=doi)
-                return HttpResponseRedirect(f'/front/add_reference/{ref.pk}')
+                return HttpResponseRedirect(f'/front/add-reference/{ref.pk}')
             except Reference.DoesNotExist:
                 ref = None
         else:
@@ -373,7 +383,7 @@ def resolve(request, pk=None):
         ref = get_ref_from_doi(doi, ref)
         form = RefForm(instance=Reference)
         c = {'form': form, 'pk': pk if pk else ''}
-        return render(request, 'front/add_reference.html', c)
+        return render(request, 'front/add-reference.html', c)
     raise Http404
 
 
@@ -499,6 +509,36 @@ def view_hierarchy(request, parent_id=None):
     return render(request, 'front/hierarchy.html', context)
 
 
+def view_experts(request):
+    experts = Expert.objects.all()
+    sorted_experts = sorted(
+        experts, key=lambda objects: objects.expert.lower())
+    paginator = Paginator(sorted_experts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'paginator': paginator, 'page_obj': page_obj}
+    return render(request, 'front/experts.html', context)
+
+
+def add_expert(request):
+    if request.method == 'POST':
+        form = ExpertForm(request.POST)
+        if form.is_valid():
+            try:
+                new_expert = form.save(commit=False)
+                new_expert.save()
+
+                geos = form.cleaned_data['geographic_div']
+                for geo in geos:
+                    new_expert.geographic_div.add(geo)
+            except Expert.DoesNotExist:
+                print("Saving a new expert did not workout; do something")
+            return HttpResponseRedirect('/add-expert')
+    else:
+        form = ExpertForm()
+    return render(request, 'front/add-expert.html', {'form': form})
+
 def view_authors(request):
     authors = TaxonAuthorLkp.objects.all()
     sorted_authors = sorted(
@@ -518,13 +558,9 @@ def add_author(request):
             try:
                 new_author = form.save(commit=False)
                 new_author.save()
-
-                geos = form.cleaned_data['geographic_div']
-                for geo in geos:
-                    new_author.geographic_div.add(geo)
             except TaxonAuthorLkp.DoesNotExist:
                 print("saving new author did not workout; do something")
-            return HttpResponseRedirect('/add_author')
+            return HttpResponseRedirect('/add-author')
     else:
         form = AuthorForm()
-    return render(request, 'front/add_author.html', {'form': form})
+    return render(request, 'front/add-author.html', {'form': form})

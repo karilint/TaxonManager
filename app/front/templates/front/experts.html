@@ -2,14 +2,14 @@
 
 {% block content %}
 <body>
-<p><a href=" ">Author list</a> | <a href="/add-author">Add author</a> </p>
+<p><a href=" ">Expert list</a> | <a href="/add-expert">Add expert</a> </p>
 
 
-<h1>Authors</h1>
+<h1>Experts</h1>
 
-{% for author in page_obj %}
+{% for expert in page_obj %}
 
-<li>{{ author.taxon_author }}</li>
+<li>{{ expert.expert }}</li>
 
 {% endfor %}
 

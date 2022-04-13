@@ -37,7 +37,7 @@
     {% with test=user.groups.all|length %}
     {% if test > 0 %}
     <a class="delete-ref" href="{}"><img src="{% static 'refs/images/trashcan.svg' %}"/></a>
-    <a href="{% url 'front:addName' taxon.pk %}"><img src="{% static 'refs/images/pencil.svg' %}"/></a>
+    <a href="{% url 'front:add-taxon' taxon.pk %}"><img src="{% static 'refs/images/pencil.svg' %}"/></a>
     {% endif %}
     {% endwith %}
     

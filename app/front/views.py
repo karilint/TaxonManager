@@ -62,13 +62,13 @@ def load_parentTaxon(request):
 
 def taxon_add(request, pk = None):
     c = {'pk': pk if pk else ''}
-    form = NameForm()
+    form = TaxonForm()
     if request.method == 'POST':
         taxon = None    
         if pk:
             taxon = TaxonomicUnit.objects.get(pk=pk)        
         # create a form instance and populate it with data from the request:
-        form = TaxonForm(request.POST)
+        form = TaxonForm(request.POST, instance = taxon)
         # check whether it's valid:
         if form.is_valid():
             try:
@@ -102,11 +102,16 @@ def taxon_add(request, pk = None):
                 new_unit.rank = rank_of_new_taxon
                 
                 # modify old taxon's name validity, if taxon is edited
-                if pk: #& new_unit.unit_name1 != taxon.unit_name1
-                    taxon.n_usage = "invalid"    
-                    taxon.save()
-                
-                new_unit.n_usage = "valid"
+                #if pk: #& new_unit.unit_name1 != taxon.unit_name1
+                    #taxon.n_usage = "invalid"    
+                    #taxon.save()
+                    
+                #new_unit.n_usage = "valid"
+
+                if pk:
+                    if taxon.rank != rank_of_new_taxon or taxon.kingdom != kingdom:
+                        update_hierarchystring(taxon)
+                             
 
                 new_unit.save()
                 refs = form.cleaned_data['references']
@@ -121,7 +126,10 @@ def taxon_add(request, pk = None):
                 author = form.cleaned_data['author']
                 new_unit.taxon_author_id=author
                 new_unit.save()
-                create_hierarchystring(new_unit)                
+                if pk:
+                    update_hierarchystring(taxon)
+                else:
+                    create_hierarchystring(new_unit)                
             except TaxonomicUnit.DoesNotExist:
                 # form was filled incorrectly
                 print("saving new unit did not workout; do something")
@@ -150,6 +158,47 @@ def taxon_add(request, pk = None):
     c['form'] = form
     return render(request, 'front/add-taxon.html', c)
 
+def update_hierarchystring(taxon):
+    children = TaxonomicUnit.objects.all().filter(parent_id = taxon.pk)
+    currentHierarchy = Hierarchy.objects.get(taxon = taxon)
+    currentHierarchy.parent_id = taxon.parent_id
+    hierarchystring = []
+    
+    # update current taxon's hierarchy string
+    while (True):
+        hierarchystring.append(str(taxon.taxon_id))
+        if taxon.parent_id == 0:
+            break
+        taxon = TaxonomicUnit.objects.get(taxon_id=taxon.parent_id)
+
+    hierarchystring.reverse()
+    hierarchystringFinal = '-'.join(hierarchystring)
+    currentHierarchy.hierarchy_string = hierarchystringFinal 
+    currentHierarchy.save()
+
+    currentKingdom = taxon.kingdom
+    
+    # update children's hierarchy string (and potentially kingdom)
+    for child in children:
+        hierarchystringFinal = ''
+        childHierarchystringObject = Hierarchy.objects.get(taxon = child)
+        taxon = TaxonomicUnit.objects.get(pk=child.pk)
+    
+        if taxon.kingdom != currentKingdom:
+            taxon.kingdom = currentKingdom
+            taxon.save()
+        hierarchystring = []
+        while (True):
+            hierarchystring.append(str(taxon.taxon_id))
+            if taxon.parent_id == 0:
+                break
+            taxon = TaxonomicUnit.objects.get(taxon_id=taxon.parent_id)
+
+        hierarchystring.reverse()
+        hierarchystringFinal = '-'.join(hierarchystring)
+        childHierarchystringObject.hierarchy_string = hierarchystringFinal 
+        childHierarchystringObject.save()
+    
 
 def create_hierarchystring(taxon):
     hierarchystring = []

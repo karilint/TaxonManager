@@ -1,9 +1,9 @@
-name: ci-staging
+name: ci-cypress
 
 on:
   push:
     branches:
-      - 'database-fixtures'
+      - 'cypress-experts-authors-taxa-search'
 
 jobs:
   test:

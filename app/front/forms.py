@@ -63,7 +63,7 @@ class NameForm(forms.ModelForm):
 class JuniorSynonymForm(forms.ModelForm):
     template_name = 'add_junior_synonym.html'
 
-    synonym_id = forms.CharField(widget=forms.Select(choices=TaxonomicUnit.objects.exclude(name_usage__in=["invalid", "not accepted"]).values_list("taxon_id", "unit_name1")), label="Junior synonym")
+    synonym_id = forms.CharField(widget=forms.Select(choices=[]), label="Junior synonym")
 
     class Meta:
         model = SynonymLink

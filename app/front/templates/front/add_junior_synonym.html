@@ -8,7 +8,7 @@
 {% if test > 0 %}
 
 <h1>Add junior synonym</h1>
-  <form action="" method="post" id="parent-form", novalidate>
+  <form action="" method="post" id="parent-form", data-juniorSynonym-url="/load_juniorSynonym" novalidate>
     {% csrf_token %}
     <table>
     {{ form.as_table }}
@@ -18,8 +18,20 @@
 
 <script>
   $(document).ready(function(){
-    $("#id_junior_synonym").select2({
+    $("#id_synonym_id").select2({
       width: '200px'
+    });
+
+    var url = $( '#parent-form' ).attr( 'data-juniorSynonym-url' );
+
+    $.ajax({
+      url: url,
+      success: function(data) {
+        $('#id_synonym_id').html(data);
+      },
+      error: function(data) {
+        alert('errors');
+      }
     });
   });
 </script>

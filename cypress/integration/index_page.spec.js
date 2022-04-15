@@ -29,8 +29,27 @@ describe("TaxonManager", () => {
     cy.contains("Picture © Luonnontieteellinen Keskusmuseo");
     cy.get("#header_image");
     cy.contains("Picture_©_Noira_Martiskainen");
-
   });
+
+  it("Add-author page cannot be opened, redirects to root URL", () => {
+    cy.visit("http://localhost:8000/add-author/");
+    cy.url().should('eq', 'http://localhost:8000/')
+    cy.contains("Author list").should("not.exist");
+    cy.contains("Add author").should("not.exist");
+    cy.contains("Picture © Luonnontieteellinen Keskusmuseo");
+    cy.contains("Hello")
+  });
+
+  it("Add-expert page cannot be opened", () => {
+    cy.visit("http://localhost:8000/add-expert/");
+    cy.url().should('eq', 'http://localhost:8000/')
+    cy.contains("Expert list").should("not.exist");
+    cy.contains("Add expert").should("not.exist");
+    cy.contains("Picture © Luonnontieteellinen Keskusmuseo");
+  });
+
+
+  
   it("Menu shows up on sidebar and adapts to logging in and out, on small screens", () => {
     //menu does not show on larger screens
     cy.get("#menuForSmallScreen").should("not.be.visible");
@@ -99,7 +118,7 @@ describe("TaxonManager", () => {
 
   });
 
-  describe("Taxonmanager, when logged in as the admin", function() {
+  describe("Taxonmanager, when logged in as contributor", function() {
     // login via the admin page to bypass orcid authentication before every each test
     beforeEach(function() {
       cy.visit("http://localhost:8000/admin/login/?next=/admin/");
@@ -201,21 +220,97 @@ describe("TaxonManager", () => {
     
   });
 
-  it("Viewing Taxa", () => {
-    cy.visit("http://localhost:8000/taxa/");
-    cy.contains("Animalia")
-    cy.contains("Bacteria")
-  })
+  it("Contributor can add authors on add-author page", () => {
 
-  it("Adding Authors", () => {
+    // Check that the correct page loads correctly
     cy.visit("http://localhost:8000/add-author/");
+    cy.url().should('eq', 'http://localhost:8000/add-author/')
     cy.contains("Add author")
+    cy.contains("Taxon author")
+    cy.contains("Kingdom")
+    cy.contains("Author list")
+    cy.contains("Picture © Luonnontieteellinen Keskusmuseo").should("not.exist");
+    cy.get("#loginButton").should("not.exist");
+
+    // Insert author details
+    cy.get("#id_taxon_author").type("Linnaeus, 1758");
+    cy.get("#select2-id_kingdom-container").type("Animalia{enter}")
+
+    // Submit
+    cy.contains("Submit").click();
+
+    // Check that redirect works correctly
+    cy.url().should('eq', 'http://localhost:8000/authors/')
+    cy.contains("Authors")
+
+    // Check that the added author is listed
+    cy.contains("Linnaeus, 1758")
+  })
+
+  // cannot add same author twice
+  it("Cannot add same author twice", () => {
+
+    // Check that the correct page loads correctly
+    cy.visit("http://localhost:8000/add-author/");
+
+    // Insert author details
+    cy.get("#id_taxon_author").type("Linnaeus, 1758");
+    cy.get("#select2-id_kingdom-container").type("Animalia{enter}")
+
+    // Submit
+    cy.contains("Submit").click();
+
+    // Check that submit doesn't work
+    cy.url().should('eq', 'http://localhost:8000/add-author/')
+    cy.contains("An author with the name Linnaeus, 1758 already exists in the database")
+  })
+
+  it("Contributor can add experts on add-expert page", () => {
+
+    // Check that the correct page loads correctly
+    cy.visit("http://localhost:8000/add-expert/");
+    cy.url().should('eq', 'http://localhost:8000/add-expert/')
+    cy.contains("Add expert")
+    cy.contains("Geographic div")
+    cy.contains("Expert list")
+    cy.contains("Picture © Luonnontieteellinen Keskusmuseo").should("not.exist");
+    cy.get("#loginButton").should("not.exist");
+
+    // Insert expert details
+    cy.get("#id_expert").type("European expert");
+    cy.get('[class*="select2-selection select2-selection--multiple"]').type("Europe{enter}")
+
+    // Submit
+    cy.contains("Submit").click();
+
+    // Check that redirect works correctly
+    cy.url().should('eq', 'http://localhost:8000/experts/')
+    cy.contains("Experts")
+
+    // Check that the added expert is listed
+    cy.contains("European expert")
 
   })
 
-  it("Viewing Authors", () => {
-    cy.visit("http://localhost:8000/authors/");
-    cy.contains("Authors")  
+  it("Existing taxa can be search", () => { 
+    // Check that the correct page loads correctly
+    cy.visit("http://localhost:8000/taxa-search/");
+    cy.contains("Advanced Search")
+    cy.contains("No results")
+    cy.contains("Taxa list")
+
+    // Search taxa with correct input
+    cy.get("#id_unit_name1").type("Bacteria");
+    cy.get(".btn").click();
+    cy.contains("1 results")
+    cy.contains("Page 1 of 1")
+
+    // Search taxa with incorrect input
+    cy.get("#id_unit_name4").type("Muurahainen");
+    cy.get(".btn").click();
+    cy.contains("No results")
+    cy.contains("Page 1 of 1").should("not.exist");
+
   })
 
   it("Logged in user that not part of group contributors", () => {

@@ -27,7 +27,7 @@ jobs:
         working-directory: ./app  
       - name: Load test data
         run: |
-          python manage.py loaddata
+          python manage.py loaddata test.json
         working-directory: ./app      
       - name: Create test user
         run: |

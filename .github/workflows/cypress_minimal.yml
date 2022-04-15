@@ -3,7 +3,7 @@ name: ci-staging
 on:
   push:
     branches:
-      - 'database_with_tests'
+      - 'database-fixtures'
 
 jobs:
   test:
@@ -24,6 +24,10 @@ jobs:
         run: |
           python manage.py makemigrations
           python manage.py migrate
+        working-directory: ./app  
+      - name: Load test data
+        run: |
+          python manage.py loaddata
         working-directory: ./app      
       - name: Create test user
         run: |

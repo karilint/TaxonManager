@@ -247,4 +247,16 @@ describe("TaxonManager", () => {
     cy.contains("Authors")
   
   })
+
+  it("Viewing Taxa", () => {
+    cy.visit("http://localhost:8000/admin/login/?next=/admin/");
+    cy.get("#id_username").type("testaaja");
+    cy.get("#id_password").type("cypress");
+    cy.contains("Log in").click();
+
+    cy.visit("http://localhost:8000/taxa/");
+    cy.contains("Animalia")
+    cy.contains("Bacteria")
+  
+  })
 });

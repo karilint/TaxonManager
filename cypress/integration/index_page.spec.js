@@ -9,6 +9,7 @@ describe("TaxonManager", () => {
   beforeEach(function () {
     cy.visit("http://localhost:8000/");
   });
+
   it("Front page can be opened", () => {
     cy.contains("TaxonManager");
     cy.contains("Login");
@@ -52,8 +53,8 @@ describe("TaxonManager", () => {
 
     // login via the admin page to bypass orcid authentication
     cy.visit("http://localhost:8000/admin/login/?next=/admin/");
-    cy.get("#id_username").type("testaaja");
-    cy.get("#id_password").type("cypress");
+    cy.get("#id_username").type("admin");
+    cy.get("#id_password").type("password");
     cy.contains("Log in").click();
     cy.visit("http://localhost:8000/");
 
@@ -66,8 +67,6 @@ describe("TaxonManager", () => {
     cy.contains("Login")
 
   });
-
-
   it("Front page adapts to logging in and logging out", () => {
     // front page contains information about login in
     cy.contains("Hello guest! Log in with your ORCID account. Upon the first time of use we will send an e-mail to you for verification. Please follow the link provided to finalize the signup process.");
@@ -78,8 +77,8 @@ describe("TaxonManager", () => {
 
     // login via the admin page to bypass orcid authentication
     cy.visit("http://localhost:8000/admin/login/?next=/admin/");
-    cy.get("#id_username").type("testaaja");
-    cy.get("#id_password").type("cypress");
+    cy.get("#id_username").type("admin");
+    cy.get("#id_password").type("password");
     cy.contains("Log in").click();
     cy.visit("http://localhost:8000/");
 
@@ -88,7 +87,7 @@ describe("TaxonManager", () => {
     cy.get("#login-button").should("not.exist");
 
     // front page shows username
-    cy.contains("Hello, testaaja! You are logged in.");
+    cy.contains("Hello, admin! You are logged in.");
 
     // logout through logout button
     cy.contains("Logout").click();
@@ -98,32 +97,31 @@ describe("TaxonManager", () => {
     cy.get("#logout-button").should("not.exist");
   });
 
+  });
+
+  describe("Taxonmanager, when logged in as the admin", function() {
+    // login via the admin page to bypass orcid authentication before every each test
+    beforeEach(function() {
+      cy.visit("http://localhost:8000/admin/login/?next=/admin/");
+      cy.get("#id_username").type("admin");
+      cy.get("#id_password").type("password");
+      cy.contains("Log in").click();
+      cy.visit("http://localhost:8000/");
+    })
+
   it("Create group and add user", () =>{
-    cy.visit("http://localhost:8000/admin/login/?next=/admin/");
-    cy.get("#id_username").type("testaaja");
-    cy.get("#id_password").type("cypress");
-    cy.contains("Log in").click();
     cy.visit("http://localhost:8000/admin/auth/group/add/");
     cy.get("#id_name").type("contributors2");
     cy.contains("Save and continue").click();
 
-    //add testaaja to the group
+    //add admin to the group
     cy.contains("Users").click();
-    cy.get('#main').contains('testaaja').click();
+    cy.get('#main').contains('admin').click();
     cy.contains("Choose all").click();
     cy.contains("Save and continue").click();
   });
 
   it("Adding references works", () => {
-    // front page contains login button but no logout button
-    cy.get("#loginButton").should("exist");
-    cy.get("#logout-button").should("not.exist");
-
-    // login via the admin page to bypass orcid authentication
-    cy.visit("http://localhost:8000/admin/login/?next=/admin/");
-    cy.get("#id_username").type("testaaja");
-    cy.get("#id_password").type("cypress");
-    cy.contains("Log in").click();
 
     cy.visit("http://localhost:8000/add-references/");
 
@@ -153,15 +151,9 @@ describe("TaxonManager", () => {
     cy.contains("Testi Kirjoittaja");
     cy.contains("10.1109/SMC.2016.7844781");
 
-    cy.contains("Logout").click({ force: true });
+    // cy.contains("Logout").click({ force: true });
   });
   it("Edit and delete reference", () => {
-    // login via the admin page to bypass orcid authentication
-    cy.visit("http://localhost:8000/admin/login/?next=/admin/");
-    cy.get("#id_username").type("testaaja");
-    cy.get("#id_password").type("cypress");
-    cy.contains("Log in").click();
-
     cy.visit("http://localhost:8000/add-references/1");
 
     // Edit reference
@@ -182,23 +174,6 @@ describe("TaxonManager", () => {
     //Delete reference
 
   });
-  it("Logged in user that not part of group contributors", () => {
-    // login via the admin page to bypass orcid authentication
-    cy.visit("http://localhost:8000/admin/login/?next=/admin/");
-    cy.get("#id_username").type("testaaja");
-    cy.get("#id_password").type("cypress");
-    cy.contains("Log in").click();
-
-    //remove user from group
-    cy.contains("Users").click();
-    cy.get('#main').contains('testaaja').click();
-    cy.contains("Remove all").click();
-    cy.contains("Save and continue").click();
-    
-    //check view when user not part of group
-    cy.visit("http://localhost:8000/add-references/");
-    cy.contains("Add or Edit Reference").should("not.exist");
-  });
 
   it("Search references", () => { 
     cy.contains("References").click();
@@ -206,10 +181,10 @@ describe("TaxonManager", () => {
 
     // Search reference with no input
     cy.get(".btn").click();
-    cy.contains("2 Results");
+    cy.contains("4 Results");
 
     // Search reference with correct input
-    cy.get("#id_title").type("Testi otsikko");
+    cy.get("#id_author").type("Testi Kirjoittaja");
     cy.get(".btn").click();
     cy.contains("1 Results");
 
@@ -226,25 +201,35 @@ describe("TaxonManager", () => {
     
   });
 
-  it("Adding Authors", () => {
-    cy.visit("http://localhost:8000/admin/login/?next=/admin/");
-    cy.get("#id_username").type("testaaja");
-    cy.get("#id_password").type("cypress");
-    cy.contains("Log in").click();
+  it("Viewing Taxa", () => {
+    cy.visit("http://localhost:8000/taxa/");
+    cy.contains("Animalia")
+    cy.contains("Bacteria")
+  })
 
+  it("Adding Authors", () => {
     cy.visit("http://localhost:8000/add-author/");
     cy.contains("Add author")
 
   })
 
   it("Viewing Authors", () => {
-    cy.visit("http://localhost:8000/admin/login/?next=/admin/");
-    cy.get("#id_username").type("testaaja");
-    cy.get("#id_password").type("cypress");
-    cy.contains("Log in").click();
-
     cy.visit("http://localhost:8000/authors/");
-    cy.contains("Authors")
-  
+    cy.contains("Authors")  
   })
+
+  it("Logged in user that not part of group contributors", () => {
+
+    //remove user from group
+    cy.visit("http://localhost:8000/admin/login/?next=/admin/");
+    cy.contains("Users").click();
+    cy.get('#main').contains('admin').click();
+    cy.contains("Remove all").click();
+    cy.contains("Save and continue").click();
+    
+    //check view when user not part of group
+    cy.visit("http://localhost:8000/add-references/");
+    cy.contains("Add or Edit Reference").should("not.exist");
+  });
+
 });

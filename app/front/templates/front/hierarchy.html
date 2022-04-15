@@ -3,58 +3,109 @@
 
 <body>
 
+    {% if taxonomic_unit.taxon_author %}
+    <h1><i>{{taxonomic_unit.unit_name1}}</i> ({{taxonomic_unit.taxon_author}})</h1>
+    {% else %}
+    <h1><i>{{taxonomic_unit.unit_name1}}</i></h1>
+    {% endif %}
 
-    <h1>{{taxonomic_unit.unit_name1}}</h1>
 
-    <table class="hierarchy" style="width:60%">
-        <th align="left">Taxonomy and Nomenclature</th>
+    {% if taxonomic_unit.n_usage != invalid %}
+        <p>Valid name: {{taxonomic_unit.n_usage}}</p>
+    {% endif %}
+
+    <table class="hierarchy" style="width:80%">
+        <th class="whiteboxhead" colspan="2" align="left">Taxonomy and Nomenclature</th>
         <tr>
-            <td>
-                <p>Kingdom:{{taxonomic_unit.kingdom}} <br>Taxonomic Rank: {{taxonomic_unit.rank.rank_name}}<br>Synonyms:<br>Author: {{taxonomic_unit.taxon_author}}
-                </p>
-            </td>
+            <td class="datatype" valign="top" align="left" width="35%">Kingdom:</td>
+            <td class="datafield" width="65%">{{taxonomic_unit.kingdom}}</td>
+        </tr>
+        <tr>
+            <td class="datatype" valign="top" align="left" width="35%">Taxonomic Rank:</td>
+            <td class="datafield" width="65%">{{taxonomic_unit.rank.rank_name}}</td>
+        </tr>
+        <tr>
+            <td class="datatype" valign="top" align="left" width="35%">Synonyms:</td>
+            <td class="datafield" width="65%">{% for synonym in synonyms %}
+                {% if forloop.last %}
+                {{ synonym }}
+                { %else% }
+                {{ synonym }}, 
+                {% endif %}
+                {% endfor %}</td>
+        <tr>
+            <td class="datatype" valign="top" align="left" width="35%">Taxonomic status:</td>
+            <td class="datafield" width="65%">{{taxonomic_unit.n_usage}}</td>
+        </tr>
+        <tr>
+            <td class="datatype" valign="top" align="left" width="35%">Author:</td>
+            <td class="datafield" width="65%">{{taxonomic_unit.taxon_author}}</td>
+        </tr>
+        <tr>
+            <td class="datatype" valign="top" align="left" width="35%">Experts:</td>
+            <td class="datafield" width="65%">{% for expert in taxonomic_unit.expert.all %}
+                {% if forloop.last %}
+                {{ expert }}
+                {%else%}
+                {{ expert }}, 
+                {% endif %}
+                {% endfor %}</td>
+        </tr>
+        <tr>
+            <td class="datatype" valign="top" align="left" width="25%">Geographic locations:</td>
+            <td class="datafield" width="75%">{% for geo in taxonomic_unit.geographic_div.all %}
+                {% if forloop.last %}
+                {{ geo }}
+                {%else%}
+                {{ geo }}, 
+                {% endif %}
+                {% endfor %}</td>
         </tr>
     </table>
 
-    <table class="hierarchy" style="width:60%">
-        <th align="left">Taxonomic Hierarchy</th>
-        {% for name, root in name_list %}
-        <tr>
-            <td>
-                <p>{{ name }}: <a href="{% url 'front:hierarchy' root.taxon_id %}">{{ root.unit_name1 }}</a></p>
-            </td>
-        </tr>
-        {% endfor %}
+  
+    {% if taxonomic_unit.n_usage == valid %}
+    <table class="hierarchy" style="width:80%">
+        <th class="whiteboxhead" colspan="2" align="left">Taxonomic Hierarchy</th>
+            {% for name, root in name_list %}
+            <tr>
+            <td class="datatype" valign="top" width="35%">{{ name |safe }}:</td>
+            <td class="datafield" width="65%"><a href="{% url 'front:hierarchy' root.taxon_id %}">{{ root.unit_name1 }}</td>
+            </tr>
+            {% endfor %}
     </table>
+    {% endif %}
+    
 
-    <table class="hierarchy" style="width:60%">
-        <th align="left">References</th>
+    <table class="hierarchy" style="width:80%">
+        <th class="whiteboxhead" colspan="2" align="left">References</th>
 
         {% for ref in references %}
         <tr>
-            <td>
-                <b>Authors:</b>
-                {{ ref.authors }}
-                <br>
-                <b>Title:</b>
-                {{ref.title }}
-            </td>
+            <td class="datatype" valign="top" width="35%">Title:</td>
+            <td class="datafield" width="65%">{{ ref.title }}</td>
         </tr>
+        <tr>
+            <td class="datatype" valign="top" width="35%">Authors:</td>
+            <td class="datafield" width="65%">{{ ref.authors }}</td>
+        </tr>
+        <tr>
+            <td class="datatype" valign="top" width="35%">DOI:</td>
+            <td class="datafield" width="65%">{{ ref.doi }}</td>
+        </tr>
+        <tr>
+            <td class="datatype" valign="top" width="35%">Notes:</td>
+            <td class="datafield" width="65%">{{ ref.note }}</td>
+        </tr>
+        {% if not forloop.last %}
+        </tr>
+        <td class="datatype" valign="top" width="35%"></td>
+        <td class="datafield" width="65%"></td>
+        <tr>
+        {% endif %}
         {% endfor %}
+
     </table>
-
-
-    <style>
-        p {
-            white-space: pre;
-        }
-
-        .hierarchy {
-            border: 2px solid grey;
-            border-collapse: collapse;
-        }
-    </style>
-
 </body>
 
 {% endblock %} 

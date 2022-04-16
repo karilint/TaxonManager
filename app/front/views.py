@@ -77,9 +77,10 @@ def taxon_add(request):
                 # if rank_of_new_taxon.rank_name=='Subkingdom':
                 #   parent = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data['kingdom_name'])
                 # else:
-
                 parent = TaxonomicUnit.objects.get(
-                    unit_name1=form.cleaned_data['rank_name'])
+                    unit_name1=form.cleaned_data['rank_name'],
+                    kingdom=kingdom
+                )
 
                 # set new unit's parent
                 new_unit.parent_id = parent.taxon_id

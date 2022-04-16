@@ -3,7 +3,7 @@ name: ci-main
 on:
   push:
     branches:
-      - 'add-ref-to-taxon'
+      - 'unwanted-parents'
 
 jobs:
   test:

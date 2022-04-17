@@ -149,7 +149,7 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains("Add a reference")
     cy.contains("Search")
     // Add references page contains form for adding or editing
-    // cy.get("#add-ref-form").should("exist");
+    // cy.get("#add-ref-form").should("exist")
 
     // Insert reference details
     cy.get("#id_authors").type("Testi Kirjoittaja")
@@ -209,10 +209,10 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains("0 Results")
 
     // Search reference with DOI
-    //cy.get("#id_title").clear();
-    //cy.get("#id_doi").type("10.1109/SMC.2016.7844781");
-    //cy.get(".btn").click();
-    //cy.contains("1 Results");
+    //cy.get("#id_title").clear()
+    //cy.get("#id_doi").type("10.1109/SMC.2016.7844781")
+    //cy.get(".btn").click()
+    //cy.contains("1 Results")
   })
 
   it("Contributor can add authors on add-author page", () => {
@@ -306,6 +306,60 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains("Page 1 of 1").should("not.exist")
   })
 
+  it("Taxon can be added/ add taxon from works", () => {
+    // Add new taxon
+    cy.visit("http://localhost:8000/add-taxon/")
+    cy.get("#id_kingdom_name").select("Bacteria", { force: true })
+    cy.get("#id_taxonnomic_types").select("Subkingdom", { force: true })
+    cy.get("#id_rank_name").select("Bacteria", { force: true })
+    cy.get("#id_unit_name1").type("Test Subkingdom")
+    cy.get("#id_references").select("1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Testi otsikko", { force: true })
+    cy.contains("Submit").click()
+
+    // Added taxon is lised on the taxon page
+    cy.visit("http://localhost:8000/taxa/")
+    cy.contains("Test Subkingdom")
+
+    // check that new taxa added is listed in the dropdown options 
+    cy.visit("http://localhost:8000/add-taxon/")
+    cy.get("#id_kingdom_name").select("Bacteria", { force: true })
+    cy.get("#id_taxonnomic_types").select("Phylum", { force: true })
+    cy.get("#id_rank_name").eq(0).should("contain", "Test Subkingdom")
+
+    // Compare dropdown options Bacteria and Plantae --> check that they change based on Kingdom
+    cy.visit("http://localhost:8000/add-taxon/")
+    cy.get("#id_kingdom_name").select("Bacteria", { force: true })
+    cy.get("#id_taxonnomic_types").eq(0).should("contain", "Phylum")
+    cy.get("#id_taxonnomic_types").eq(0).should("contain", "Subphylum")
+    cy.get("#id_taxonnomic_types").eq(0).should("not.contain", "Superdivision")
+    cy.get("#id_taxonnomic_types").eq(0).should("not.contain", "Division")
+
+    cy.get("#id_kingdom_name").select("Plantae", { force: true })
+    cy.get("#id_taxonnomic_types").eq(0).should("contain", "Superdivision")
+    cy.get("#id_taxonnomic_types").eq(0).should("contain", "Division")
+    cy.get("#id_taxonnomic_types").eq(0).should("not.contain", "Phylum")
+    cy.get("#id_taxonnomic_types").eq(0).should("not.contain", "Subphylum")
+
+  })
+
+  it("Taxon hiearchy displays correct infromation", () => {
+    cy.visit("http://localhost:8000/taxa/")
+    cy.contains("Test Subkingdom").click()
+
+    cy.contains("Taxonomy and Nomenclature")
+    cy.contains("Taxonomic Hierarchy")
+
+    cy.contains("References")
+    cy.contains("Testi otsikko")
+    cy.contains("Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D.")
+  
+    // Check that links in hiearchy works
+    cy.get(".hiearchy-lists").contains("Bacteria").click()
+    cy.contains("Subkingdom").should("not.exist")
+    cy.contains("Test Subkingdom").should("not.exist")
+  })
+
+
   it("Logged in user that not part of group contributors", () => {
     //remove user from group
     cy.visit("http://localhost:8000/admin/login/?next=/admin/")
@@ -319,3 +373,4 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains("Add or Edit Reference").should("not.exist")
   })
 })
+

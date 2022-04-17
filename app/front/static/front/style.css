@@ -368,3 +368,26 @@ select[name="reference"] {
     top: -15px;
     left:-5px;
 }
+
+.hierarchy
+{
+   border: 2px solid #8fa567;
+   border-collapse: collapse;
+}
+
+.whiteboxhead {
+    font-weight: bold;
+    font-size: 18px;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #8fa567;
+}
+
+.datafield {
+    background-color: #eef7dc;
+    padding:5px;
+}
+
+.datatype {
+    padding:5px;
+}

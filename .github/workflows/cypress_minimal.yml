@@ -3,7 +3,7 @@ name: ci-staging
 on:
   push:
     branches:
-      - 'database_with_tests'
+      - 'database-fixtures'
 
 jobs:
   test:
@@ -24,11 +24,11 @@ jobs:
         run: |
           python manage.py makemigrations
           python manage.py migrate
-        working-directory: ./app      
-      - name: Create test user
+        working-directory: ./app  
+      - name: Load test data
         run: |
-          python manage.py shell --command="from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('testaaja', 'admin@admin.com', 'cypress')"
-        working-directory: ./app
+          python manage.py loaddata test.json
+        working-directory: ./app      
       - name: Run unit tests
         run: python manage.py test -v3
         working-directory: ./app

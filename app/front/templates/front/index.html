@@ -11,6 +11,19 @@
   <p>Hello guest! Log in with your <a href="{% provider_login_url 'orcid' %}">ORCID account.</a></p>
   <p>Upon the first time of use we will send an e-mail to you for verification. Please follow the link provided to finalize the signup process.</p>
   {% endif %}
+  {% with test=user.groups.all|length %}
+  {% if test == 0 and user.is_authenticated %}
+  <div id="info_logged_in_not_contributors">Contributor privileges are required in order to modify data on this site. Contributor privileges are granted to users as invite only.<br>
+    If one however, feel they possess the required skills and knowledge, to contribute to this site. Then, please contact the administrator, who will make an assessment.
+    <br>Contributor privileges are in other words not automatically assigned upon request.<br><br></div>
+  {% endif %}
+  {% endwith %}
+  <style>
+    #info_logged_in_not_contributors
+    {
+      font-size: xx-small;
+    }
+  </style>
   <div class="image_text">
     <img src="{% static "images/bird.jpg" %}" style="width: 100%; height: auto;" alt="bird image" class="responsive">
     <p id="image_credit">Picture © Luonnontieteellinen Keskusmuseo</p>
@@ -19,3 +32,4 @@
   <p>TaxonManger is a tool for classifying fossil species.<br><br>In the scientific classification of fossil species, organisms are organized into hierarchical categories, taxa. Different taxon levels include, for example, class, order, tribe, genus, and species. As research progresses, knowledge about the relationships of the species also increases, which may lead to changes in their taxonomy.</p>
 </body>
 {% endblock %}
+

@@ -89,9 +89,26 @@
                 <table>
                     <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/taxa"> Taxa </a></th></tr>
                     <tr><th>{% if user.is_authenticated %}
-                        <a class="w3-bar-item w3-button" id="sideButton" href="/addName"> Add new taxon </a>
+                        <a class="w3-bar-item w3-button" id="sideButton" href="/add-taxon"> Add new taxon </a>
                         {% else %}
-                        <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/addName"> Add new taxon </a>
+                        <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/add-taxon"> Add new taxon </a>
+                        {% endif %}
+                    </th>
+                    </tr>
+                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/experts"> Experts </a></th></tr>
+                    <tr>
+                        <th>{% if user.is_authenticated %}
+                        <a class="w3-bar-item w3-button" id="sideButton" href="/add-expert"> Add new expert </a>
+                        {% else %}
+                        <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/add-expert"> Add new expert </a>
+                        {% endif %}
+                    </th>
+                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/authors"> Authors </a></th></tr>
+                    <tr>
+                        <th>{% if user.is_authenticated %}
+                        <a class="w3-bar-item w3-button" id="sideButton" href="/add-author"> Add new author </a>
+                        {% else %}
+                        <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/add-author"> Add new author </a>
                         {% endif %}
                     </th>
                     </tr>

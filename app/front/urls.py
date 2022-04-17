@@ -14,7 +14,7 @@ urlpatterns = [
     re_path(r'^add-references/(?:(?P<pk>\d+))?$', views.refs_add, name='add-references'),
     re_path(r'^delete/(?P<pk>\d+)$', views.delete, name='delete'),
     re_path(r'^resolve/(?:(?P<pk>\d+))?$', views.resolve, name='resolve'),
-    path('addName/', views.taxon_add, name ='addName'),
+    path('add-taxon/', views.taxon_add, name ='add-taxon'),
     # path('addName/<int:pk>', views.load_taxonomicUnitTypes, name ='addName_changelist'),
     path('taxa/', views.view_taxa, name='taxa'),
     path('taxa-search/', views.search_taxa, name='taxa-search'),
@@ -25,6 +25,10 @@ urlpatterns = [
     path('load_parentTaxon/', views.load_parentTaxon, name='load_parentTaxon'),
     path('import_data_from_excel/', views.import_data_from_excel, name='import_data_from_excel'),
     path('load_seniorSynonym/', views.load_seniorSynonym, name='load_seniorSynonym'),
-    path('load_juniorSynonym/', views.load_juniorSynonym, name='load_juniorSynonym')
-
+    path('load_juniorSynonym/', views.load_juniorSynonym, name='load_juniorSynonym'),
+    path('experts/', views.view_experts, name='view-experts'),
+    path('add-expert/', views.add_expert, name='add-expert'),
+    path('authors/', views.view_authors, name='view-authors'),
+    path('add-author/', views.add_author, name='add-author'),
+    path('error/<str:message>', views.error, name='error')
 ]

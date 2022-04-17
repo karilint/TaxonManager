@@ -4,7 +4,7 @@
 <body>
 
 <div class="container content-container">
-<p><a href="/taxa">Taxa list</a> | <a href="/addName">Add taxon</a> | <a href="">Search</a></p>
+<p><a href="/taxa">Taxa list</a> | <a href="/add-taxon">Add taxon</a> | <a href="">Search</a></p>
 
 <h1>Advanced Search</h1>
 
@@ -71,6 +71,33 @@
                 </div>
 
                 <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_expert_name">{{ filter.form.expert_name.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.expert_name }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_author_name">{{ filter.form.author_name.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.author_name }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_geo_location">{{ filter.form.geo_location.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.geo_location }}
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="form-group col-md-12 text-center">
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
@@ -81,29 +108,35 @@
     </form>
 
 
-    {% if filtered_taxa is not None %}
+    {% if page_obj %}
     <h2 class="text-center">{{ nresults }} results</h2>
-
-    {% if nresults %}
-
     
-    {% for taxon in filtered_taxa %}
-    
+    {% for taxon in page_obj %}
     {% if taxon.complete_name and taxon.rank_id.rank_name %}
-    <li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.complete_name }}</a> ({{ taxon.rank_id.rank_name }})</li>
+    <li><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a> ({{ taxon.rank_id.rank_name }})</li>
     {% elif taxon.complete_name %}
-    <li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.complete_name }}</a></li>
+    <li><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a></li>
     {% elif taxon.rank_id.rank_name %}
-    <li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.unit_name1 }}</a> ({{ taxon.rank_id.rank_name }})</li>
+    <li><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.unit_name1 }}</a> ({{ taxon.rank_id.rank_name }})</li>
     {% else %}
-    <li><a href="{% url 'front:hierarchy' taxon.parent_id %}">{{ taxon.unit_name1 }}</a></li>
-    
-    
+    <li><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.unit_name1 }}</a></li>
     {% endif %}
     {% endfor %}
 
-
+    {% if page_obj.has_previous %}
+    <a href="?page=1{{ querystring }}">&laquo First</a>
+    <a href="?page={{ taxa.previous_page_number}}{{ querystring }}">Previous</a>
     {% endif %}
+
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}{{ querystring }}">Next</a>
+    <a href="?page={{ page_obj.paginator.num_pages }}{{ querystring }}">Last &raquo</a>
+    {% endif %}
+    
+    {% else %}
+    <h2 class="text-center">No results</h2>
     {% endif %}
 
 

@@ -32,3 +32,15 @@ urllib3==1.26.7
 django-simple-history==3.0.0
 django-mptt==0.13.4
 django-treebeard==4.5.1
+async-timeout==4.0.2
+Deprecated==1.2.13
+django-appconf==1.0.5
+django-redis==5.2.0
+django-select2==7.10.0
+packaging==21.3
+pyparsing==3.0.7
+redis==4.2.0
+sqlparse==0.4.2
+typing_extensions==4.1.1
+tzdata==2022.1
+wrapt==1.14.0

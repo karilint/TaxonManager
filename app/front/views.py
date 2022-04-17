@@ -539,8 +539,8 @@ def add_junior_synonym(request, taxon_id=None):
         form = JuniorSynonymForm(request.POST)
                 
         if form.is_valid():
-            if True:
-                taxon = TaxonomicUnit.objects.get(taxon_id = form.cleaned_data['synonym_id'])
+            try:
+                taxon = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data['synonym_id'])
                 if taxon.kingdom in ["Chromista", "Fungi", "Plantae"]:
                     taxon.name_usage = "not accepted"
                     taxon.unaccept_reason = "synonym"
@@ -549,8 +549,8 @@ def add_junior_synonym(request, taxon_id=None):
                     taxon.unaccept_reason= "junior synonym"
                 taxon.save()
                 SynonymLink.objects.create(synonym_id = taxon.taxon_id, taxon_id_accepted = TaxonomicUnit.objects.get(taxon_id = taxon_id), update_date = datetime.now()).save()
-            #except:
-                #print("error in adding junior synonym")
+            except:
+                print("error in adding junior synonym")
             
             return HttpResponseRedirect(f'/hierarchy/{taxon_id}')
             

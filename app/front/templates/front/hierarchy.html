@@ -65,7 +65,7 @@
 
 <p></p>
 
-{% with hierarchies|last as taxon %}
+{% with taxonomic_unit as taxon %}
   <a href="{% url 'front:add_junior_synonym' taxon_id=taxon.taxon_id %}">Add junior synonym</a>
 {% endwith %}
 

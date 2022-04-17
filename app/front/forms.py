@@ -99,14 +99,14 @@ class TaxonForm(forms.ModelForm):
         exclude = ['unnamed_taxon_ind']
 
 
-class JuniorSynonymForm(forms.ModelForm):
+class JuniorSynonymForm(forms.Form):
     template_name = 'add_junior_synonym.html'
 
     synonym_id = forms.CharField(widget=forms.Select(choices=[]), label="Junior synonym")
 
-    class Meta:
-        model = SynonymLink
-        fields = ['synonym_id']
+    #class Meta:
+        #model = SynonymLink
+        #fields = ['synonym_id']
 class ExpertForm(forms.ModelForm):
     template_name = 'add-expert.html'
 

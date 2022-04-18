@@ -25,10 +25,10 @@ jobs:
           python manage.py makemigrations
           python manage.py migrate
         working-directory: ./app      
-      - name: Create test user
+      - name: Load test data
         run: |
-          python manage.py shell --command="from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('testaaja', 'admin@admin.com', 'cypress')"
-        working-directory: ./app
+          python manage.py loaddata test.json
+        working-directory: ./app 
       - name: Run unit tests
         run: python manage.py test -v2
         working-directory: ./app

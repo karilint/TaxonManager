@@ -82,9 +82,10 @@ def taxon_add(request, pk = None):
                 # if rank_of_new_taxon.rank_name=='Subkingdom':
                 #   parent = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data['kingdom_name'])
                 # else:
-
                 parent = TaxonomicUnit.objects.get(
-                    unit_name1=form.cleaned_data['rank_name'])
+                    unit_name1=form.cleaned_data['rank_name'],
+                    kingdom=kingdom
+                )
 
                 # set new unit's parent
                 new_unit.parent_id = parent.taxon_id
@@ -541,12 +542,14 @@ def view_hierarchy(request, parent_id=None):
             # E.G. User chooses Deuterostomia -> this takes the refenences for deuterostomia and not for the parent taxons
             references.append(root.references.all())
 
-        space = " " * grow
+        space = "&nbsp" * grow
         name = space + root.rank.rank_name
 
         name_list.append((name, root))
         # result.append(root)
         grow += 2
+
+
 
     context = {
         'taxonomic_unit': chosenTaxon,
@@ -583,7 +586,7 @@ def add_expert(request):
                     new_expert.geographic_div.add(geo)
             except Expert.DoesNotExist:
                 print("Saving a new expert did not workout; do something")
-            return HttpResponseRedirect('/add-expert')
+            return HttpResponseRedirect('/experts')
     else:
         form = ExpertForm()
     return render(request, 'front/add-expert.html', {'form': form})
@@ -609,7 +612,7 @@ def add_author(request):
                 new_author.save()
             except TaxonAuthorLkp.DoesNotExist:
                 print("saving new author did not workout; do something")
-            return HttpResponseRedirect('/add-author')
+            return HttpResponseRedirect('/authors')
     else:
         form = AuthorForm()
     return render(request, 'front/add-author.html', {'form': form})

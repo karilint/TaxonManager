@@ -71,6 +71,33 @@
                 </div>
 
                 <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_expert_name">{{ filter.form.expert_name.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.expert_name }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_author_name">{{ filter.form.author_name.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.author_name }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_geo_location">{{ filter.form.geo_location.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.geo_location }}
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="form-group col-md-12 text-center">
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>

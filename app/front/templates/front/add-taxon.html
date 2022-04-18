@@ -29,6 +29,7 @@
       var taxonnomic_types = document.getElementById("id_taxonnomic_types");
       var rank_name = document.getElementById("id_rank_name");
       var unit_name1 = document.getElementById("id_unit_name1");
+      var references = document.getElementById("id_references");
       let error = [];
 
       if (kingdom_name.value.length === 0) {
@@ -43,11 +44,11 @@
       if (unit_name1.value.length === 0) {
         error.push("Unit name1 cannot be empty")
       }
-      if (id_references.value.length === 0) {
+      if (references.value.length === 0) {
         error.push("References cannot be empty")
       }
       if (error.length > 0) {
-        // e.preventDefault()
+        e.preventDefault()
         window.alert(error.join(", "));
       }
     })

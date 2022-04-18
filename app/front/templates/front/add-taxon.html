@@ -3,13 +3,13 @@
 {% block content %}
 
 <body>
-  <p><a href="/taxa">Taxa list</a> | <a href=" ">Add taxon</a> | <a href="/taxa-search">Search</a></p>
+  <p><a href="/taxa">Taxa list</a> | <a href="{% url 'front:add-taxon' %} ">Add taxon</a> | <a href="/taxa-search">Search</a></p>
 
   {% with test=user.groups.all|length %}
   {% if test > 0 %}
 
   <h1>Add taxon</h1>
-  <form action="" method="post" id="parent-form" , data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded"
+  <form action="{% url 'front:add-taxon' pk %}" method="post" id="parent-form" , data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded"
     data_parentTaxon-url="/load_parentTaxon" novalidate>
     {% csrf_token %}
     <table>

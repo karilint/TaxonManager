@@ -25,14 +25,23 @@
             <td class="datafield" width="65%">{{taxonomic_unit.rank.rank_name}}</td>
         </tr>
         <tr>
+            {% if isJunior %}
+            <td class="datatype" valign="top" align="left" width="35%">Senior synonym:</td>
+            <td class="datafield" width="65%">
+                <a href={{ seniorSynonym.taxon_id }}>{{ seniorSynonym.unit_name1 }}</a>
+            </td>
+            {% else %}
             <td class="datatype" valign="top" align="left" width="35%">Synonyms:</td>
-            <td class="datafield" width="65%">{% for synonym in synonyms %}
+            <td class="datafield" width="65%">
+                {% for synonym in synonyms %}
                 {% if forloop.last %}
-                {{ synonym }}
-                { %else% }
-                {{ synonym }}, 
+                <a href={{ synonym.taxon_id }}>{{ synonym.unit_name1 }}</a>
+                {% else %}
+                <a href={{ synonym.taxon_id }}>{{ synonym.unit_name1 }},</a>
                 {% endif %}
-                {% endfor %}</td>
+                {% endfor %}
+            </td>
+            {% endif %}
         <tr>
             <td class="datatype" valign="top" align="left" width="35%">Taxonomic status:</td>
             <td class="datafield" width="65%">{{taxonomic_unit.n_usage}}</td>
@@ -113,35 +122,7 @@
 
     </table>
 
-    <table class="synonyms" style="width:80%">
-        <th class="whiteboxhead" colspan="2" align="left">Synonyms</th>
 
-        {% for synonym in synonyms %}
-        <tr>
-            <td class="datatype" valign="top" width="35%">Unit name 1:</td>
-            <td class="datafield" width="65%">{{ synonym.unit_name1 }}</td>
-        </tr>
-        <tr>
-            <td class="datatype" valign="top" width="35%">Unit name 2:</td>
-            <td class="datafield" width="65%">{{ synonym.unit_name1 }}</td>
-        </tr>
-        <tr>
-            <td class="datatype" valign="top" width="35%">Unit name 3:</td>
-            <td class="datafield" width="65%">{{ synonym.unit_name3 }}</td>
-        </tr>
-        <tr>
-            <td class="datatype" valign="top" width="35%">Unit name 4::</td>
-            <td class="datafield" width="65%">{{ synonym.unit_name4 }}</td>
-        </tr>
-        {% if not forloop.last %}
-        </tr>
-        <td class="datatype" valign="top" width="35%"></td>
-        <td class="datafield" width="65%"></td>
-        <tr>
-        {% endif %}
-        {% endfor %}
-
-    </table>
 </body>
 
 {% endblock %} 

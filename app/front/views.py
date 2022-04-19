@@ -498,6 +498,10 @@ def view_hierarchy(request, parent_id=None):
     # Only those taxons where the rank is the same as the rank of the taxon we're currently looking at.
     synonymTaxons = TaxonomicUnit.objects.filter(pk__in=taxonSynonymIds)#.filter(rank=chosenTaxon.rank)
 
+    if len(SynonymLink.objects.filter(synonym_id=chosenTaxon.taxon_id)) > 0:
+        seniorSynonym = TaxonomicUnit.objects.get(taxon_id = SynonymLink.objects.get(synonym_id=chosenTaxon.taxon_id).taxon_id_accepted.taxon_id)
+    else:
+        seniorSynonym = None
     hierarchy = hierarchyObject.hierarchy_string.split('-')
 
     # TODO result array seems useless?
@@ -528,7 +532,9 @@ def view_hierarchy(request, parent_id=None):
         # 'hierarchies': result,
         'name_list': name_list,
         'references': references[0],
-        'synonyms': synonymTaxons
+        'synonyms': synonymTaxons,
+        'seniorSynonym': seniorSynonym,
+        'isJunior': seniorSynonym is not None
     }
 
     return render(request, 'front/hierarchy.html', context)

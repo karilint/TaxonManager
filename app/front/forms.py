@@ -15,7 +15,9 @@
 from cProfile import label
 from django import forms
 from .models import GeographicDiv, Reference, TaxonAuthorLkp, TaxonomicUnit, Kingdom, Expert, TaxonAuthorLkp
-from django_select2.forms import Select2MultipleWidget, ModelSelect2MultipleWidget
+from django_select2.forms import Select2MultipleWidget
+from django.contrib.admin import site as admin_site
+from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
 
 class RefForm(forms.ModelForm):
     class Meta:
@@ -68,9 +70,10 @@ class TaxonForm(forms.ModelForm):
         required=False
     )
 
-    author = forms.ModelChoiceField(
-    queryset=TaxonAuthorLkp.objects.all(),
-    required=False
+    taxon_author_id  = forms.ModelChoiceField(
+        queryset=TaxonAuthorLkp.objects.all(),
+        required=False,
+        label='Author'
     )
 
 
@@ -81,8 +84,18 @@ class TaxonForm(forms.ModelForm):
 
     class Meta:
         model = TaxonomicUnit
-        fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div', 'expert', 'author']
+        fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div', 'expert', 'taxon_author_id']
         exclude = ['unnamed_taxon_ind']
+
+    def __init__(self, *args, **kwargs):
+        super(TaxonForm, self).__init__(*args, **kwargs) 
+        for field in ["expert", "taxon_author_id", "references"]:
+                self.fields[field].widget = RelatedFieldWidgetWrapper(
+                self.fields[field].widget,
+                self.instance._meta.get_field(field).remote_field,
+                admin_site
+            ) 
+
 
 class ExpertForm(forms.ModelForm):
     template_name = 'add-expert.html'

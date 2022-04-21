@@ -3,7 +3,7 @@ name: ci-main
 on:
   push:
     branches:
-      - 'unwanted-parents'
+      - 'taxon-add-popup'
 
 jobs:
   test:

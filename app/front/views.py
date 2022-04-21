@@ -124,7 +124,7 @@ def taxon_add(request, pk = None):
                 experts = form.cleaned_data['expert']
                 for expert in experts:
                     new_unit.expert.add(expert)
-                author = form.cleaned_data['author']
+                author = form.cleaned_data['taxon_author_id']
                 new_unit.taxon_author_id=author
                 new_unit.save()
                 if pk:

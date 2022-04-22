@@ -42,9 +42,9 @@
     {% endwith %}
 
     {% if taxon.complete_name and taxon.rank_id.rank_name %}
-    <a ref="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a> 
+    <a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a> 
     {% elif taxon.complete_name %}
-    <a ref="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a>
+    <a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a>
     {% elif taxon.rank_id.rank_name %}
     <a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.rank_id.rank_name }}</a>
     {% else %}

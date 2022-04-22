@@ -28,25 +28,25 @@
         </div>
       </div>
     </form>
-    
+
     {% if page_obj %}
     <h2 class="text-center">{{ nresults }} results</h2>
-    
+
     {% for taxon in page_obj %}
 
     {% with test=user.groups.all|length %}
     {% if test > 0 %}
-    
-    <a href="{% url 'front:add-taxon' taxon.pk %}"><img src="{% static 'refs/images/pencil.svg' %}"/></a>
+
+    <a href="{% url 'front:add-taxon' taxon.pk %}"><img src="{% static 'refs/images/pencil.svg' %}" /></a>
     {% endif %}
     {% endwith %}
-    
+
     {% if taxon.complete_name and taxon.rank_id.rank_name %}
-    ref="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a> ({{n.rank_id.rank_name }})
+    <a ref="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a> 
     {% elif taxon.complete_name %}
-    ref="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a></li>
+    <a ref="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a>
     {% elif taxon.rank_id.rank_name %}
-    <a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.unit_name1 }}</a>taxon.rank_id.rank_name }})</li>
+    <a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.rank_id.rank_name }}</a>
     {% else %}
     <a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.unit_name1 }}</a>
     {% endif %}
@@ -65,7 +65,7 @@
     <a href="?page={{ page_obj.next_page_number }}{{ querystring }}">Next</a>
     <a href="?page={{ page_obj.paginator.num_pages }}{{ querystring }}">Last &raquo</a>
     {% endif %}
-    
+
     {% else %}
     <h2 class="text-center">No result.</h2>
     {% endif %}

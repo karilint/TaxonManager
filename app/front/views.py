@@ -62,9 +62,11 @@ def load_parentTaxon(request):
 
 def taxon_add(request, pk = None):
     c = {'pk': pk if pk else ''}
+    taxon = None
+    parent = None
+    
     form = TaxonForm()
     if request.method == 'POST':
-        taxon = None    
         if pk:
             taxon = TaxonomicUnit.objects.get(pk=pk)        
         # create a form instance and populate it with data from the request:
@@ -141,11 +143,11 @@ def taxon_add(request, pk = None):
         # edit existing taxon
         try:
             taxon = TaxonomicUnit.objects.get(pk=pk)
-            
+            parent =TaxonomicUnit.objects.get(pk=taxon.parent_id)
+
             form = TaxonForm(initial={
             'kingdom_name': taxon.kingdom,
-            'rank_name': taxon.rank.rank_name,
-            #parent
+            #rank name and parent name's are initialized by add-taxon.html
             'unit_name1': taxon.unit_name1,
             'unit_name2': taxon.unit_name2,
             'unit_name3': taxon.unit_name3,
@@ -156,8 +158,18 @@ def taxon_add(request, pk = None):
 
         except TaxonomicUnit.DoesNotExist:
             form = TaxonForm()
+    
+    context = {}
+
+    context.update({'form': form,
+                    'taxon': taxon,
+                    'parent': parent,})
+
     c['form'] = form
-    return render(request, 'front/add-taxon.html', c)
+    return render(request, 'front/add-taxon.html', context)
+
+
+
 
 def update_hierarchystring(taxon):
     children = TaxonomicUnit.objects.all().filter(parent_id = taxon.pk)

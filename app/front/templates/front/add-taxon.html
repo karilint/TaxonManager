@@ -3,21 +3,22 @@
 {% block content %}
 
 <body>
-  <p><a href="/taxa">Taxa list</a> | <a href="{% url 'front:add-taxon' %} ">Add taxon</a> | <a href="/taxa-search">Search</a></p>
+  <p><a href="/taxa">Taxa list</a> | <a href="{% url 'front:add-taxon' %} ">Add taxon</a> | <a
+      href="/taxa-search">Search</a></p>
 
   {% with test=user.groups.all|length %}
   {% if test > 0 %}
 
   <h1>Add taxon</h1>
-  <form action="{% url 'front:add-taxon' pk %}" method="post" id="parent-form" , data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded"
-    data_parentTaxon-url="/load_parentTaxon" novalidate>
+  <form action="{% url 'front:add-taxon' pk %}" method="post" id="parent-form" ,
+    data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded" data_parentTaxon-url="/load_parentTaxon" novalidate>
     {% csrf_token %}
     <table>
       {{ form.as_table }}
     </table>
     <input type="submit" value="Submit">
-  </form>
 
+  </form>
 
 
   <script>
@@ -53,7 +54,7 @@
       }
     })
 
-
+    //fetch possible ranks based on kingdom
     $("#id_kingdom_name").change(function (e) {
       e.preventDefault();
       var url = $('#parent-form').attr('data-rankOfTaxonToBeAdded-url');
@@ -64,7 +65,6 @@
           url: url,
           data: {
             'id': parentId
-
           },
           success: function (data) {
             $('#id_taxonnomic_types').html(data);
@@ -79,7 +79,7 @@
       }
     });
 
-
+    //fetch parents based on kingdom and taxon's rank
     $("#id_taxonnomic_types").change(function (e) {
       e.preventDefault();
       var url = $('#parent-form').attr('data_parentTaxon-url');
@@ -105,6 +105,62 @@
         $('#id_rank_name').empty();
       }
     });
+
+    $("#id_kingdom_name").ready(function () {
+      var url = $('#parent-form').attr('data-rankOfTaxonToBeAdded-url');
+      
+      var rankName = '{{ taxon.rank.rank_name }}';
+      var parent = '{{ parent.unit_name1 }}';
+      var kingdomId = '{{ taxon.kingdom.pk }}'
+      
+      if (kingdomId) {
+        $.ajax({
+          url: url,
+          data: {
+            'id': kingdomId
+          },
+          success: function (data) {
+            $('#id_taxonnomic_types').html(data);
+            $('#id_taxonnomic_types').val(rankName);//set initial value for rank
+            
+            $("#id_taxonnomic_types").ready(function () {
+              var url = $('#parent-form').attr('data_parentTaxon-url');
+              var rankId = document.getElementById("id_taxonnomic_types").value;
+              kingdomId = $('#id_kingdom_name').val(); 
+              
+              if (rankId && kingdomId) {
+                $.ajax({
+                  url: url,
+                  data: {
+                    'id': rankId,
+                    'kingdomId': kingdomId
+                  },
+                  success: function (data) {
+                    // alert(data);
+                    $('#id_rank_name').html(data);
+                    $('#id_rank_name').val(parent); //set inital value for parent
+                  },
+                  error: function (data) {
+                    alert('errors');
+                  }
+                });
+              } else {
+                $('#id_rank_name').empty();
+              }
+            })
+          },
+          error: function (data) {
+            alert('errors');
+          }
+        });
+      }
+      else {
+        $('#id_taxonnomic_types').empty();
+        $('#id_rank_name').empty();
+      }
+    });
+
+
 
     $(document).ready(function () {
       $("#id_taxonnomic_types").select2({

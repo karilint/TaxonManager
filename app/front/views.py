@@ -246,7 +246,7 @@ def import_data_from_excel(request):
             taxons.sort(key=lambda a: rankorder[a["taxon_level"]])
             # Here we create the top few levels of the hierarchy, since our database doesn't have it
             taxonunit = TaxonomicUnit.objects.get_or_create(unit_name1="Animalia", kingdom=Kingdom.objects.get(kingdom_name="Animalia"),
-                                                            parent_id=0, rank=TaxonUnitType.objects.get(rank_name="Kingdom"))
+                                                            parent_id=0, rank=TaxonUnitType.objects.get(kingdom=Kingdom.objects.get(kingdom_name="Animalia"), rank_name="Kingdom"))
             if taxonunit[1]:
                 taxonunit[0].save()
                 create_hierarchystring(taxonunit[0])
@@ -262,7 +262,7 @@ def import_data_from_excel(request):
                 taxonunit = TaxonomicUnit.objects.get_or_create(unit_name1=taxon[0], kingdom=Kingdom.objects.get(kingdom_name="Animalia"),
                                                                 parent_id=getattr(TaxonomicUnit.objects.get(
                                                                     unit_name1=taxon[1]), "taxon_id"),
-                                                                rank=TaxonUnitType.objects.get(rank_name=taxon[2]))
+                                                                rank=TaxonUnitType.objects.get(kingdom=Kingdom.objects.get(kingdom_name="Animalia"), rank_name=taxon[2]))
                 if taxonunit[1]:
                     taxonunit[0].save()
                     create_hierarchystring(taxonunit[0])
@@ -285,6 +285,7 @@ def import_data_from_excel(request):
                                                                 kingdom=Kingdom.objects.get(
                                                                     kingdom_name="Animalia"),
                                                                 rank=TaxonUnitType.objects.get(
+                                                                    kingdom=Kingdom.objects.get(kingdom_name="Animalia"),
                                                                     rank_name=taxon["taxon_level"].capitalize()),
                                                                 complete_name=taxon["taxon_name"].lower().capitalize())
 
@@ -555,6 +556,17 @@ def add_junior_synonym(request, taxon_id=None):
                     taxon.unaccept_reason= "junior synonym"
                 taxon.save()
                 SynonymLink.objects.create(synonym_id = taxon.taxon_id, taxon_id_accepted = TaxonomicUnit.objects.get(taxon_id = taxon_id), update_date = datetime.now()).save()
+                children = TaxonomicUnit.objects.filter(parent_id = taxon.taxon_id)
+                if len(children) > 0:
+                    for child in children:
+                        child.parent_id = taxon_id
+                        hierarchyObject = Hierarchy.objects.get(taxon=child)
+                        child.save()
+                        hierarchy = hierarchyObject.hierarchy_string.split("-")
+                        hierarchy[-2] = taxon_id
+                        hierarchyObject.hierarchy_string = "-".join(hierarchy)
+                        hierarchyObject.save()
+                        
             except:
                 print("error in adding junior synonym")
             

@@ -34,12 +34,9 @@
             <td class="datatype" valign="top" align="left" width="35%">Synonyms:</td>
             <td class="datafield" width="65%">
                 {% for synonym in synonyms %}
-                {% if forloop.last %}
-                <a href={{ synonym.taxon_id }}>{{ synonym.unit_name1 }}</a>
-                {% else %}
                 <a href={{ synonym.taxon_id }}>{{ synonym.unit_name1 }},</a>
-                {% endif %}
                 {% endfor %}
+                <a href="{% url 'front:add_junior_synonym' taxon_id=taxonomic_unit.taxon_id %}">Add junior synonym</a>
             </td>
             {% endif %}
         <tr>
@@ -74,12 +71,10 @@
 
 <p></p>
 
-{% with taxonomic_unit as taxon %}
-  <a href="{% url 'front:add_junior_synonym' taxon_id=taxon.taxon_id %}">Add junior synonym</a>
-{% endwith %}
+
 
   
-    {% if taxonomic_unit.n_usage == valid %}
+    {% if isJunior == False %}
     <table class="hierarchy" style="width:80%">
         <th class="whiteboxhead" colspan="2" align="left">Taxonomic Hierarchy</th>
             {% for name, root in name_list %}

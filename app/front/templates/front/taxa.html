@@ -34,13 +34,6 @@
 
     {% for taxon in page_obj %}
 
-    {% with test=user.groups.all|length %}
-    {% if test > 0 %}
-
-    <a href="{% url 'front:add-taxon' taxon.pk %}"><img src="{% static 'refs/images/pencil.svg' %}" /></a>
-    {% endif %}
-    {% endwith %}
-
     {% if taxon.complete_name and taxon.rank_id.rank_name %}
     <a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a> 
     {% elif taxon.complete_name %}

@@ -12,19 +12,16 @@ from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import user_passes_test
 from front.models import Reference, get_ref_from_doi
-from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom, Expert
+from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom, Expert, SynonymLink, Reference, GeographicDiv
 from front.utils import canonicalize_doi
 # from front.forms import RefForm, NameForm, JuniorSynonymForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
-from .models import TaxonomicUnit, SynonymLink
-import csv
 from datetime import datetime
 
 from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
-from .models import TaxonomicUnit
 import csv, urllib.parse
 
 
@@ -267,28 +264,48 @@ def import_data_from_excel(request):
                     taxonunit[0].save()
                     create_hierarchystring(taxonunit[0])
 
+            # Here we create a dummy reference and geographic region
+            dummy_reference = Reference.objects.get_or_create(authors = "dummy author", title = "dummy reference")[0].save()
+            dummy_geographic_div = GeographicDiv.objects.get_or_create(geographic_value = "dummy geographic division")[0].save()
+
+            # Here we handle the actual taxons
             for taxon in taxons:
                 namelist = [taxon["class_name"], taxon["subclass_or_superorder_name"], taxon["order_name"],
                             taxon["suborder_name"], taxon["superfamily_name"], taxon["family_name"],
                             taxon["subfamily_name"], taxon["tribe_name"], taxon["genus_name"], taxon["species_name"]]
-                namelist = [i.lower().capitalize()
-                            for i in namelist if i is not None]
+                parent_level_list = ["class", "subclass", "order", "suborder", "superfamily", "family", "subfamily", "tribe",
+                                "genus", "species"]
+                parent_level = None
+                level = None
+                place = 0
+                for i in reversed(range(len(namelist))):
+                    if namelist[i] is not None:
+                        place += 1
+                        if place == 1:
+                            level = TaxonUnitType.objects.get(kingdom=Kingdom.objects.get(kingdom_name="Animalia"),
+                                                              rank_name = parent_level_list[i].capitalize())
+                        if place == 2:
+                            parent_level = TaxonUnitType.objects.get(kingdom=Kingdom.objects.get(kingdom_name="Animalia"),
+                                                                     rank_name = parent_level_list[i].capitalize())
+                            
+                namelist = [i.lower().capitalize() for i in namelist if i is not None]
 
-                if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2])) > 1:
+                if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2], rank=parent_level)) > 1:
                     print(namelist[-2], namelist[-1])
 
                 # Makes sure there is a unique parent
-                if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2])) != 1:
+                if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2], rank=parent_level)) != 1:
                     continue
 
-                taxonunit = TaxonomicUnit.objects.get_or_create(unit_name1=namelist[-1], parent_id=getattr(TaxonomicUnit.objects.get_or_create(unit_name1=namelist[-2])[0], "taxon_id"),
-                                                                kingdom=Kingdom.objects.get(
-                                                                    kingdom_name="Animalia"),
-                                                                rank=TaxonUnitType.objects.get(
-                                                                    kingdom=Kingdom.objects.get(kingdom_name="Animalia"),
-                                                                    rank_name=taxon["taxon_level"].capitalize()),
+                taxonunit = TaxonomicUnit.objects.get_or_create(unit_name1=namelist[-1],
+                                                                parent_id=TaxonomicUnit.objects.get(unit_name1=namelist[-2], rank = parent_level).taxon_id,
+                                                                kingdom=Kingdom.objects.get(kingdom_name="Animalia"),
+                                                                rank=level,
+                                                                name_usage = "valid",
                                                                 complete_name=taxon["taxon_name"].lower().capitalize())
 
+                taxonunit[0].references.add(dummy_reference)
+                taxonunit[0].geographic_div.add(dummy_geographic_div)
                 if taxonunit[1]:
                     taxonunit[0].save()
                     create_hierarchystring(taxonunit[0])

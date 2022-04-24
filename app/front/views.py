@@ -342,7 +342,7 @@ def import_data_from_excel(request):
 
 def view_reference(request):
     refs = Reference.objects.all().filter(visible=1)
-    paginator = Paginator(refs, 10)
+    paginator = Paginator(refs, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     c = {'page_obj': page_obj, 'paginator': paginator}
@@ -355,7 +355,7 @@ def search(request):
     nresults = ref_filter.qs.count()
     filtered_qs = sorted(ref_filter.qs, key=lambda objects: objects.pk)
 
-    paginator = Paginator(filtered_qs, 1)
+    paginator = Paginator(filtered_qs, 10)
 
     c = {}
     if request.GET:
@@ -377,7 +377,7 @@ def search(request):
         response = None
 
     c.update({'filter': ref_filter,
-              'filtered_refs': response,
+              'page_obj': response,
               'nresults': nresults,
               'paginator': paginator})
     return render(request, 'front/reference-search.html', c)
@@ -565,7 +565,7 @@ def view_experts(request):
     experts = Expert.objects.all()
     sorted_experts = sorted(
         experts, key=lambda objects: objects.expert.lower())
-    paginator = Paginator(sorted_experts, 10)
+    paginator = Paginator(sorted_experts, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -595,7 +595,7 @@ def view_authors(request):
     authors = TaxonAuthorLkp.objects.all()
     sorted_authors = sorted(
         authors, key=lambda objects: objects.taxon_author.lower())
-    paginator = Paginator(sorted_authors, 10)
+    paginator = Paginator(sorted_authors, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

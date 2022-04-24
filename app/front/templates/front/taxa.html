@@ -41,12 +41,8 @@
     {% endif %}
     {% endwith %}
     
-    {% if taxon.complete_name and taxon.rank_id.rank_name %}
-    ref="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a> ({{n.rank_id.rank_name }})
-    {% elif taxon.complete_name %}
-    ref="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a></li>
-    {% elif taxon.rank_id.rank_name %}
-    <a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.unit_name1 }}</a>taxon.rank_id.rank_name }})</li>
+    {% if taxon.rank.rank_name %}
+    <a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.unit_name1 }}</a> ({{ taxon.rank.rank_name }})</li>
     {% else %}
     <a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.unit_name1 }}</a>
     {% endif %}

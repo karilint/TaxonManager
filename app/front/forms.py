@@ -14,8 +14,10 @@
 
 from cProfile import label
 from django import forms
-from .models import GeographicDiv, Reference, TaxonAuthorLkp, TaxonomicUnit, Kingdom
-from django_select2.forms import Select2MultipleWidget, ModelSelect2MultipleWidget
+from .models import GeographicDiv, Reference, TaxonAuthorLkp, TaxonomicUnit, Kingdom, Expert, TaxonAuthorLkp
+from django_select2.forms import Select2MultipleWidget
+from django.contrib.admin import site as admin_site
+from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
 
 class RefForm(forms.ModelForm):
     class Meta:
@@ -39,8 +41,8 @@ class RefForm(forms.ModelForm):
 
         return self.cleaned_data['doi']
 
-class NameForm(forms.ModelForm):
-    template_name = 'add_name.html'
+class TaxonForm(forms.ModelForm):
+    template_name = 'add-taxon.html'
 
     kingdom_name = forms.ModelChoiceField(queryset=Kingdom.objects.all())
     rank_name = forms.CharField(widget=forms.Select(choices=[]), label="New taxon's parent")
@@ -57,8 +59,23 @@ class NameForm(forms.ModelForm):
     geographic_div = forms.ModelMultipleChoiceField(
         queryset=GeographicDiv.objects.all(),
         widget=Select2MultipleWidget,
-        label='Geographic location'
+        label='Geographic location',
+        required=False
     )
+
+    expert = forms.ModelMultipleChoiceField(
+        queryset=Expert.objects.all(),
+        widget=Select2MultipleWidget,
+        label= 'Experts',
+        required=False
+    )
+
+    taxon_author_id  = forms.ModelChoiceField(
+        queryset=TaxonAuthorLkp.objects.all(),
+        required=False,
+        label='Author'
+    )
+
 
     # Maybe multiplechoicefield from this advice: https://stackoverflow.com/a/56823482
 
@@ -67,14 +84,21 @@ class NameForm(forms.ModelForm):
 
     class Meta:
         model = TaxonomicUnit
-        fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div']
+        fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div', 'expert', 'taxon_author_id']
         exclude = ['unnamed_taxon_ind']
 
-class AuthorForm(forms.ModelForm):
-    template_name = 'add_author.html'
+    def __init__(self, *args, **kwargs):
+        super(TaxonForm, self).__init__(*args, **kwargs) 
+        for field in ["expert", "taxon_author_id", "references"]:
+                self.fields[field].widget = RelatedFieldWidgetWrapper(
+                self.fields[field].widget,
+                self.instance._meta.get_field(field).remote_field,
+                admin_site
+            ) 
 
-    kingdom = forms.ModelChoiceField(queryset=Kingdom.objects.all())
-    # geographic_div = forms.ModelChoiceField(queryset=GeographicDiv.objects.all())
+
+class ExpertForm(forms.ModelForm):
+    template_name = 'add-expert.html'
 
     geographic_div = forms.ModelMultipleChoiceField(
         queryset=GeographicDiv.objects.all(),
@@ -82,5 +106,31 @@ class AuthorForm(forms.ModelForm):
     )
 
     class Meta:
+        model = Expert
+        fields = ['expert', 'geographic_div']
+
+class AuthorForm(forms.ModelForm):
+    template_name = 'add-author.html'
+
+    kingdom = forms.ModelChoiceField(queryset=Kingdom.objects.all())
+
+    class Meta:
         model = TaxonAuthorLkp
-        fields = ['taxon_author', 'kingdom', 'geographic_div']
+        fields = ['taxon_author', 'kingdom']
+
+    # Prevent blank or duplicate authors
+    def clean_taxon_author(self):
+        taxon_author = self.cleaned_data['taxon_author']
+        if taxon_author is None or taxon_author.strip() == '':
+            raise forms.ValidationError('Taxon author cannot be left blank')
+        try:
+            author = TaxonAuthorLkp.objects.get(taxon_author=taxon_author)
+            if author is not None:
+                raise forms.ValidationError('An author with the name '\
+                             + taxon_author + ' already exists in the database')
+        except TaxonAuthorLkp.DoesNotExist:
+            # Good: an author with this name is not in the DB already
+            pass
+
+        return self.cleaned_data['taxon_author']
+

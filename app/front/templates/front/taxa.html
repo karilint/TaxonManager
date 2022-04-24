@@ -1,75 +1,74 @@
-{% extends "front/base.html" %}
-{% block content %}
+{% extends "front/base.html" %} {% block content %}
+{% load static pyref_tags %}
 
 <body>
-<p><a href="">Taxa list</a> | <a href="/addName">Add taxon</a> | <a href="/taxa-search">Search</a></p>
+  <p>
+    <a href="">Taxa list</a> | <a href="/add-taxon">Add taxon</a> |
+    <a href="/taxa-search">Search</a>
+  </p>
 
-<div class="container">
-
+  <div class="container">
     <h1>Taxa list</h1>
 
     <form method="get">
-        <div class="card card-body search-card">
-            <div class="container-fluid">
-
-                <div class="row">
-                    <div class="form-group col-md-4 text-right">
-                        <label for="id_any_field"></label>
-                    </div>
-                    <div class="form-group col-md-8">
-                        {{ filter.form.any_field }}
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="form-group col-md-12 text-center">
-                        <button type="submit" class="btn btn-primary">Search</button>
-                    </div>
-                </div>
-
+      <div class="card card-body search-card">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="form-group col-md-4 text-right">
+              <label for="id_any_field"></label>
             </div>
+            <div class="form-group col-md-8">{{ filter.form.any_field }}</div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-12 text-center">
+              <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+          </div>
         </div>
+      </div>
     </form>
-
-{% if taxa %}
-
+    
+    {% if page_obj %}
     <h2 class="text-center">{{ nresults }} results</h2>
-    <ul>
-    {% for taxon in taxa %}
+    
+    {% for taxon in page_obj %}
 
-        {% if taxon.complete_name and taxon.rank_id.rank_name %}
-            <li><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a> ({{ taxon.rank_id.rank_name }})</li>
-        {% elif taxon.complete_name %}
-            <li><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a></li>
-        {% elif taxon.rank_id.rank_name %}
-            <li><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.unit_name1 }}</a> ({{ taxon.rank_id.rank_name }})</li>
-        {% else %}
-            <li><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.unit_name1 }}</a></li>
-
-        {% endif %}
+    {% with test=user.groups.all|length %}
+    {% if test > 0 %}
+    
+    <a href="{% url 'front:add-taxon' taxon.pk %}"><img src="{% static 'refs/images/pencil.svg' %}"/></a>
+    {% endif %}
+    {% endwith %}
+    
+    {% if taxon.rank.rank_name %}
+    <a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.unit_name1 }}</a> ({{ taxon.rank.rank_name }})</li>
+    {% else %}
+    <a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.unit_name1 }}</a>
+    {% endif %}
+    <br><br>
     {% endfor %}
-    </ul>
 
-<!-- {% if taxa.has_previous %}
-    <a href="?page=1">&laquo First</a>
-    <a href="?page={{ taxa.previous_page_number}}">Previous</a>
-{% endif %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+      <a class="page-first" href="?page=1{{ querystring }}">&laquo First</a>
+      <a class="page-prev" href="?page={{ page_obj.previous_page_number}}{{ querystring }}">Previous</a>
+      {% endif %}
 
-Page {{ taxa.number }} of {{ taxa.paginator.num_pages }}
+      <span class="pagination-text">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
 
-{% if taxa.has_next %}
-    <a href="?page={{ taxa.next_page_number }}">Next</a>
-    <a href="?page={{ taxa.paginator.num_pages }}">Last &raquo</a>
-{% endif %} -->
-
-{% else %}
-No results.
-{% endif %}
-
-
-</div>
-
+      {% if page_obj.has_next %}
+      <a class="page-next" href="?page={{ page_obj.next_page_number }}{{ querystring }}">Next</a>
+      <a class="page-last" href="?page={{ page_obj.paginator.num_pages }}{{ querystring }}">Last &raquo</a>
+      {% endif %}
+      
+      {% else %}
+      <h2 class="text-center">No result.</h2>
+      {% endif %}
+    </div>
   
-</body>
 
-{% endblock %} 
+
+  </div>
+</body>
+{% endblock %}

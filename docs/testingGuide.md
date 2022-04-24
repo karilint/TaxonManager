@@ -50,12 +50,14 @@ Then, to run all the existing Cypress tests, run this command:
 npm run cypress:run
 ```
 
-The Cypress tests are currently using hard-coded test user named testaaja (pw: cypress). 
-Once docker containers are running, the user can be created with:
+The Cypress tests are currently using test data from /app/front/fixtures/test.json. 
+Once docker containers are running, data can be loaded by
 
 ```
-docker-compose exec web python manage.py shell --command="from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('testaaja', 'admin@admin.com', 'cypress')"
+docker-compose exec web python manage.py loaddata test.json"
 ```
+
+Some cypress tests may not work properly unless the database is cleared before loading the test data.
 
 
 ### Creating and/or modifying tests

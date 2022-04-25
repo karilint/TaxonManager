@@ -14,8 +14,16 @@
 
 from cProfile import label
 from django import forms
-from .models import GeographicDiv, Reference, TaxonAuthorLkp, TaxonomicUnit, Kingdom, Expert, TaxonAuthorLkp
-from django_select2.forms import Select2MultipleWidget
+from .models import (
+    Expert,
+    GeographicDiv,
+    Kingdom,
+    Reference,
+    SynonymLink,
+    TaxonAuthorLkp,
+    TaxonomicUnit,
+)
+from django_select2.forms import Select2MultipleWidget, ModelSelect2MultipleWidget
 from django.contrib.admin import site as admin_site
 from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
 
@@ -49,6 +57,10 @@ class TaxonForm(forms.ModelForm):
 
     taxonnomic_types = forms.CharField(widget=forms.Select(choices=[]), label="Rank of the new taxon")
 
+    is_junior_synonym = forms.BooleanField(required=False)
+    senior_synonym = forms.CharField(widget=forms.Select(choices=[]), label="Senior synonym", required = False)
+    
+    
     # reference = forms.ModelChoiceField(queryset=Reference.objects.all(), label="References where the taxon is mentioned", empty_label="Please choose reference for this taxon")
     # https://stackoverflow.com/a/8538923
     references = forms.ModelMultipleChoiceField(
@@ -86,7 +98,6 @@ class TaxonForm(forms.ModelForm):
         model = TaxonomicUnit
         fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div', 'expert', 'taxon_author_id']
         exclude = ['unnamed_taxon_ind']
-
     def __init__(self, *args, **kwargs):
         super(TaxonForm, self).__init__(*args, **kwargs) 
         for field in ["expert", "taxon_author_id", "references"]:
@@ -97,6 +108,14 @@ class TaxonForm(forms.ModelForm):
             ) 
 
 
+class JuniorSynonymForm(forms.Form):
+    template_name = 'add_junior_synonym.html'
+
+    synonym_id = forms.CharField(widget=forms.Select(choices=[]), label="Junior synonym")
+
+    #class Meta:
+        #model = SynonymLink
+        #fields = ['synonym_id']
 class ExpertForm(forms.ModelForm):
     template_name = 'add-expert.html'
 
@@ -133,4 +152,3 @@ class AuthorForm(forms.ModelForm):
             pass
 
         return self.cleaned_data['taxon_author']
-

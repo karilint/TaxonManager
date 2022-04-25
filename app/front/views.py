@@ -127,7 +127,6 @@ def taxon_add(request):
                 #save new unit =name
                 
                 new_unit.save()
-                create_hierarchystring(new_unit)
 
                 #add SynonymLink
                 if form.cleaned_data["is_junior_synonym"] and form.cleaned_data["senior_synonym"] != "":

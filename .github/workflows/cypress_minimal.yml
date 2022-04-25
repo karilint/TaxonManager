@@ -3,7 +3,7 @@ name: ci-cypress
 on:
   push:
     branches:
-      - 'cypress-experts-authors-taxa-search'
+      - 'pagination'
 
 jobs:
   test:

@@ -6,25 +6,28 @@
 
 
 <h1>Experts</h1>
+<p>
+    {% for expert in page_obj %}
 
-{% for expert in page_obj %}
+    <li>{{ expert.expert }}</li>
+    
+    {% endfor %}
+</p>
 
-<li>{{ expert.expert }}</li>
 
-{% endfor %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+    <a class="page-first" href="?page=1">&laquo First</a>
+    <a class="page-prev" href="?page={{ page_obj.previous_page_number}}">Previous</a>
+    {% endif %}
 
-{% if page_obj.has_previous %}
-    <a href="?page=1">&laquo First</a>
-    <a href="?page={{ page_obj.previous_page_number}}">Previous</a>
-{% endif %}
+    <span class="pagination-text">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
 
-Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-
-{% if page_obj.has_next %}
-    <a href="?page={{ page_obj.next_page_number }}">Next</a>
-    <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo</a>
-{% endif %}
-
+    {% if page_obj.has_next %}
+    <a class="page-next" href="?page={{ page_obj.next_page_number }}">Next</a>
+    <a class="page-last" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo</a>
+    {% endif %}    
+</div>
 
 
 </body>

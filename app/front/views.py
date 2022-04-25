@@ -1,3 +1,4 @@
+import string
 from xxlimited import new
 from django import template
 from django.shortcuts import render
@@ -62,10 +63,10 @@ def load_parentTaxon(request):
 
 def taxon_add(request, pk = None):
     c = {'pk': pk if pk else ''}
+    form = TaxonForm()
     taxon = None
     parent = None
-    
-    form = TaxonForm()
+
     if request.method == 'POST':
         if pk:
             taxon = TaxonomicUnit.objects.get(pk=pk)        
@@ -94,28 +95,14 @@ def taxon_add(request, pk = None):
                 # and kingdom based on parent
                 new_unit.kingdom = parent.kingdom
 
-                # FIX: set author (can be something or null)
-                # if it is something:
-                # 1. set correct taxon_author_id for new unit by references(and handle publications vs. experts) or what?
-                # do here: some db -queries
-                # set author here: new_unit.taxon_author_id = SUITABLE FOUND taxon_author_id
-
-                # else if there's no author:
-                # get rank by kingdom name and rank name + set rank to new unit
                 new_unit.rank = rank_of_new_taxon
                 
                 # modify old taxon's name validity, if taxon is edited
                 #if pk: #& new_unit.unit_name1 != taxon.unit_name1
                     #taxon.n_usage = "invalid"    
-                    #taxon.save()
-                    
+                    #taxon.save()    
                 #new_unit.n_usage = "valid"
-
-                if pk:
-                    if taxon.rank != rank_of_new_taxon or taxon.kingdom != kingdom:
-                        update_hierarchystring(taxon)
-                             
-
+                #                 
                 new_unit.save()
                 refs = form.cleaned_data['references']
                 for ref in refs:
@@ -129,10 +116,11 @@ def taxon_add(request, pk = None):
                 author = form.cleaned_data['taxon_author_id']
                 new_unit.taxon_author_id=author
                 new_unit.save()
+               
                 if pk:
-                    update_hierarchystring(taxon)
+                    move_taxon_update_hierarchystring(taxon)
                 else:
-                    create_hierarchystring(new_unit)                
+                    create_hierarchystring(new_unit)                                    
             except TaxonomicUnit.DoesNotExist:
                 # form was filled incorrectly
                 print("saving new unit did not workout; do something")
@@ -159,66 +147,55 @@ def taxon_add(request, pk = None):
         except TaxonomicUnit.DoesNotExist:
             form = TaxonForm()
     
-    context = {}
-
-    context.update({'form': form,
-                    'taxon': taxon,
-                    'parent': parent,})
-
     c['form'] = form
-    return render(request, 'front/add-taxon.html', context)
+    c['taxon'] = taxon
+    c['parent'] = parent
+    return render(request, 'front/add-taxon.html', c)
 
 
-
-
-def update_hierarchystring(taxon):
-    children = TaxonomicUnit.objects.all().filter(parent_id = taxon.pk)
+def move_taxon_update_hierarchystring(taxon):
     currentHierarchy = Hierarchy.objects.get(taxon = taxon)
+    # get the old Hierarchy object's parent's id
+    idToBeChanged = currentHierarchy.parent_id 
+
+    # update Hierarchy object's parent's id;
     currentHierarchy.parent_id = taxon.parent_id
-    hierarchystring = []
     
-    # update current taxon's hierarchy string
-    while (True):
-        hierarchystring.append(str(taxon.taxon_id))
-        if taxon.parent_id == 0:
-            break
-        taxon = TaxonomicUnit.objects.get(taxon_id=taxon.parent_id)
+    # establish current depth
+    idsInHierarchystring = currentHierarchy.hierarchy_string.split('-')
+    depth = len(idsInHierarchystring)
+    
+    # fetch all the objects that contain old id in hierarchystring
+    hierarchies= Hierarchy.objects.filter(hierarchy_string__contains=idToBeChanged)
+    
+    
+    for hierarchy in hierarchies:
+        currentString= hierarchy.hierarchy_string
+        currentArray = currentString.split('-')
+        currentLength = len(currentArray)
+        
+        # handle child
+        if(currentLength == depth):
+            newString= currentString.replace(str(idToBeChanged), str(currentHierarchy.parent_id))
+            hierarchy.hierarchy_string=newString
+            # update hierarchy's parent also
+            hierarchy.parent_id = taxon.parent_id
+            hierarchy.save()
 
-    hierarchystring.reverse()
-    hierarchystringFinal = '-'.join(hierarchystring)
-    currentHierarchy.hierarchy_string = hierarchystringFinal 
-    currentHierarchy.save()
-
-    currentKingdom = taxon.kingdom
-    
-    # update children's hierarchy string (and potentially kingdom)
-    for child in children:
-        hierarchystringFinal = ''
-        childHierarchystringObject = Hierarchy.objects.get(taxon = child)
-        taxon = TaxonomicUnit.objects.get(pk=child.pk)
-    
-        if taxon.kingdom != currentKingdom:
-            taxon.kingdom = currentKingdom
-            taxon.save()
-        hierarchystring = []
-        while (True):
-            hierarchystring.append(str(taxon.taxon_id))
-            if taxon.parent_id == 0:
-                break
-            taxon = TaxonomicUnit.objects.get(taxon_id=taxon.parent_id)
-
-        hierarchystring.reverse()
-        hierarchystringFinal = '-'.join(hierarchystring)
-        childHierarchystringObject.hierarchy_string = hierarchystringFinal 
-        childHierarchystringObject.save()
-    
+        # handle child's children and their children and so on forth
+        if (currentLength > depth):
+            # only update string
+            newString= currentString.replace(str(idToBeChanged), str(currentHierarchy.parent_id))
+            hierarchy.hierarchy_string=newString      
+            hierarchy.save()
+   
 
 def create_hierarchystring(taxon):
     hierarchystring = []
 
     hierarchyParentId = str(taxon.parent_id)
-    hierarchyTaxonId = taxon
 
+    hierarchyTaxonId = taxon
     while (True):
         hierarchystring.append(str(taxon.taxon_id))
         if taxon.parent_id == 0:

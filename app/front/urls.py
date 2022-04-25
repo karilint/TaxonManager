@@ -19,13 +19,17 @@ urlpatterns = [
     path('taxa/', views.view_taxa, name='taxa'),
     path('taxa-search/', views.search_taxa, name='taxa-search'),
     re_path(r'hierarchy/(?:(?P<parent_id>\d+))?$', views.view_hierarchy, name='hierarchy'),
+    re_path(r'add_junior_synonym/(?:(?P<taxon_id>\d+))?$', views.add_junior_synonym, name='add_junior_synonym'),
     path("favicon.ico", RedirectView.as_view(url=staticfiles_storage.url("favicon.ico"))),
     path('load_rankOfTaxonToBeAdded/', views.load_rankOfTaxonToBeAdded, name='load_rankOfTaxonToBeAdded'),
     path('load_parentTaxon/', views.load_parentTaxon, name='load_parentTaxon'),
     path('import_data_from_excel/', views.import_data_from_excel, name='import_data_from_excel'),
+    path('load_seniorSynonym/', views.load_seniorSynonym, name='load_seniorSynonym'),
+    path('load_juniorSynonym/', views.load_juniorSynonym, name='load_juniorSynonym'),
     path('experts/', views.view_experts, name='view-experts'),
     path('add-expert/', views.add_expert, name='add-expert'),
     path('authors/', views.view_authors, name='view-authors'),
     path('add-author/', views.add_author, name='add-author'),
     path('error/<str:message>', views.error, name='error')
 ]
+

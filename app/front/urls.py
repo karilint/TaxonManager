@@ -24,11 +24,12 @@ urlpatterns = [
     path('load_rankOfTaxonToBeAdded/', views.load_rankOfTaxonToBeAdded, name='load_rankOfTaxonToBeAdded'),
     path('load_parentTaxon/', views.load_parentTaxon, name='load_parentTaxon'),
     path('import_data_from_excel/', views.import_data_from_excel, name='import_data_from_excel'),
+    path('load_seniorSynonym/', views.load_seniorSynonym, name='load_seniorSynonym'),
+    path('load_juniorSynonym/', views.load_juniorSynonym, name='load_juniorSynonym'),
     path('experts/', views.view_experts, name='view-experts'),
     path('add-expert/', views.add_expert, name='add-expert'),
     path('authors/', views.view_authors, name='view-authors'),
     path('add-author/', views.add_author, name='add-author'),
-    path('error/<str:message>', views.error, name='error'),
     path('error/<str:message>', views.error, name='error')
 ]
-==== BASE ====
+

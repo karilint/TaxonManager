@@ -3,11 +3,11 @@
 
 <body>
 
-==== BASE ====
-{% if hierarchies %} 
-<h1>Hierarchy</h1>
-{% for hierarchy in hierarchies %}
-==== BASE ====
+    {% if taxonomic_unit.taxon_author %}
+    <h1><i>{{taxonomic_unit.unit_name1}}</i> ({{taxonomic_unit.taxon_author}})</h1>
+    {% else %}
+    <h1><i>{{taxonomic_unit.unit_name1}}</i></h1>
+    {% endif %}
 
 
     {% if taxonomic_unit.n_usage != invalid %}
@@ -75,7 +75,7 @@
 
   
     {% if isJunior == False %}
-    <table class="hierarchy" style="width:80%">
+    <table class="hierarchy hiearchy-lists" style="width:80%">
         <th class="whiteboxhead" colspan="2" align="left">Taxonomic Hierarchy</th>
             {% for name, root in name_list %}
             <tr>

@@ -358,22 +358,6 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains("Subkingdom").should("not.exist")
     cy.contains("Test Subkingdom").should("not.exist")
   })
-
-
-  it("Logged in user that not part of group contributors", () => {
-    //remove user from group
-    cy.visit("http://localhost:8000/admin/login/?next=/admin/")
-    cy.contains("Users").click()
-    cy.get("#main").contains("admin").click()
-    cy.contains("Remove all").click()
-    cy.contains("Save and continue").click()
-
-    //check view when user not part of group
-    cy.visit("http://localhost:8000/add-references/")
-    cy.contains("Add or Edit Reference").should("not.exist")
-  })
-})
-
   it("Adding taxon as junior synonym", () => {
     cy.visit("http://localhost:8000/add-taxon")
     cy.contains("Is junior synonym:").click()
@@ -429,5 +413,23 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains("aajstatchild").click()
     cy.contains("aajstat2")
   })
+
+  it("Logged in user that not part of group contributors", () => {
+    //remove user from group
+    cy.visit("http://localhost:8000/admin/login/?next=/admin/")
+    cy.contains("Users").click()
+    cy.get("#main").contains("admin").click()
+    cy.contains("Remove all").click()
+    cy.contains("Save and continue").click()
+
+    //check view when user not part of group
+    cy.visit("http://localhost:8000/add-references/")
+    cy.contains("Add or Edit Reference").should("not.exist")
+  })
+  
+
+})
+
+
   
 

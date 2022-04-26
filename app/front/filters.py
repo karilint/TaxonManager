@@ -1,8 +1,8 @@
-from front.models import Reference, TaxonomicUnit
+from front.models import Reference, TaxonomicUnit, SynonymLink
 from front.utils import canonicalize_doi
 from django.db.models import Q
 import django_filters
-
+from django_filters import ModelChoiceFilter
 
 class RefFilter(django_filters.FilterSet):
 
@@ -14,7 +14,6 @@ class RefFilter(django_filters.FilterSet):
                     lookup_expr='icontains')
     author = django_filters.CharFilter(field_name='authors', label='Author',
                     lookup_expr='icontains')
-
 
     def filter_by_doi(self, queryset, name, value):
         return queryset.filter(doi=canonicalize_doi(value))
@@ -43,7 +42,25 @@ class TaxonFilter(django_filters.FilterSet):
                     lookup_expr='icontains')
     geo_location = django_filters.CharFilter(field_name='geographic_div__geographic_value', label='Geographic location',
                     lookup_expr='icontains')
-    any_field = django_filters.CharFilter(method='filter_by_any_field', label="Search")
+    any_field = django_filters.CharFilter(method='filter_by_any_field', label='Search', lookup_expr='icontains')
+    synonyms = django_filters.CharFilter(method='filter_synonyms', label='Synonyms', lookup_expr='icontains')
+
+    def filter_synonyms(self, queryset, name, value):
+        taxons = TaxonomicUnit.objects.all()
+
+        junior_synonym_taxon = TaxonomicUnit.objects.filter(
+            Q(unit_name1__icontains=value) |
+            Q(unit_name2__icontains=value) |
+            Q(unit_name3__icontains=value) |
+            Q(unit_name4__icontains=value)
+        )
+        junior_synonym_ids = [synonym.taxon_id for synonym in junior_synonym_taxon]
+        senior_synonyms = SynonymLink.objects.filter(taxon_id_accepted__in=junior_synonym_ids).only("synonym_id")
+        junior_synonyms = SynonymLink.objects.filter(taxon_id_accepted__not_in=junior_synonym_ids).only("synonym_id")
+        print("Junior synonyms: ", junior_synonyms)
+        print("Senior synonyms: ", senior_synonyms)
+        senior_synonym_taxons = TaxonomicUnit.objects.filter(taxon_id__in=senior_synonyms)
+        return senior_synonym_taxons
 
     def filter_by_any_field(self, queryset, name, value):
         return queryset.filter(

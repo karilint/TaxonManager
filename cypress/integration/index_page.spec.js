@@ -17,7 +17,6 @@ describe("TaxonManager", () => {
     cy.contains("Help")
     cy.contains("2022")
     cy.contains("Add reference")
-    cy.contains("Welcome")
     cy.get("#mySidebar")
 
     cy.contains("TaxonManger is a tool for classifying fossil species.")

@@ -54,11 +54,20 @@
       }
     })
 
-    //fetch possible ranks based on kingdom
+    // fetch possible ranks based on kingdom
     $("#id_kingdom_name").change(function (e) {
       e.preventDefault();
       var url = $('#parent-form').attr('data-rankOfTaxonToBeAdded-url');
       var parentId = $(this).val();
+
+      // check if taxon is being edited and kingdom is changed
+      var taxonKingdom = '{{ taxon.kingdom.pk }}';
+      if (taxonKingdom != parentId && taxonKingdom) {
+        alert('Taxon cannot be moved to another kingdom')
+        // keep the old kingdom value
+        $("#id_kingdom_name").val(taxonKingdom);
+        return;
+      }
 
       if (parentId) {
         $.ajax({
@@ -79,7 +88,7 @@
       }
     });
 
-    //fetch parents based on kingdom and taxon's rank
+    // fetch parents based on kingdom and taxon's rank
     $("#id_taxonnomic_types").change(function (e) {
       e.preventDefault();
       var url = $('#parent-form').attr('data_parentTaxon-url');
@@ -106,13 +115,14 @@
       }
     });
 
+    // when taxon is edited, retain old info
     $("#id_kingdom_name").ready(function () {
       var url = $('#parent-form').attr('data-rankOfTaxonToBeAdded-url');
-      
+
       var rankName = '{{ taxon.rank.rank_name }}';
       var parent = '{{ parent.unit_name1 }}';
       var kingdomId = '{{ taxon.kingdom.pk }}'
-      
+
       if (kingdomId) {
         $.ajax({
           url: url,
@@ -122,12 +132,12 @@
           success: function (data) {
             $('#id_taxonnomic_types').html(data);
             $('#id_taxonnomic_types').val(rankName);//set initial value for rank
-            
+
             $("#id_taxonnomic_types").ready(function () {
               var url = $('#parent-form').attr('data_parentTaxon-url');
               var rankId = document.getElementById("id_taxonnomic_types").value;
-              kingdomId = $('#id_kingdom_name').val(); 
-              
+              kingdomId = $('#id_kingdom_name').val();
+
               if (rankId && kingdomId) {
                 $.ajax({
                   url: url,
@@ -136,7 +146,6 @@
                     'kingdomId': kingdomId
                   },
                   success: function (data) {
-                    // alert(data);
                     $('#id_rank_name').html(data);
                     $('#id_rank_name').val(parent); //set inital value for parent
                   },
@@ -159,8 +168,6 @@
         $('#id_rank_name').empty();
       }
     });
-
-
 
     $(document).ready(function () {
       $("#id_taxonnomic_types").select2({

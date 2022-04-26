@@ -607,7 +607,10 @@ def view_hierarchy(request, parent_id=None):
 
     while (len(hierarchy) != 0):
         index = hierarchy.pop(0)
-        root = TaxonomicUnit.objects.get(taxon_id=index)
+        if len(TaxonomicUnit.objects.filter(taxon_id=index)) == 1:
+            root = TaxonomicUnit.objects.get(taxon_id=index)
+        else:
+            root = None
 
         if (len(hierarchy) == 0):
             # This takes only the reference for the selected taxon.
@@ -615,9 +618,12 @@ def view_hierarchy(request, parent_id=None):
             references.append(root.references.all())
 
         space = "&nbsp" * grow
-        name = space + root.rank.rank_name
 
-        name_list.append((name, root))
+        if root is None:
+            name_list.append((space + "Missing taxon", None))
+        else:
+            name = space + root.rank.rank_name
+            name_list.append((name, root))
         # result.append(root)
         grow += 2
 

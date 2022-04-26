@@ -784,3 +784,5 @@ def add_author(request):
         form = AuthorForm()
     return render(request, 'front/add-author.html', {'form': form})
 
+def help(request):
+    return render(request, 'front/help.html')

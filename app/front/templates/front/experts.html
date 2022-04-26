@@ -7,12 +7,15 @@
 
 <h1>Experts</h1>
 <p>
-    {% for expert in page_obj %}
-
-    <li>{{ expert.expert }}</li>
-    
-    {% endfor %}
+    <table style="width:60%">
+        {% for expert in page_obj %}
+        <tr id="style_expert_author">
+        <td width="20.0%">{{ expert.expert }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </p>
+
 
 
 <div class="pagination">

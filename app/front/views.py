@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 from django import forms
-
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
@@ -14,7 +13,7 @@ from django.contrib.auth.decorators import user_passes_test
 from front.models import Reference, get_ref_from_doi
 from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom, Expert, SynonymLink, Reference, GeographicDiv
 from front.utils import canonicalize_doi
-from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm
+from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm, DoiForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
@@ -23,6 +22,7 @@ from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynony
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 import csv, urllib.parse
+import requests
 
 
 def index(request):
@@ -30,6 +30,8 @@ def index(request):
 
 
 # !! Temporary address for login page, references view and adding a reference
+
+
 def login(request):
     return render(request, 'front/login.html')
 
@@ -453,9 +455,27 @@ def refs_add(request, pk=None):
         except Reference.DoesNotExist:
             ref = None
         form = RefForm(instance=ref)
-
+    autofill_form = DoiForm()
+    c['doiform'] = autofill_form
     c['form'] = form
     return render(request, 'front/add-reference.html', c)
+
+def auto_fill(request):
+
+    autofill_form = DoiForm(request.POST)
+    form = RefForm()
+    if autofill_form.is_valid():
+        print(autofill_form.cleaned_data.get("doi"))
+        url = (autofill_form.cleaned_data.get("doi"))
+    payload={}
+    headers = {'Accept': 'application/x-bibtex'}
+    context= {'form': form, 'doiform': autofill_form}
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    print(response.text)
+    return render(request, 'front/add-reference.html', context)
+
 
 
 def delete(request, pk):

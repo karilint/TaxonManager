@@ -13,6 +13,13 @@
 <p class="errorlist">Please correct the errors below.</p>
 {% endif %}
 
+<form action="/doi-autofill/" method="POST">
+    {% csrf_token %}
+    {{doiform.as_table}}
+    <button type="submit">Autofill</button>
+</form>
+<br><br>
+
 
 <form action="{% url 'front:add-references' pk %}" method="post" class="add-ref-form">
 {% csrf_token %}

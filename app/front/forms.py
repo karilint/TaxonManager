@@ -27,6 +27,11 @@ from django_select2.forms import Select2MultipleWidget, ModelSelect2MultipleWidg
 from django.contrib.admin import site as admin_site
 from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
 
+
+class DoiForm(forms.Form):
+    doi = forms.CharField(max_length=100)
+
+
 class RefForm(forms.ModelForm):
     class Meta:
         model = Reference

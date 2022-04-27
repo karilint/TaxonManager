@@ -144,9 +144,6 @@ describe("Taxonmanager, when logged in as contributor", function () {
 
     // Add references page contains Add or Edit Reference and other tags
     cy.contains("Add or Edit Reference")
-    cy.contains("Reference List")
-    cy.contains("Add a reference")
-    cy.contains("Search")
     // Add references page contains form for adding or editing
     // cy.get("#add-ref-form").should("exist")
 
@@ -190,8 +187,7 @@ describe("Taxonmanager, when logged in as contributor", function () {
   })
 
   it("Search references", () => {
-    cy.contains("References").click()
-    cy.contains("Search").click()
+    cy.contains("Reference search").click()
 
     // Search reference with no input
     cy.get(".btn").click()
@@ -221,7 +217,6 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains("Add author")
     cy.contains("Taxon author")
     cy.contains("Kingdom")
-    cy.contains("Author list")
     cy.contains("Picture © Luonnontieteellinen Keskusmuseo").should("not.exist")
     cy.get("#loginButton").should("not.exist")
 
@@ -262,9 +257,9 @@ describe("Taxonmanager, when logged in as contributor", function () {
     // Check that the correct page loads correctly
     cy.visit("http://localhost:8000/add-expert/")
     cy.url().should("eq", "http://localhost:8000/add-expert/")
-    cy.contains("Add expert")
+    cy.contains("Add new expert")
     cy.contains("Geographic div")
-    cy.contains("Expert list")
+    cy.contains("Experts")
     cy.contains("Picture © Luonnontieteellinen Keskusmuseo").should("not.exist")
     cy.get("#loginButton").should("not.exist")
 

@@ -46,7 +46,7 @@
         error.push("References cannot be empty")
       }
       if (error.length > 0) {
-        // e.preventDefault()
+        e.preventDefault()
         window.alert(error.join(", "));
       }
     })

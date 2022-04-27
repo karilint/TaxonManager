@@ -157,7 +157,9 @@ def move_taxon_update_hierarchystring(taxon):
     currentHierarchy = Hierarchy.objects.get(taxon = taxon)
     # get the old Hierarchy object's parent's id
     idToBeChanged = currentHierarchy.parent_id 
-
+    # get the old parent for comparison
+    oldParent = TaxonomicUnit.objects.get(pk = idToBeChanged)
+    
     # update Hierarchy object's parent's id;
     currentHierarchy.parent_id = taxon.parent_id
     
@@ -165,30 +167,104 @@ def move_taxon_update_hierarchystring(taxon):
     idsInHierarchystring = currentHierarchy.hierarchy_string.split('-')
     depth = len(idsInHierarchystring)
     
-    # fetch all the objects that contain old id in hierarchystring
+    # fetch all the objects that contain the old id in hierarchystring
     hierarchies= Hierarchy.objects.filter(hierarchy_string__contains=idToBeChanged)
     
-    
-    for hierarchy in hierarchies:
-        currentString= hierarchy.hierarchy_string
-        currentArray = currentString.split('-')
-        currentLength = len(currentArray)
-        
-        # handle child
-        if(currentLength == depth):
-            newString= currentString.replace(str(idToBeChanged), str(currentHierarchy.parent_id))
-            hierarchy.hierarchy_string=newString
-            # update hierarchy's parent also
-            hierarchy.parent_id = taxon.parent_id
-            hierarchy.save()
+    # new parent for comparison below
+    parent = TaxonomicUnit.objects.get(pk = taxon.parent_id)
 
-        # handle child's children and their children and so on forth
-        if (currentLength > depth):
-            # only update string
-            newString= currentString.replace(str(idToBeChanged), str(currentHierarchy.parent_id))
-            hierarchy.hierarchy_string=newString      
-            hierarchy.save()
-   
+    # levels increase
+    if oldParent.rank.rank_id < parent.rank.rank_id:
+            hierarchies = Hierarchy.objects.filter(hierarchy_string__contains=taxon.pk)
+            parentHierarchyString = Hierarchy.objects.get(taxon = parent)
+            parentString = parentHierarchyString.hierarchy_string
+            
+            for hierarchy in hierarchies:
+                parentIds = parentString.split('-')
+                currentString= hierarchy.hierarchy_string
+                currentArray = currentString.split('-')
+                currentLength = len(currentArray)
+ 
+                # manipulate string so that there will be no duplicates
+                for id in currentArray:
+                    if id not in parentIds:
+                        parentIds.append(id)
+
+                newString = '-'.join(parentIds)
+                hierarchy.hierarchy_string=newString
+                
+                if depth == currentLength:
+                    #update hierarchy object's parent
+                    hierarchy.parent_id = taxon.parent_id    
+                hierarchy.save()              
+            
+    # levels decrease
+    elif oldParent.rank.rank_id > parent.rank.rank_id:      
+        # old parent info
+        oldParentHierarchy = Hierarchy.objects.get(taxon=oldParent) 
+        oldparentString = oldParentHierarchy.hierarchy_string
+        oldParentIds = oldparentString.split('-')
+
+        # new parent info
+        parentHierarchy = Hierarchy.objects.get(taxon = parent) 
+        parentString = parentHierarchy.hierarchy_string
+        parentIds=parentString.split('-')
+    
+        for hierarchy in hierarchies:
+            delete = []
+            parentIds = parentString.split('-')
+            currentString= hierarchy.hierarchy_string
+            currentArray = currentString.split('-')
+            currentLength = len(currentArray)                
+             
+            # handle current taxon's children     --> älä koske 1-7-8 (1-7 ei ollu ees listas..)
+            if currentLength >= depth:
+                #determine ids to remove
+                for id in currentArray: #1-7-8-9    
+                    if id in oldParentIds: #1-7-8
+                        delete.append(id)
+
+                # remove ids
+                for id in delete:
+                    if id in currentArray:
+                        currentArray.remove(id)
+
+                # determine final ids 
+                for id in currentArray:
+                    parentIds.append(id)
+
+                newString = '-'.join(parentIds)
+                hierarchy.hierarchy_string=newString
+
+                if currentLength == depth:
+                    #update hierarchy object's parent
+                    hierarchy.parent_id = taxon.parent_id    
+
+                hierarchy.save()
+
+
+    # child moves on the same level
+    elif oldParent.rank.rank_id == parent.rank.rank_id:        
+        for hierarchy in hierarchies:
+            currentString= hierarchy.hierarchy_string
+            currentArray = currentString.split('-')
+            currentLength = len(currentArray)
+            
+            # handle child
+            if currentLength == depth:
+                newString= currentString.replace(str(idToBeChanged), str(currentHierarchy.parent_id))
+                hierarchy.hierarchy_string=newString
+                # update hierarchy's parent also
+                hierarchy.parent_id = taxon.parent_id
+                hierarchy.save()
+
+            # handle child's children and their children and so on forth
+            if currentLength > depth:
+                # only update string
+                newString= currentString.replace(str(idToBeChanged), str(currentHierarchy.parent_id))
+                hierarchy.hierarchy_string=newString      
+                hierarchy.save()
+
 
 def create_hierarchystring(taxon):
     hierarchystring = []

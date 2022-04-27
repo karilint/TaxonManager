@@ -461,11 +461,20 @@ def refs_add(request, pk=None):
     return render(request, 'front/add-reference.html', c)
 
 def auto_fill(request):
+    """ Auto fills reference details using bibtex
+    information fetched from dx.doi API.
+
+    Args:
+        request (GET): http://dx.doi.org/10.1038/nrd842
+
+    Returns:
+        string: reference information in bibtex format
+    """
 
     autofill_form = DoiForm(request.POST)
     form = RefForm()
     if autofill_form.is_valid():
-        print(autofill_form.cleaned_data.get("doi"))
+        print("doi: ", autofill_form.cleaned_data.get("doi"))
         url = (autofill_form.cleaned_data.get("doi"))
     payload={}
     headers = {'Accept': 'application/x-bibtex'}
@@ -475,8 +484,6 @@ def auto_fill(request):
 
     print(response.text)
     return render(request, 'front/add-reference.html', context)
-
-
 
 def delete(request, pk):
     if request.user.groups.filter(name='contributors').exists():

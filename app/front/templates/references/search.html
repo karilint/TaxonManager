@@ -62,19 +62,39 @@
     </form>
 
 
-    {% if filtered_refs is not None %}
+    {% if page_obj is not None %}
     <h2 class="text-center">{{ nresults }} Results</h2>
 
     {% if nresults %}
 
-    {% for ref in filtered_refs %}
-    <p>
-        <a href="{% url 'front:add-references' ref.pk %}"><img src="{% static 'refs/images/pencil.svg' %}" /></a>
-        {% ref_html ref 3 %}
-    </p>
-    {% endfor %}
+    <table style="width:60%; border-collapse: collapse">
+        {% for ref in page_obj %}
+          <tr class="liststaxon">
+            {% with test=user.groups.all|length %}
+            {% if test > 0 %}
+            <td width="3.0%"><a class="delete-ref" href="{% url "front:delete" ref.pk %}"><img src="{% static 'refs/images/trashcan.svg' %}"/></a></td>
+            <td width="3.0%"><a href="{% url 'front:add-references' ref.pk %}"><img src="{% static 'refs/images/pencil.svg' %}"/></a></td>
+            {% endif %}
+            {% endwith %}
 
-    {% include "refs/pagination.html" with page_obj=filtered_refs %}
+            <td width="90.0%">{% ref_html ref 3 %}</td> 
+          </tr>
+          {% endfor %}
+  </table>
+
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+        <a class="page-first" href="?page=1{{ querystring }}">&laquo First</a>
+        <a class="page-prev" href="?page={{ page_obj.previous_page_number}}{{ querystring }}">Previous</a>
+        {% endif %}
+  
+        <span class="pagination-text">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+  
+        {% if page_obj.has_next %}
+        <a class="page-next" href="?page={{ page_obj.next_page_number }}{{ querystring }}">Next</a>
+        <a class="page-last" href="?page={{ page_obj.paginator.num_pages }}{{ querystring }}">Last &raquo</a>
+        {% endif %}
+      </div>
 
     {% endif %}
     {% endif %}

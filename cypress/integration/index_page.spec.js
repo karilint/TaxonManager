@@ -17,7 +17,6 @@ describe("TaxonManager", () => {
     cy.contains("Help")
     cy.contains("2022")
     cy.contains("Add reference")
-    cy.contains("Welcome")
     cy.get("#mySidebar")
 
     cy.contains("TaxonManger is a tool for classifying fossil species.")
@@ -145,9 +144,6 @@ describe("Taxonmanager, when logged in as contributor", function () {
 
     // Add references page contains Add or Edit Reference and other tags
     cy.contains("Add or Edit Reference")
-    cy.contains("Reference List")
-    cy.contains("Add a reference")
-    cy.contains("Search")
     // Add references page contains form for adding or editing
     // cy.get("#add-ref-form").should("exist")
 
@@ -191,8 +187,7 @@ describe("Taxonmanager, when logged in as contributor", function () {
   })
 
   it("Search references", () => {
-    cy.contains("References").click()
-    cy.contains("Search").click()
+    cy.contains("Reference search").click()
 
     // Search reference with no input
     cy.get(".btn").click()
@@ -222,7 +217,6 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains("Add author")
     cy.contains("Taxon author")
     cy.contains("Kingdom")
-    cy.contains("Author list")
     cy.contains("Picture © Luonnontieteellinen Keskusmuseo").should("not.exist")
     cy.get("#loginButton").should("not.exist")
 
@@ -263,9 +257,9 @@ describe("Taxonmanager, when logged in as contributor", function () {
     // Check that the correct page loads correctly
     cy.visit("http://localhost:8000/add-expert/")
     cy.url().should("eq", "http://localhost:8000/add-expert/")
-    cy.contains("Add expert")
+    cy.contains("Add new expert")
     cy.contains("Geographic div")
-    cy.contains("Expert list")
+    cy.contains("Experts")
     cy.contains("Picture © Luonnontieteellinen Keskusmuseo").should("not.exist")
     cy.get("#loginButton").should("not.exist")
 
@@ -358,7 +352,61 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains("Subkingdom").should("not.exist")
     cy.contains("Test Subkingdom").should("not.exist")
   })
-
+  it("Adding taxon as junior synonym", () => {
+    cy.visit("http://localhost:8000/add-taxon")
+    cy.contains("Is junior synonym:").click()
+    cy.get('#id_kingdom_name').select('Bacteria', { force: true })
+    cy.get('#id_taxonnomic_types').select('Subkingdom', { force: true })
+    cy.get('#id_rank_name').select('Bacteria', { force: true })
+    cy.get('#id_unit_name1').type('Test of adding as junior synonym')
+    cy.get('#id_references').select('2: Audet, A.M., Robbins, C.B. and Larivière, S., Alopex lagopus', { force: true })
+    cy.get('#id_geographic_div').select('Europe', { force: true })
+    cy.get('#id_senior_synonym').select('Bacteria', { force: true })
+    cy.contains("Submit").click()
+    
+    cy.visit("http://localhost:8000/taxa")
+    cy.contains("Test of adding as junior synonym").click()
+    cy.contains("Senior synonym:")
+  })
+  
+  it("Adding a junior synonym to a taxon", () => {
+    cy.visit("http://localhost:8000/add-taxon")
+    cy.get('#id_kingdom_name').select('Bacteria', { force: true })
+    cy.get('#id_taxonnomic_types').select('Subkingdom', { force: true })
+    cy.get('#id_rank_name').select('Bacteria', { force: true })
+    cy.get('#id_unit_name1').type('aajstat1')
+    cy.get('#id_references').select('2: Audet, A.M., Robbins, C.B. and Larivière, S., Alopex lagopus', { force: true })
+    cy.get('#id_geographic_div').select('Europe', { force: true })
+    cy.contains("Submit").click()
+    
+    cy.visit("http://localhost:8000/add-taxon")
+    cy.get('#id_kingdom_name').select('Bacteria', { force: true })
+    cy.get('#id_taxonnomic_types').select('Subkingdom', { force: true })
+    cy.get('#id_rank_name').select('Bacteria', { force: true })
+    cy.get('#id_unit_name1').type('aajstat2')
+    cy.get('#id_references').select('2: Audet, A.M., Robbins, C.B. and Larivière, S., Alopex lagopus', { force: true })
+    cy.get('#id_geographic_div').select('Europe', { force: true })
+    cy.contains("Submit").click()
+    
+    cy.visit("http://localhost:8000/add-taxon")
+    cy.get('#id_kingdom_name').select('Bacteria', { force: true })
+    cy.get('#id_taxonnomic_types').select('Phylum', { force: true })
+    cy.get('#id_rank_name').select('aajstat1', { force: true })
+    cy.get('#id_unit_name1').type('aajstatchild')
+    cy.get('#id_references').select('2: Audet, A.M., Robbins, C.B. and Larivière, S., Alopex lagopus', { force: true })
+    cy.get('#id_geographic_div').select('Europe', { force: true })
+    cy.contains("Submit").click()
+    
+    cy.visit("http://localhost:8000/taxa")
+    cy.contains("aajstat2").click()
+    cy.contains("Add junior synonym").click()
+    cy.get('#id_synonym_id').select('aajstat1', { force: true })
+    cy.contains("Submit").click()
+    cy.contains('aajstat1')
+    cy.visit("http://localhost:8000/taxa")
+    cy.contains("aajstatchild").click()
+    cy.contains("aajstat2")
+  })
 
   it("Logged in user that not part of group contributors", () => {
     //remove user from group
@@ -372,5 +420,10 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.visit("http://localhost:8000/add-references/")
     cy.contains("Add or Edit Reference").should("not.exist")
   })
+  
+
 })
+
+
+  
 

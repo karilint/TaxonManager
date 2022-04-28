@@ -37,14 +37,20 @@
             <td class="datafield" width="65%">{{taxonomic_unit.rank.rank_name}}</td>
         </tr>
         <tr>
+            {% if isJunior %}
+            <td class="datatype" valign="top" align="left" width="35%">Senior synonym:</td>
+            <td class="datafield" width="65%">
+                <a href={{ seniorSynonym.taxon_id }}>{{ seniorSynonym.unit_name1 }}</a>
+            </td>
+            {% else %}
             <td class="datatype" valign="top" align="left" width="35%">Synonyms:</td>
-            <td class="datafield" width="65%">{% for synonym in synonyms %}
-                {% if forloop.last %}
-                {{ synonym }}
-                { %else% }
-                {{ synonym }}, 
-                {% endif %}
-                {% endfor %}</td>
+            <td class="datafield" width="65%">
+                {% for synonym in synonyms %}
+                <a href={{ synonym.taxon_id }}>{{ synonym.unit_name1 }},</a>
+                {% endfor %}
+                <a href="{% url 'front:add_junior_synonym' taxon_id=taxonomic_unit.taxon_id %}">Add junior synonym</a>
+            </td>
+            {% endif %}
         <tr>
             <td class="datatype" valign="top" align="left" width="35%">Taxonomic status:</td>
             <td class="datafield" width="65%">{{taxonomic_unit.n_usage}}</td>
@@ -75,8 +81,12 @@
         </tr>
     </table>
 
+<p></p>
+
+
+
   
-    {% if taxonomic_unit.n_usage == valid %}
+    {% if isJunior == False %}
     <table class="hierarchy hiearchy-lists" style="width:80%">
         <th class="whiteboxhead" colspan="2" align="left">Taxonomic Hierarchy</th>
             {% for name, root in name_list %}
@@ -118,6 +128,8 @@
         {% endfor %}
 
     </table>
+
+
 </body>
 
 {% endblock %} 

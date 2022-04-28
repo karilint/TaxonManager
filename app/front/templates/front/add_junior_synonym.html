@@ -1,0 +1,49 @@
+{% extends "front/base.html" %}
+
+{% block content %}
+<body>
+<p><a href="/taxa">Taxa list</a> | <a href=" ">Add taxon</a> | <a href="/taxa-search">Search</a></p>
+
+{% with test=user.groups.all|length %}
+{% if test > 0 %}
+
+<h1>Add junior synonym</h1>
+  <form action="" method="post" id="parent-form", data-juniorSynonym-url="/load_juniorSynonym" novalidate>
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit">
+  </form>
+
+<script>
+  $(document).ready(function(){
+    $("#id_synonym_id").select2({
+      width: '200px'
+    });
+
+    var url = $( '#parent-form' ).attr( 'data-juniorSynonym-url' );
+
+    $.ajax({
+      url: url,
+      success: function(data) {
+        $('#id_synonym_id').html(data);
+      },
+      error: function(data) {
+        alert('errors');
+      }
+    });
+  });
+</script>
+
+{% else %}
+
+<head>
+  <meta http-equiv="Refresh" content="0;url=/">
+</head>
+
+{% endif %}
+{% endwith %}
+
+</body>
+{% endblock %}

@@ -3,8 +3,6 @@
 {% block content %}
 
 <body>
-  <p><a href="/taxa">Taxa list</a> | <a href="{% url 'front:add-taxon' %} ">Add taxon</a> | <a
-      href="/taxa-search">Search</a></p>
 
   {% with test=user.groups.all|length %}
   {% if test > 0 %}
@@ -30,7 +28,6 @@
       var taxonnomic_types = document.getElementById("id_taxonnomic_types");
       var rank_name = document.getElementById("id_rank_name");
       var unit_name1 = document.getElementById("id_unit_name1");
-      var references = document.getElementById("id_references");
       let error = [];
 
       if (kingdom_name.value.length === 0) {
@@ -45,7 +42,7 @@
       if (unit_name1.value.length === 0) {
         error.push("Unit name1 cannot be empty")
       }
-      if (references.value.length === 0) {
+      if (id_references.value.length === 0) {
         error.push("References cannot be empty")
       }
       if (error.length > 0) {
@@ -113,6 +110,34 @@
       } else {
         $('#id_rank_name').empty();
       }
+    });
+    
+    $("#id_is_junior_synonym").change(function (e) {
+      e.preventDefault();
+        
+      if ($("#id_is_junior_synonym").is(':checked')) {
+        $("#id_senior_synonym").select2({
+          disabled: false,
+          width: '200px'
+        });
+      } else {
+        $("#id_senior_synonym").select2({
+          disabled: true,
+          width: '200px'
+        });
+      }
+        
+      var url = $( '#parent-form' ).attr( 'data-seniorSynonym-url' );
+      $.ajax({
+        url: url,
+        success: function(data) {
+          // alert(data);
+          $('#id_senior_synonym').html(data);
+        },
+        error: function(data) {
+          alert('errors');
+        }
+      });
     });
 
     // when taxon is edited, retain old info
@@ -188,8 +213,12 @@
       $('#id_expert').select2({
         width: '400px'
       });
-      $('#id_taxon_author_id').select2({
+      $('#id_author').select2({
         width: '400px'
+      });
+      $("#id_senior_synonym").select2({
+        width: '200px',
+        disabled: true
       });
     });
 

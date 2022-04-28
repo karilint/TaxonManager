@@ -31,6 +31,9 @@ from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
 class DoiForm(forms.Form):
     doi = forms.CharField(max_length=100)
 
+class BibtexForm(forms.Form):
+    bibtex = forms.CharField(widget=forms.Textarea(attrs={'rows':10, 'cols':40, 'style': "width:100%"}))
+
 
 class RefForm(forms.ModelForm):
     class Meta:

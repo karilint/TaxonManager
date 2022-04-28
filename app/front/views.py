@@ -217,11 +217,11 @@ def move_taxon_update_hierarchystring(taxon):
             currentArray = currentString.split('-')
             currentLength = len(currentArray)                
              
-            # handle current taxon's children     --> älä koske 1-7-8 (1-7 ei ollu ees listas..)
+            # handle current taxon's children
             if currentLength >= depth:
                 #determine ids to remove
-                for id in currentArray: #1-7-8-9    
-                    if id in oldParentIds: #1-7-8
+                for id in currentArray: 
+                    if id in oldParentIds: 
                         delete.append(id)
 
                 # remove ids

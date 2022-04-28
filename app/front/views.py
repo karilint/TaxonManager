@@ -23,7 +23,7 @@ from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 import csv, urllib.parse
 import requests
-
+import re
 
 def index(request):
     return render(request, 'front/index.html')
@@ -460,6 +460,16 @@ def refs_add(request, pk=None):
     c['form'] = form
     return render(request, 'front/add-reference.html', c)
 
+def _parse_bibtex(bibtex_string):
+    """ Parses bibtex string to a dictionary """
+    from bibtexparser.bparser import BibTexParser
+    from bibtexparser.bibdatabase import as_text
+    bp = BibTexParser(interpolate_strings=False)
+    bib_database = bp.parse(bibtex_string)
+    # results = re.findall('(?<=@article\{)[a-zA-Z0-9]+|(?<=\=\{)[a-zA-Z0-9:\s,]+|[a-zA-Z]+(?=\=)|@[a-zA-Z0-9]+', bibtex_string)
+    # final_results = {results[i][1:] if results[i].startswith('@') else results[i]:int(results[i+1]) if results[i+1].isdigit() else results[i+1] for i in range(0, len(results), 2)}
+    return bib_database.entries[0]
+
 def auto_fill(request):
     """ Auto fills reference details using bibtex
     information fetched from dx.doi API.
@@ -472,17 +482,29 @@ def auto_fill(request):
     """
 
     autofill_form = DoiForm(request.POST)
-    form = RefForm()
+
     if autofill_form.is_valid():
         print("doi: ", autofill_form.cleaned_data.get("doi"))
         url = (autofill_form.cleaned_data.get("doi"))
     payload={}
     headers = {'Accept': 'application/x-bibtex'}
-    context= {'form': form, 'doiform': autofill_form}
+    
 
     response = requests.request("GET", url, headers=headers, data=payload)
+   
 
     print(response.text)
+    print(_parse_bibtex(response.text))
+    bib = _parse_bibtex(response.text)
+    keylist = ['author', 'title', 'doi', 'journal', 'year']
+    form = RefForm(initial={
+        'authors': bib['author'],
+        'title': bib['title'],
+        'doi': bib['doi'],
+        'journal': bib['journal'],
+        'year': bib['year']
+    })
+    context= {'form': form, 'doiform': autofill_form}
     return render(request, 'front/add-reference.html', context)
 
 def delete(request, pk):
@@ -665,6 +687,7 @@ def view_hierarchy(request, parent_id=None):
     }
 
     return render(request, 'front/hierarchy.html', context)
+
 def add_junior_synonym(request, taxon_id=None):
     #works similiarly to add_name
     if request.method == 'POST':

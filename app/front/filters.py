@@ -48,24 +48,30 @@ class TaxonFilter(django_filters.FilterSet):
     def filter_synonyms(self, queryset, name, value):
         taxons = TaxonomicUnit.objects.all()
 
-        junior_synonym_taxon = TaxonomicUnit.objects.filter(
+        taxon = TaxonomicUnit.objects.filter(
             Q(unit_name1__icontains=value) |
             Q(unit_name2__icontains=value) |
             Q(unit_name3__icontains=value) |
             Q(unit_name4__icontains=value)
         )
-        junior_synonym_ids = [synonym.taxon_id for synonym in junior_synonym_taxon]
-        senior_synonyms = SynonymLink.objects.filter(taxon_id_accepted__in=junior_synonym_ids).only("synonym_id")
-        junior_synonyms = SynonymLink.objects.filter(taxon_id_accepted__not_in=junior_synonym_ids).only("synonym_id")
+        taxon_ids = [synonym.taxon_id for synonym in taxon]
+        print(taxon_ids)
+        senior_synonyms = SynonymLink.objects.filter(taxon_id_accepted__in=taxon_ids).only("taxon_id_accepted")
+        junior_synonyms = SynonymLink.objects.filter(synonym_id__in=taxon_ids).only("synonym_id")
+        seniors_of_juniors = SynonymLink.objects.filter(synonym_id__in=taxon_ids).only("taxon_id_accepted")
+        
         print("Junior synonyms: ", junior_synonyms)
-        print("Senior synonyms: ", senior_synonyms)
-        senior_synonym_taxons = TaxonomicUnit.objects.filter(taxon_id__in=senior_synonyms)
-        return senior_synonym_taxons
+        print("Senior synonyms: ", seniors_of_juniors)
+        search_results0 = TaxonomicUnit.objects.filter(taxon_id__in=seniors_of_juniors)
+        search_results1 = TaxonomicUnit.objects.filter(taxon_id__in=junior_synonyms)
+        search_results = search_results0 | search_results1
+        return search_results
 
     def filter_by_any_field(self, queryset, name, value):
         return queryset.filter(
             Q(unit_name1__icontains=value) | Q(unit_name2__icontains=value) | Q(unit_name3__icontains=value) | Q(unit_name4__icontains=value)
-            | Q(kingdom__kingdom_name__icontains=value) | Q(rank__rank_name__icontains=value))
+            | Q(kingdom__kingdom_name__icontains=value) | Q(rank__rank_name__icontains=value)
+            )
 
     class Meta:
         model = TaxonomicUnit

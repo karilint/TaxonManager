@@ -136,10 +136,6 @@ def taxon_add(request, pk = None):
                 #add SynonymLink
                 if form.cleaned_data["is_junior_synonym"] and form.cleaned_data["senior_synonym"] != "":
                     SynonymLink.objects.create(synonym_id = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["unit_name1"]).taxon_id, taxon_id_accepted=TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["senior_synonym"]), update_date = datetime.now()).save()
-
-                if pk:
-                    if taxon.rank != rank_of_new_taxon or taxon.kingdom != kingdom:
-                        update_hierarchystring(taxon)
                         
                 new_unit.save()
                 refs = form.cleaned_data['references']

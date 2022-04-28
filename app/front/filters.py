@@ -89,35 +89,6 @@ class TaxonFilter(django_filters.FilterSet):
         search_results.extend(seniors)
         queryset = TaxonomicUnit.objects.filter(taxon_id__in=search_results)
 
-        for tax in taxons:
-            print("\ttax: ", tax)
-            senior_synonym = self._get_senior_taxon(tax)
-            junior_synonym = self._get_junior_taxon(tax)
-            print("\tSenior synonym: ", senior_synonym)
-            print("\tJunior synonym: ", junior_synonym)
-            print(".")
-
-        taxon_ids = [synonym.taxon_id for synonym in taxon]
-
-        l = []
-        for i in taxon_ids:
-            l.append(SynonymLink.objects.filter(synonym_id=i))
-            l.append(SynonymLink.objects.filter)
-        print("L: ", l)
-        print(taxon_ids)
-        senior_synonyms = SynonymLink.objects.filter(synonym_id__in=taxon_ids).only("taxon_id_accepted")
-        junior_synonyms = SynonymLink.objects.filter(synonym_id__in=taxon_ids).only("synonym_id")
-        #seniors_of_juniors = SynonymLink.objects.filter(synonym_id__in=taxon_ids).only("taxon_id_accepted")
-        
-        #seniors = TaxonomicUnit.objects.filter(taxon_id__in=senior_synonyms)
-        #juniors = TaxonomicUnit.objects.filter(taxon_id__in=junior_synonyms)
-        print("Seniors: ", seniors)
-        print("Junior synonyms: ", junior_synonyms)
-        print("Senior synonyms: ", senior_synonyms)
-        print("Juniors: ", juniors)
-        #search_results0 = TaxonomicUnit.objects.filter(taxon_id__in=senior_synonyms)
-        #search_results1 = TaxonomicUnit.objects.filter(taxon_id__in=junior_synonyms)
-        # search_results = juniors | seniors | taxon
         return queryset
 
     def filter_by_any_field(self, queryset, name, value):

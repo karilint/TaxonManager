@@ -420,6 +420,54 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.visit("http://localhost:8000/add-references/")
     cy.contains("Add or Edit Reference").should("not.exist")
   })
+
+
+  it("Search finds a junior and senior synonym to a taxon", () => {
+    // This is all just stuff from the Adding a junior synonym to a taxon
+    cy.visit("http://localhost:8000/add-taxon")
+    cy.get('#id_kingdom_name').select('Bacteria', { force: true })
+    cy.get('#id_taxonnomic_types').select('Subkingdom', { force: true })
+    cy.get('#id_rank_name').select('Bacteria', { force: true })
+    cy.get('#id_unit_name1').type('aajstat1')
+    cy.get('#id_references').select('2: Audet, A.M., Robbins, C.B. and Larivière, S., Alopex lagopus', { force: true })
+    cy.get('#id_geographic_div').select('Europe', { force: true })
+    cy.contains("Submit").click()
+    
+    cy.visit("http://localhost:8000/add-taxon")
+    cy.get('#id_kingdom_name').select('Bacteria', { force: true })
+    cy.get('#id_taxonnomic_types').select('Subkingdom', { force: true })
+    cy.get('#id_rank_name').select('Bacteria', { force: true })
+    cy.get('#id_unit_name1').type('aajstat2')
+    cy.get('#id_references').select('2: Audet, A.M., Robbins, C.B. and Larivière, S., Alopex lagopus', { force: true })
+    cy.get('#id_geographic_div').select('Europe', { force: true })
+    cy.contains("Submit").click()
+    
+    cy.visit("http://localhost:8000/add-taxon")
+    cy.get('#id_kingdom_name').select('Bacteria', { force: true })
+    cy.get('#id_taxonnomic_types').select('Phylum', { force: true })
+    cy.get('#id_rank_name').select('aajstat1', { force: true })
+    cy.get('#id_unit_name1').type('aajstatchild')
+    cy.get('#id_references').select('2: Audet, A.M., Robbins, C.B. and Larivière, S., Alopex lagopus', { force: true })
+    cy.get('#id_geographic_div').select('Europe', { force: true })
+    cy.contains("Submit").click()
+    
+    cy.visit("http://localhost:8000/taxa")
+    cy.contains("aajstat2").click()
+    cy.contains("Add junior synonym").click()
+    cy.get('#id_synonym_id').select('aajstat1', { force: true })
+    cy.contains("Submit").click()
+    cy.contains('aajstat1')
+    cy.visit("http://localhost:8000/taxa")
+    cy.contains("aajstatchild").click()
+    cy.contains("aajstat2")
+
+    // Actual test to find junior and senior synonym
+    cy.visit("http://localhost/taxa-search/")
+    cy.get('#id_synonyms').type('aajstat2')
+    cy.contains("aajstat2")
+    cy.contains('aajstat1')
+
+  })
   
 
 })

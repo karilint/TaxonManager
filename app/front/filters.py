@@ -64,6 +64,10 @@ class TaxonFilter(django_filters.FilterSet):
         return res
 
     def filter_synonyms(self, queryset, name, value):
+        """ Filters synonyms 
+        
+        Definitely not pretty and worth improving.
+        """
         taxons = TaxonomicUnit.objects.all()
 
         taxon = TaxonomicUnit.objects.filter(
@@ -83,8 +87,6 @@ class TaxonFilter(django_filters.FilterSet):
         seniors = [x.taxon_id for x in seniors]
         juniors = [x.taxon_id for x in juniors]
 
-        print("Seniors: ", seniors)
-        #print("juniors: ", juniors)
         search_results.extend(juniors)
         search_results.extend(seniors)
         queryset = TaxonomicUnit.objects.filter(taxon_id__in=search_results)

@@ -408,20 +408,6 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains("aajstat2")
   })
 
-  it("Logged in user that not part of group contributors", () => {
-    //remove user from group
-    cy.visit("http://localhost:8000/admin/login/?next=/admin/")
-    cy.contains("Users").click()
-    cy.get("#main").contains("admin").click()
-    cy.contains("Remove all").click()
-    cy.contains("Save and continue").click()
-
-    //check view when user not part of group
-    cy.visit("http://localhost:8000/add-references/")
-    cy.contains("Add or Edit Reference").should("not.exist")
-  })
-
-
   it("Search finds a junior and senior synonym to a taxon", () => {
     // This is all just stuff from the Adding a junior synonym to a taxon
     cy.visit("http://localhost:8000/add-taxon")
@@ -468,7 +454,19 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains('aajstat1')
 
   })
-  
+
+  it("Logged in user that not part of group contributors", () => {
+    //remove user from group
+    cy.visit("http://localhost:8000/admin/login/?next=/admin/")
+    cy.contains("Users").click()
+    cy.get("#main").contains("admin").click()
+    cy.contains("Remove all").click()
+    cy.contains("Save and continue").click()
+
+    //check view when user not part of group
+    cy.visit("http://localhost:8000/add-references/")
+    cy.contains("Add or Edit Reference").should("not.exist")
+  })
 
 })
 

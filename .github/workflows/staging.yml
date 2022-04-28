@@ -25,7 +25,6 @@ jobs:
           python manage.py makemigrations
           python manage.py migrate
         working-directory: ./app      
-      - name: Create test user
       - name: Load test data
         run: |
           python manage.py loaddata test.json

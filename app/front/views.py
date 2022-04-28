@@ -12,19 +12,16 @@ from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import user_passes_test
 from front.models import Reference, get_ref_from_doi
-from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom, Expert
+from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom, Expert, SynonymLink, Reference, GeographicDiv
 from front.utils import canonicalize_doi
-# from front.forms import RefForm, NameForm, JuniorSynonymForm
+from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
-from .models import TaxonomicUnit, SynonymLink
-import csv
 from datetime import datetime
 
 from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
-from .models import TaxonomicUnit
 import csv, urllib.parse
 
 
@@ -76,11 +73,15 @@ def load_juniorSynonym(request):
 
     return render(request, 'front/juniorSynonym.html', {'juniorSynonym': juniorSynonym})
 
-
-def taxon_add(request):
+def taxon_add(request, pk = None):
+    c = {'pk': pk if pk else ''}
+    form = TaxonForm()
     if request.method == 'POST':
+        taxon = None    
+        if pk:
+            taxon = TaxonomicUnit.objects.get(pk=pk)        
         # create a form instance and populate it with data from the request:
-        form = TaxonForm(request.POST)
+        form = TaxonForm(request.POST, instance = taxon)
         # check whether it's valid:
         if form.is_valid():
             try:
@@ -94,9 +95,10 @@ def taxon_add(request):
                 # if rank_of_new_taxon.rank_name=='Subkingdom':
                 #   parent = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data['kingdom_name'])
                 # else:
-
                 parent = TaxonomicUnit.objects.get(
-                    unit_name1=form.cleaned_data['rank_name'])
+                    unit_name1=form.cleaned_data['rank_name'],
+                    kingdom=kingdom
+                )
 
                 # set new unit's parent
                 new_unit.parent_id = parent.taxon_id
@@ -112,7 +114,6 @@ def taxon_add(request):
                 # else if there's no author:
                 # get rank by kingdom name and rank name + set rank to new unit
                 new_unit.rank = rank_of_new_taxon
-
                 #Synonym stuff:
                 if form.cleaned_data["is_junior_synonym"] and form.cleaned_data["senior_synonym"] != "":
                     if kingdom.kingdom_name in ["Chromista", "Fungi", "Plantae"]:
@@ -129,13 +130,23 @@ def taxon_add(request):
 
                 #save new unit =name
                 
+                # modify old taxon's name validity, if taxon is edited
+                #if pk: #& new_unit.unit_name1 != taxon.unit_name1
+                    #taxon.n_usage = "invalid"    
+                    #taxon.save()
+                    
+                #new_unit.n_usage = "valid"
+
                 new_unit.save()
-                create_hierarchystring(new_unit)
 
                 #add SynonymLink
                 if form.cleaned_data["is_junior_synonym"] and form.cleaned_data["senior_synonym"] != "":
                     SynonymLink.objects.create(synonym_id = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["unit_name1"]).taxon_id, taxon_id_accepted=TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["senior_synonym"]), update_date = datetime.now()).save()
 
+                if pk:
+                    if taxon.rank != rank_of_new_taxon or taxon.kingdom != kingdom:
+                        update_hierarchystring(taxon)
+                        
                 new_unit.save()
                 refs = form.cleaned_data['references']
                 for ref in refs:
@@ -146,10 +157,13 @@ def taxon_add(request):
                 experts = form.cleaned_data['expert']
                 for expert in experts:
                     new_unit.expert.add(expert)
-                author = form.cleaned_data['author']
+                author = form.cleaned_data['taxon_author_id']
                 new_unit.taxon_author_id=author
                 new_unit.save()
-                create_hierarchystring(new_unit)                
+                if pk:
+                    update_hierarchystring(taxon)
+                else:
+                    create_hierarchystring(new_unit)                
             except TaxonomicUnit.DoesNotExist:
                 # form was filled incorrectly
                 print("saving new unit did not workout; do something")
@@ -157,9 +171,68 @@ def taxon_add(request):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = TaxonForm()
-    return render(request, 'front/add-taxon.html', {'form': form})
+        # edit existing taxon
+        try:
+            taxon = TaxonomicUnit.objects.get(pk=pk)
+            
+            form = TaxonForm(initial={
+            'kingdom_name': taxon.kingdom,
+            'rank_name': taxon.rank.rank_name,
+            #parent
+            'unit_name1': taxon.unit_name1,
+            'unit_name2': taxon.unit_name2,
+            'unit_name3': taxon.unit_name3,
+            'unit_name4': taxon.unit_name4,
+            'references': taxon.references.values_list('id', flat=True),
+            'geographic_div': taxon.geographic_div.values_list('id', flat=True)
+             })
 
+        except TaxonomicUnit.DoesNotExist:
+            form = TaxonForm()
+    c['form'] = form
+    return render(request, 'front/add-taxon.html', c)
+
+def update_hierarchystring(taxon):
+    children = TaxonomicUnit.objects.all().filter(parent_id = taxon.pk)
+    currentHierarchy = Hierarchy.objects.get(taxon = taxon)
+    currentHierarchy.parent_id = taxon.parent_id
+    hierarchystring = []
+    
+    # update current taxon's hierarchy string
+    while (True):
+        hierarchystring.append(str(taxon.taxon_id))
+        if taxon.parent_id == 0:
+            break
+        taxon = TaxonomicUnit.objects.get(taxon_id=taxon.parent_id)
+
+    hierarchystring.reverse()
+    hierarchystringFinal = '-'.join(hierarchystring)
+    currentHierarchy.hierarchy_string = hierarchystringFinal 
+    currentHierarchy.save()
+
+    currentKingdom = taxon.kingdom
+    
+    # update children's hierarchy string (and potentially kingdom)
+    for child in children:
+        hierarchystringFinal = ''
+        childHierarchystringObject = Hierarchy.objects.get(taxon = child)
+        taxon = TaxonomicUnit.objects.get(pk=child.pk)
+    
+        if taxon.kingdom != currentKingdom:
+            taxon.kingdom = currentKingdom
+            taxon.save()
+        hierarchystring = []
+        while (True):
+            hierarchystring.append(str(taxon.taxon_id))
+            if taxon.parent_id == 0:
+                break
+            taxon = TaxonomicUnit.objects.get(taxon_id=taxon.parent_id)
+
+        hierarchystring.reverse()
+        hierarchystringFinal = '-'.join(hierarchystring)
+        childHierarchystringObject.hierarchy_string = hierarchystringFinal 
+        childHierarchystringObject.save()
+    
 
 def create_hierarchystring(taxon):
     hierarchystring = []
@@ -267,28 +340,48 @@ def import_data_from_excel(request):
                     taxonunit[0].save()
                     create_hierarchystring(taxonunit[0])
 
+            # Here we create a dummy reference and geographic region
+            dummy_reference = Reference.objects.get_or_create(authors = "dummy author", title = "dummy reference")[0].save()
+            dummy_geographic_div = GeographicDiv.objects.get_or_create(geographic_value = "dummy geographic division")[0].save()
+
+            # Here we handle the actual taxons
             for taxon in taxons:
                 namelist = [taxon["class_name"], taxon["subclass_or_superorder_name"], taxon["order_name"],
                             taxon["suborder_name"], taxon["superfamily_name"], taxon["family_name"],
                             taxon["subfamily_name"], taxon["tribe_name"], taxon["genus_name"], taxon["species_name"]]
-                namelist = [i.lower().capitalize()
-                            for i in namelist if i is not None]
+                parent_level_list = ["class", "subclass", "order", "suborder", "superfamily", "family", "subfamily", "tribe",
+                                "genus", "species"]
+                parent_level = None
+                level = None
+                place = 0
+                for i in reversed(range(len(namelist))):
+                    if namelist[i] is not None:
+                        place += 1
+                        if place == 1:
+                            level = TaxonUnitType.objects.get(kingdom=Kingdom.objects.get(kingdom_name="Animalia"),
+                                                              rank_name = parent_level_list[i].capitalize())
+                        if place == 2:
+                            parent_level = TaxonUnitType.objects.get(kingdom=Kingdom.objects.get(kingdom_name="Animalia"),
+                                                                     rank_name = parent_level_list[i].capitalize())
+                            
+                namelist = [i.lower().capitalize() for i in namelist if i is not None]
 
-                if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2])) > 1:
+                if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2], rank=parent_level)) > 1:
                     print(namelist[-2], namelist[-1])
 
                 # Makes sure there is a unique parent
-                if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2])) != 1:
+                if len(namelist) >= 2 and len(TaxonomicUnit.objects.filter(unit_name1=namelist[-2], rank=parent_level)) != 1:
                     continue
 
-                taxonunit = TaxonomicUnit.objects.get_or_create(unit_name1=namelist[-1], parent_id=getattr(TaxonomicUnit.objects.get_or_create(unit_name1=namelist[-2])[0], "taxon_id"),
-                                                                kingdom=Kingdom.objects.get(
-                                                                    kingdom_name="Animalia"),
-                                                                rank=TaxonUnitType.objects.get(
-                                                                    kingdom=Kingdom.objects.get(kingdom_name="Animalia"),
-                                                                    rank_name=taxon["taxon_level"].capitalize()),
+                taxonunit = TaxonomicUnit.objects.get_or_create(unit_name1=namelist[-1],
+                                                                parent_id=TaxonomicUnit.objects.get(unit_name1=namelist[-2], rank = parent_level).taxon_id,
+                                                                kingdom=Kingdom.objects.get(kingdom_name="Animalia"),
+                                                                rank=level,
+                                                                name_usage = "valid",
                                                                 complete_name=taxon["taxon_name"].lower().capitalize())
 
+                taxonunit[0].references.add(dummy_reference)
+                taxonunit[0].geographic_div.add(dummy_geographic_div)
                 if taxonunit[1]:
                     taxonunit[0].save()
                     create_hierarchystring(taxonunit[0])
@@ -303,7 +396,7 @@ def import_data_from_excel(request):
 
 def view_reference(request):
     refs = Reference.objects.all().filter(visible=1)
-    paginator = Paginator(refs, 10)
+    paginator = Paginator(refs, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     c = {'page_obj': page_obj, 'paginator': paginator}
@@ -316,7 +409,7 @@ def search(request):
     nresults = ref_filter.qs.count()
     filtered_qs = sorted(ref_filter.qs, key=lambda objects: objects.pk)
 
-    paginator = Paginator(filtered_qs, 1)
+    paginator = Paginator(filtered_qs, 10)
 
     c = {}
     if request.GET:
@@ -338,7 +431,7 @@ def search(request):
         response = None
 
     c.update({'filter': ref_filter,
-              'filtered_refs': response,
+              'page_obj': response,
               'nresults': nresults,
               'paginator': paginator})
     return render(request, 'front/reference-search.html', c)
@@ -514,7 +607,10 @@ def view_hierarchy(request, parent_id=None):
 
     while (len(hierarchy) != 0):
         index = hierarchy.pop(0)
-        root = TaxonomicUnit.objects.get(taxon_id=index)
+        if len(TaxonomicUnit.objects.filter(taxon_id=index)) == 1:
+            root = TaxonomicUnit.objects.get(taxon_id=index)
+        else:
+            root = None
 
         if (len(hierarchy) == 0):
             # This takes only the reference for the selected taxon.
@@ -522,9 +618,12 @@ def view_hierarchy(request, parent_id=None):
             references.append(root.references.all())
 
         space = "&nbsp" * grow
-        name = space + root.rank.rank_name
 
-        name_list.append((name, root))
+        if root is None:
+            name_list.append((space + "Missing taxon", None))
+        else:
+            name = space + root.rank.rank_name
+            name_list.append((name, root))
         # result.append(root)
         grow += 2
 
@@ -539,7 +638,6 @@ def view_hierarchy(request, parent_id=None):
     }
 
     return render(request, 'front/hierarchy.html', context)
-
 def add_junior_synonym(request, taxon_id=None):
     #works similiarly to add_name
     if request.method == 'POST':
@@ -575,12 +673,11 @@ def add_junior_synonym(request, taxon_id=None):
     else:
         form = JuniorSynonymForm()
     return render(request, 'front/add_junior_synonym.html', {'form': form})
-
 def view_experts(request):
     experts = Expert.objects.all()
     sorted_experts = sorted(
         experts, key=lambda objects: objects.expert.lower())
-    paginator = Paginator(sorted_experts, 10)
+    paginator = Paginator(sorted_experts, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -610,7 +707,7 @@ def view_authors(request):
     authors = TaxonAuthorLkp.objects.all()
     sorted_authors = sorted(
         authors, key=lambda objects: objects.taxon_author.lower())
-    paginator = Paginator(sorted_authors, 10)
+    paginator = Paginator(sorted_authors, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -631,3 +728,61 @@ def add_author(request):
     else:
         form = AuthorForm()
     return render(request, 'front/add-author.html', {'form': form})
+def view_experts(request):
+    experts = Expert.objects.all()
+    sorted_experts = sorted(
+        experts, key=lambda objects: objects.expert.lower())
+    paginator = Paginator(sorted_experts, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'paginator': paginator, 'page_obj': page_obj}
+    return render(request, 'front/experts.html', context)
+
+
+def add_expert(request):
+    if request.method == 'POST':
+        form = ExpertForm(request.POST)
+        if form.is_valid():
+            try:
+                new_expert = form.save(commit=False)
+                new_expert.save()
+
+                geos = form.cleaned_data['geographic_div']
+                for geo in geos:
+                    new_expert.geographic_div.add(geo)
+            except Expert.DoesNotExist:
+                print("Saving a new expert did not workout; do something")
+            return HttpResponseRedirect('/experts')
+    else:
+        form = ExpertForm()
+    return render(request, 'front/add-expert.html', {'form': form})
+
+def view_authors(request):
+    authors = TaxonAuthorLkp.objects.all()
+    sorted_authors = sorted(
+        authors, key=lambda objects: objects.taxon_author.lower())
+    paginator = Paginator(sorted_authors, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'paginator': paginator, 'page_obj': page_obj}
+    return render(request, 'front/authors.html', context)
+
+
+def add_author(request):
+    if request.method == 'POST':
+        form = AuthorForm(request.POST)
+        if form.is_valid():
+            try:
+                new_author = form.save(commit=False)
+                new_author.save()
+            except TaxonAuthorLkp.DoesNotExist:
+                print("saving new author did not workout; do something")
+            return HttpResponseRedirect('/authors')
+    else:
+        form = AuthorForm()
+    return render(request, 'front/add-author.html', {'form': form})
+
+def help(request):
+    return render(request, 'front/help.html')

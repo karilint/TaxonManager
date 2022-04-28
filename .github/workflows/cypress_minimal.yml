@@ -1,9 +1,9 @@
-name: ci-staging
+name: ci-cypress
 
 on:
   push:
     branches:
-      - 'database-fixtures'
+      - 'pagination'
 
 jobs:
   test:

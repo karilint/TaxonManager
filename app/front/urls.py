@@ -14,7 +14,7 @@ urlpatterns = [
     re_path(r'^add-references/(?:(?P<pk>\d+))?$', views.refs_add, name='add-references'),
     re_path(r'^delete/(?P<pk>\d+)$', views.delete, name='delete'),
     re_path(r'^resolve/(?:(?P<pk>\d+))?$', views.resolve, name='resolve'),
-    path('add-taxon/', views.taxon_add, name ='add-taxon'),
+    re_path(r'^add-taxon/(?:(?P<pk>\d+))?$', views.taxon_add, name ='add-taxon'),
     # path('addName/<int:pk>', views.load_taxonomicUnitTypes, name ='addName_changelist'),
     path('taxa/', views.view_taxa, name='taxa'),
     path('taxa-search/', views.search_taxa, name='taxa-search'),
@@ -30,5 +30,7 @@ urlpatterns = [
     path('add-expert/', views.add_expert, name='add-expert'),
     path('authors/', views.view_authors, name='view-authors'),
     path('add-author/', views.add_author, name='add-author'),
-    path('error/<str:message>', views.error, name='error')
+    path('error/<str:message>', views.error, name='error'),
+    path('help/', views.help, name='help')
 ]
+

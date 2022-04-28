@@ -3,14 +3,12 @@
 {% block content %}
 
 <body>
-  <p><a href="/taxa">Taxa list</a> | <a href=" ">Add taxon</a> | <a href="/taxa-search">Search</a></p>
 
   {% with test=user.groups.all|length %}
   {% if test > 0 %}
 
   <h1>Add taxon</h1>
-  <form action="" method="post" id="parent-form" , data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded"
-    data_parentTaxon-url="/load_parentTaxon" novalidate>
+  <form action="" method="post" id="parent-form" , data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded" data_parentTaxon-url="/load_parentTaxon" data-seniorSynonym-url="/load_seniorSynonym" novalidate>
     {% csrf_token %}
     <table>
       {{ form.as_table }}
@@ -47,7 +45,7 @@
         error.push("References cannot be empty")
       }
       if (error.length > 0) {
-        // e.preventDefault()
+        e.preventDefault()
         window.alert(error.join(", "));
       }
     })
@@ -104,6 +102,34 @@
         $('#id_rank_name').empty();
       }
     });
+    
+    $("#id_is_junior_synonym").change(function (e) {
+      e.preventDefault();
+        
+      if ($("#id_is_junior_synonym").is(':checked')) {
+        $("#id_senior_synonym").select2({
+          disabled: false,
+          width: '200px'
+        });
+      } else {
+        $("#id_senior_synonym").select2({
+          disabled: true,
+          width: '200px'
+        });
+      }
+        
+      var url = $( '#parent-form' ).attr( 'data-seniorSynonym-url' );
+      $.ajax({
+        url: url,
+        success: function(data) {
+          // alert(data);
+          $('#id_senior_synonym').html(data);
+        },
+        error: function(data) {
+          alert('errors');
+        }
+      });
+    });
 
     $(document).ready(function () {
       $("#id_taxonnomic_types").select2({
@@ -126,6 +152,10 @@
       });
       $('#id_author').select2({
         width: '400px'
+      });
+      $("#id_senior_synonym").select2({
+        width: '200px',
+        disabled: true
       });
     });
 

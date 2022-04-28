@@ -77,19 +77,25 @@ class TaxonFilter(django_filters.FilterSet):
             Q(unit_name4__icontains=value)
         )
         taxons = [x for x in taxon]
+        taxons_ids = [x.taxon_id for x in taxon]
+        print("Taxon ids: ", taxons_ids)
         
         search_results = []
         seniors = [self._get_senior_taxon(x) for x in taxons]
         seniors = self._remove_nones_from_list(seniors)
         juniors = [self._get_junior_taxon(x) for x in taxons]
         juniors = self._remove_nones_from_list(juniors)
+        print("Juniors: ", juniors)
+        print("Seniors: ", seniors)
         # Turn objects into just ids
         seniors = [x.taxon_id for x in seniors]
         juniors = [x.taxon_id for x in juniors]
 
         search_results.extend(juniors)
         search_results.extend(seniors)
+        search_results.extend(taxons_ids)
         queryset = TaxonomicUnit.objects.filter(taxon_id__in=search_results)
+        # = TaxonomicUnit.objects.filter()
 
         return queryset
 

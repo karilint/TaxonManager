@@ -411,10 +411,10 @@ describe("Taxonmanager, when logged in as contributor", function () {
   it("Search finds a junior and senior synonym to a taxon", () => {
     // Actual test to find junior and senior synonym
     cy.visit("http://localhost:8000/taxa-search/")
-    cy.get('#id_synonyms').type('aajstat2')
+    cy.get('#id_synonyms').type('Test of adding as junior synonym')
     cy.contains("Search").click()
-    cy.contains("aajstat1")
-    cy.contains('aajstat2')
+    cy.contains("Bacteria")
+    cy.contains('Test of adding as junior synonym')
 
   })
 

@@ -704,6 +704,7 @@ def view_hierarchy(request, parent_id=None):
     }
 
     return render(request, 'front/hierarchy.html', context)
+
 def add_junior_synonym(request, taxon_id=None):
     #works similiarly to add_name
     if request.method == 'POST':

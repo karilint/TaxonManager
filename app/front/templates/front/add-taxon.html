@@ -111,30 +111,26 @@
         $('#id_rank_name').empty();
       }
     });
-    
+
     $("#id_is_junior_synonym").change(function (e) {
       e.preventDefault();
-        
+
       if ($("#id_is_junior_synonym").is(':checked')) {
-        $("#id_senior_synonym").select2({
-          disabled: false,
-          width: '200px'
-        });
-      } else {
-        $("#id_senior_synonym").select2({
-          disabled: true,
-          width: '200px'
-        });
-      }
+        $("#id_senior_synonym").prop("disabled", false);
         
-      var url = $( '#parent-form' ).attr( 'data-seniorSynonym-url' );
+      } else {
+        $("#id_senior_synonym").prop("disabled", true);
+        $("#id_senior_synonym").empty();
+      }
+
+      var url = $('#parent-form').attr('data-seniorSynonym-url');
       $.ajax({
         url: url,
-        success: function(data) {
+        success: function (data) {
           // alert(data);
           $('#id_senior_synonym').html(data);
         },
-        error: function(data) {
+        error: function (data) {
           alert('errors');
         }
       });

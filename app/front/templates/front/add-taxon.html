@@ -9,7 +9,7 @@
 
   <h1>Add taxon</h1>
   <form action="{% url 'front:add-taxon' pk %}" method="post" id="parent-form" ,
-    data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded" data_parentTaxon-url="/load_parentTaxon" novalidate>
+    data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded" data_parentTaxon-url="/load_parentTaxon" data-seniorSynonym-url="/load_seniorSynonym" novalidate>
     {% csrf_token %}
     <table>
       {{ form.as_table }}

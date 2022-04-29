@@ -740,6 +740,7 @@ def add_junior_synonym(request, taxon_id=None):
     else:
         form = JuniorSynonymForm()
     return render(request, 'front/add_junior_synonym.html', {'form': form})
+    
 def view_experts(request):
     experts = Expert.objects.all()
     sorted_experts = sorted(

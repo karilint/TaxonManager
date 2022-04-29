@@ -535,6 +535,7 @@ def search_taxa(request):
     # Get all the taxa
     taxa_all = TaxonomicUnit.objects.all()
     # Set up filter
+    print(request.GET)
     taxon_filter = TaxonFilter(request.GET, queryset=taxa_all)
     # Total amount of results
     nresults = taxon_filter.qs.count()
@@ -572,7 +573,6 @@ def search_taxa(request):
                     'nresults': nresults})
 
     return render(request, 'front/taxa-search.html', context)
-
 
 def view_hierarchy(request, parent_id=None):
     """ View for individual taxon """
@@ -642,7 +642,7 @@ def add_junior_synonym(request, taxon_id=None):
     #works similiarly to add_name
     if request.method == 'POST':
         form = JuniorSynonymForm(request.POST)
-                
+
         if form.is_valid():
             try:
                 taxon = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data['synonym_id'])
@@ -669,7 +669,7 @@ def add_junior_synonym(request, taxon_id=None):
                 print("error in adding junior synonym")
             
             return HttpResponseRedirect(f'/hierarchy/{taxon_id}')
-            
+
     else:
         form = JuniorSynonymForm()
     return render(request, 'front/add_junior_synonym.html', {'form': form})

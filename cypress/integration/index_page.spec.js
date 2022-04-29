@@ -408,6 +408,18 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains("aajstat2")
   })
 
+  it("Search finds a junior and senior synonym to a taxon", () => {
+    // Actual test to find junior and senior synonym
+    cy.visit("http://localhost:8000/taxa-search/")
+    cy.get('#id_synonyms').type('Test of adding as junior synonym')
+    cy.get(".btn").click()
+    cy.contains("Bacteria")
+    cy.contains('Test of adding as junior synonym')
+
+  })
+
+  // Best to keep this as the last one as user no longer
+  // a contributor after this.
   it("Logged in user that not part of group contributors", () => {
     //remove user from group
     cy.visit("http://localhost:8000/admin/login/?next=/admin/")
@@ -420,7 +432,6 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.visit("http://localhost:8000/add-references/")
     cy.contains("Add or Edit Reference").should("not.exist")
   })
-  
 
 })
 

@@ -3,7 +3,6 @@
 {% block content %}
 
 <body>
-  <p><a href="/taxa">Taxa list</a> | <a href=" ">Add taxon</a> | <a href="/taxa-search">Search</a></p>
 
   {% with test=user.groups.all|length %}
   {% if test > 0 %}
@@ -46,7 +45,7 @@
         error.push("References cannot be empty")
       }
       if (error.length > 0) {
-        // e.preventDefault()
+        e.preventDefault()
         window.alert(error.join(", "));
       }
     })

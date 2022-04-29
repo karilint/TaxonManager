@@ -435,7 +435,7 @@ describe("Taxonmanager, when logged in as contributor", function () {
 
     cy.visit("http://localhost:8000/taxa/")
     cy.contains("Plantae2").click()
-    cy.visit("http://localhost:8000/add-taxon/12")
+    cy.visit("http://localhost:8000/add-taxon/13")
 
     //check that information is displayed correctly
     cy.get("#id_kingdom_name").should("have.value", 3)
@@ -463,7 +463,7 @@ describe("Taxonmanager, when logged in as contributor", function () {
 
     //change from subkingdom to superdivision  --> two taxons have same rank
     cy.contains("Plantae2").click()
-    cy.visit("http://localhost:8000/add-taxon/12")
+    cy.visit("http://localhost:8000/add-taxon/13")
     cy.get("#id_taxonnomic_types").select("Superdivision", { force: true })
     cy.get("#id_rank_name").select("Plantae", { force: true })
     cy.contains("Submit").click()

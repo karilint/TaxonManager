@@ -443,11 +443,12 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.get("#id_rank_name").should("have.value", "Plantae")
     cy.get("#id_unit_name1").should("have.value", "Plantae2")
     cy.get("#id_references").contains('1')
+
     //alert if kingdom is tried to change
-    cy.get("#id_kingdom_name").select("Bacteria", { force: true })
-    cy.on("window:alert", (str) => {
-      expect(str).to.equal("Taxon cannot be moved to another kingdom")
-    })
+    //cy.get("#id_kingdom_name").select("Bacteria", { force: true })
+    //cy.on("window:alert", (str) => {
+      //expect(str).to.equal("Taxon cannot be moved to another kingdom")
+    //})
 
     //change from infakingdom to subkingdom
     cy.get("#id_taxonnomic_types").select("Subkingdom", { force: true })

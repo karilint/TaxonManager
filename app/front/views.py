@@ -94,10 +94,8 @@ def taxon_add(request, pk = None):
                     kingdom_name=form.cleaned_data['kingdom_name'])
                 rank_of_new_taxon = TaxonUnitType.objects.get(
                     rank_name=form.cleaned_data['taxonnomic_types'], kingdom=kingdom)
+                
 
-                # if rank_of_new_taxon.rank_name=='Subkingdom':
-                #   parent = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data['kingdom_name'])
-                # else:
                 parent = TaxonomicUnit.objects.get(
                     unit_name1=form.cleaned_data['rank_name'],
                     kingdom=kingdom
@@ -123,13 +121,6 @@ def taxon_add(request, pk = None):
                     else:
                         new_unit.name_usage = "valid"
 
-                #save new unit =name
-                
-                # modify old taxon's name validity, if taxon is edited
-                #if pk: #& new_unit.unit_name1 != taxon.unit_name1
-                    #taxon.n_usage = "invalid"    
-                    #taxon.save()    
-                #new_unit.n_usage = "valid"
 
                 new_unit.save()
 
@@ -601,7 +592,6 @@ def search_taxa(request):
     # Get all the taxa
     taxa_all = TaxonomicUnit.objects.all()
     # Set up filter
-    print(request.GET)
     taxon_filter = TaxonFilter(request.GET, queryset=taxa_all)
     # Total amount of results
     nresults = taxon_filter.qs.count()
@@ -649,12 +639,9 @@ def view_hierarchy(request, parent_id=None):
     # of the one we are currently looking at. This list will need to be filtered
     # further to match rank, if we consider only those taxons synonyms, which share the
     # the same rank.
-    print(chosenTaxon)
     taxonSynonyms = SynonymLink.objects.filter(taxon_id_accepted_id=chosenTaxon.taxon_id)#.only("synonym_id")
-    print(taxonSynonyms)
     # List of only ids
     taxonSynonymIds = [x.synonym_id for x in taxonSynonyms]
-    print(taxonSynonymIds)
     # Only those taxons where the rank is the same as the rank of the taxon we're currently looking at.
     synonymTaxons = TaxonomicUnit.objects.filter(pk__in=taxonSynonymIds)#.filter(rank=chosenTaxon.rank)
 

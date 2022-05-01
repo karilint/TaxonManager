@@ -455,24 +455,32 @@ def refs_add(request, pk=None):
         except Reference.DoesNotExist:
             ref = None
         form = RefForm(instance=ref)
-    doi_form = DoiForm()
-    bibtex_form = BibtexForm()
+    doi_form = DoiForm(initial={'doi':'10.'})
+    bibtex_form = BibtexForm(initial={'bib':'@'})
     c['doiform'] = doi_form
     c['bibtexform'] = bibtex_form
     c['form'] = form
     return render(request, 'front/add-reference.html', c)
 
-def _fill_form_with_initial_values(bibtex: dict):
+def _fill_form_with_initial_values(parsed_bibtex: dict, bibtex: dict):
     """Fills RefForm with initial values by bibtex"""
     initial_values = {'author': '', 'title':'', 'doi':'',
-     'journal':'', 'year':'', 'volume':'', 'number':''}
+     'journal':'', 'year':'', 'volume':'', 'number':'',
+     'url':'', 'bibtex':'', 'page_start':'', 'page_end':''}
 
-    for key in bibtex.keys():
-        print(key)
     for key in initial_values.keys():
-        if key in bibtex.keys():
-            initial_values[key] = bibtex[key]
-    print(initial_values)
+        if key in parsed_bibtex.keys():
+            initial_values[key] = parsed_bibtex[key]
+    if 'pages' in parsed_bibtex.keys():
+        splitted = parsed_bibtex['pages'].split('-')
+        pages = []
+        for c in splitted:
+            try:
+                pages.append(int(c))
+            except:
+                continue
+        initial_values['page_start'] = pages[0]
+        initial_values['page_end'] = pages[len(pages)-1]       
 
     form = RefForm(initial={
     'authors': initial_values['author'],
@@ -481,11 +489,14 @@ def _fill_form_with_initial_values(bibtex: dict):
     'journal': initial_values['journal'],
     'year': initial_values['year'],
     'volume': initial_values['volume'],
-    'article_number': initial_values['number']
+    'article_number': initial_values['number'],
+    'url': initial_values['url'],
+    'page_start': initial_values['page_start'],
+    'page_end': initial_values['page_end'],
+    'bibtex':bibtex
     })
 
     return form
-
 
 def _parse_bibtex(bibtex_string):
     """ Parses bibtex string to a dictionary """
@@ -493,12 +504,10 @@ def _parse_bibtex(bibtex_string):
     from bibtexparser.bibdatabase import as_text
     bp = BibTexParser(interpolate_strings=False)
     bib_database = bp.parse(bibtex_string)
-    # results = re.findall('(?<=@article\{)[a-zA-Z0-9]+|(?<=\=\{)[a-zA-Z0-9:\s,]+|[a-zA-Z]+(?=\=)|@[a-zA-Z0-9]+', bibtex_string)
-    # final_results = {results[i][1:] if results[i].startswith('@') else results[i]:int(results[i+1]) if results[i+1].isdigit() else results[i+1] for i in range(0, len(results), 2)}
     return bib_database.entries[0]
 
 def doi_auto_fill(request):
-    """ Auto fills reference details using bibtex
+    """ Autofills reference details using bibtex
     information fetched from dx.doi API.
 
     Args:
@@ -509,26 +518,25 @@ def doi_auto_fill(request):
     """
     
     doi_form = DoiForm(request.POST)
-    bibtex_form = BibtexForm()
+    bibtex_form = BibtexForm(initial={'bib':'@'})
     form = RefForm()
 
     if doi_form.is_valid():
-        print("doi: ", doi_form.cleaned_data.get("doi"))
 
-        url = (doi_form.cleaned_data.get("doi"))
+
+        url = 'https://dx.doi.org/{}'.format(doi_form.cleaned_data.get("doi"))
         payload={}
         headers = {'Accept': 'application/x-bibtex'}
         response = requests.request("GET", url, headers=headers, data=payload)
-        print(response.text)
         bib = _parse_bibtex(response.text)
-        form = _fill_form_with_initial_values(bib)
+        form = _fill_form_with_initial_values(bib, response.text)
 
 
     context= {'form': form, 'doiform': doi_form, 'bibtexform': bibtex_form}
     return render(request, 'front/add-reference.html', context)
 
 def bibtex_auto_fill(request):
-    """ Auto fills reference details using bibtex
+    """ Autofills reference details using bibtex
     information fetched from dx.doi API.
 
     Args:
@@ -538,14 +546,14 @@ def bibtex_auto_fill(request):
         string: reference information in bibtex format
     """
     
-    doi_form = DoiForm()
+    doi_form = DoiForm(initial={'doi':'10.'})
     bibtex_form = BibtexForm(request.POST)
     form = RefForm()
 
     if bibtex_form.is_valid():
-        print("bibtex: ", bibtex_form.cleaned_data.get("bibtex"))
-        bib = _parse_bibtex(bibtex_form.cleaned_data.get("bibtex"))
-        form = _fill_form_with_initial_values(bib)
+        bibtex_string = bibtex_form.cleaned_data.get("bib")
+        bib = _parse_bibtex(bibtex_string)
+        form = _fill_form_with_initial_values(bib, bibtex_string)
 
     context= {'form': form, 'doiform': doi_form, 'bibtexform': bibtex_form}
     return render(request, 'front/add-reference.html', context)

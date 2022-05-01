@@ -12,7 +12,8 @@
 {% if form.errors %}
 <p class="errorlist">Please correct the errors below.</p>
 {% endif %}
-
+<br>
+<p><i>Fill the fields by inserting reference's DOI or BibTex</i></p>
 <form action="/doi-autofill/" method="POST">
     {% csrf_token %}
     {{doiform.as_table}}
@@ -24,7 +25,11 @@
     {{bibtexform.as_table}}
     <button type="submit">Autofill</button>
 </form>
-<br><br>
+
+
+<hr>
+<p><i>Or fill in/edit the fields manually</i></p>
+<br>
 
 
 <form action="{% url 'front:add-references' pk %}" method="post" class="add-ref-form">

@@ -26,13 +26,32 @@ from .models import (
 from django_select2.forms import Select2MultipleWidget, ModelSelect2MultipleWidget
 from django.contrib.admin import site as admin_site
 from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
+import re
 
 
 class DoiForm(forms.Form):
     doi = forms.CharField(max_length=100)
 
+    def clean_doi(self):
+        doi = self.cleaned_data['doi']
+        if doi is None or doi.strip() == '':
+            raise forms.ValidationError('Doi cannot be left blank')
+        # if (re.compile(r'/^10.\d{4,9}/[-._;()/:A-Z0-9]+$/i').match(doi)) == None:
+        #     raise forms.ValidationError('Doi is invalid')
+
+        return self.cleaned_data['doi']
+
 class BibtexForm(forms.Form):
-    bibtex = forms.CharField(widget=forms.Textarea(attrs={'rows':10, 'cols':40, 'style': "width:100%"}))
+    bib = forms.CharField(widget=forms.Textarea(attrs={'rows':5, 'cols':60}))
+
+    def clean_bib(self):
+        bib = self.cleaned_data['bib']
+        if bib is None or bib.strip() == '':
+            raise forms.ValidationError('BibTex cannot be left blank')
+        if not bib.startswith('@'):    
+            raise forms.ValidationError('BibTex is invalid')
+    
+        return self.cleaned_data['bib']
 
 
 class RefForm(forms.ModelForm):

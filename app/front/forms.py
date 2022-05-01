@@ -30,7 +30,7 @@ import re
 
 
 class DoiForm(forms.Form):
-    doi = forms.CharField(max_length=100)
+    doi = forms.CharField(widget= forms.TextInput(attrs={'id':'autodoi'}))
 
     def clean_doi(self):
         doi = self.cleaned_data['doi']

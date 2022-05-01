@@ -17,7 +17,6 @@ describe("TaxonManager", () => {
     cy.contains("Help")
     cy.contains("2022")
     cy.contains("Add reference")
-    cy.contains("Welcome")
     cy.get("#mySidebar")
 
     cy.contains("TaxonManger is a tool for classifying fossil species.")
@@ -145,9 +144,6 @@ describe("Taxonmanager, when logged in as contributor", function () {
 
     // Add references page contains Add or Edit Reference and other tags
     cy.contains("Add or Edit Reference")
-    cy.contains("Reference List")
-    cy.contains("Add a reference")
-    cy.contains("Search")
     // Add references page contains form for adding or editing
     // cy.get("#add-ref-form").should("exist")
 
@@ -191,8 +187,7 @@ describe("Taxonmanager, when logged in as contributor", function () {
   })
 
   it("Search references", () => {
-    cy.contains("References").click()
-    cy.contains("Search").click()
+    cy.contains("Reference search").click()
 
     // Search reference with no input
     cy.get(".btn").click()
@@ -222,7 +217,6 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains("Add author")
     cy.contains("Taxon author")
     cy.contains("Kingdom")
-    cy.contains("Author list")
     cy.contains("Picture © Luonnontieteellinen Keskusmuseo").should("not.exist")
     cy.get("#loginButton").should("not.exist")
 
@@ -263,9 +257,9 @@ describe("Taxonmanager, when logged in as contributor", function () {
     // Check that the correct page loads correctly
     cy.visit("http://localhost:8000/add-expert/")
     cy.url().should("eq", "http://localhost:8000/add-expert/")
-    cy.contains("Add expert")
+    cy.contains("Add new expert")
     cy.contains("Geographic div")
-    cy.contains("Expert list")
+    cy.contains("Experts")
     cy.contains("Picture © Luonnontieteellinen Keskusmuseo").should("not.exist")
     cy.get("#loginButton").should("not.exist")
 
@@ -413,7 +407,88 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains("aajstatchild").click()
     cy.contains("aajstat2")
   })
+  
+  it("Taxon can be edited", () => {
+    cy.visit("http://localhost:8000/add-taxon/")
+    cy.get("#id_kingdom_name").select("Plantae", { force: true })
+    cy.get("#id_taxonnomic_types").select("Infrakingdom", { force: true })
+    cy.get("#id_rank_name").select("Plantae", { force: true })
+    cy.get("#id_unit_name1").type("Plantae2")
+    cy.get("#id_references").select("1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Testi otsikko", { force: true })
+    cy.contains("Submit").click()
 
+    cy.visit("http://localhost:8000/add-taxon/")
+    cy.get("#id_kingdom_name").select("Plantae", { force: true })
+    cy.get("#id_taxonnomic_types").select("Superdivision", { force: true })
+    cy.get("#id_rank_name").select("Plantae2", { force: true })
+    cy.get("#id_unit_name1").type("Plantae3")
+    cy.get("#id_references").select("1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Testi otsikko", { force: true })
+    cy.contains("Submit").click()
+
+    cy.visit("http://localhost:8000/add-taxon/")
+    cy.get("#id_kingdom_name").select("Plantae", { force: true })
+    cy.get("#id_taxonnomic_types").select("Division", { force: true })
+    cy.get("#id_rank_name").select("Plantae3", { force: true })
+    cy.get("#id_unit_name1").type("Plantae4")
+    cy.get("#id_references").select("1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Testi otsikko", { force: true })
+    cy.contains("Submit").click()
+
+    cy.visit("http://localhost:8000/taxa/")
+    cy.contains("Plantae2").click()
+    cy.visit("http://localhost:8000/add-taxon/13")
+
+    //check that information is displayed correctly
+    cy.get("#id_kingdom_name").should("have.value", 3)
+    cy.get("#id_taxonnomic_types").should("have.value", "Infrakingdom")
+    cy.get("#id_rank_name").should("have.value", "Plantae")
+    cy.get("#id_unit_name1").should("have.value", "Plantae2")
+    cy.get("#id_references").contains('1')
+
+    //alert if kingdom is tried to change
+    //cy.get("#id_kingdom_name").select("Bacteria", { force: true })
+    //cy.on("window:alert", (str) => {
+      //expect(str).to.equal("Taxon cannot be moved to another kingdom")
+    //})
+
+    //change from infakingdom to subkingdom
+    cy.get("#id_taxonnomic_types").select("Subkingdom", { force: true })
+    cy.get("#id_rank_name").select("Plantae", { force: true })
+    cy.contains("Submit").click()
+
+    cy.contains("Plantae4").click()
+    cy.contains("Plantae")
+    cy.contains("Plantae2")
+    cy.contains("Plantae3")
+    cy.contains("Subkingdom")
+    cy.contains("Infrakingdom").should("not.exist")
+
+    //change from subkingdom to superdivision  --> two taxons have same rank
+    cy.contains("Plantae2").click()
+    cy.visit("http://localhost:8000/add-taxon/13")
+    cy.get("#id_taxonnomic_types").select("Superdivision", { force: true })
+    cy.get("#id_rank_name").select("Plantae", { force: true })
+    cy.contains("Submit").click()
+
+    cy.contains("Plantae4").click()
+    cy.contains("Plantae")
+    cy.contains("Plantae2")
+    cy.contains("Plantae3")
+    cy.contains("Subkingdom").should("not.exist")
+    
+  })
+
+  it("Search finds a junior and senior synonym to a taxon", () => {
+    // Actual test to find junior and senior synonym
+    cy.visit("http://localhost:8000/taxa-search/")
+    cy.get('#id_synonyms').type('Test of adding as junior synonym')
+    cy.get(".btn").click()
+    cy.contains("Bacteria")
+    cy.contains('Test of adding as junior synonym')
+
+  })
+
+  // Best to keep this as the last one as user no longer
+  // a contributor after this.
   it("Logged in user that not part of group contributors", () => {
     //remove user from group
     cy.visit("http://localhost:8000/admin/login/?next=/admin/")
@@ -426,7 +501,6 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.visit("http://localhost:8000/add-references/")
     cy.contains("Add or Edit Reference").should("not.exist")
   })
-  
 
 })
 

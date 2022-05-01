@@ -5,7 +5,6 @@
 <body>
 
 <div class="container content-container">
-<p><a href="/taxa">Taxa list</a> | <a href="/add-taxon">Add taxon</a> | <a href="">Search</a></p>
 
 <h1>Advanced Search</h1>
 
@@ -95,6 +94,15 @@
                     </div>
                     <div class="form-group col-md-8">
                         {{ filter.form.geo_location }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_synonyms">{{ filter.form.synonyms.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.synonyms }}
                     </div>
                 </div>
 

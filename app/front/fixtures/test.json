@@ -1,1 +1,2885 @@
-[{"model": "admin.logentry", "pk": 1, "fields": {"action_time": "2022-04-02T11:09:21.082Z", "user": 1, "content_type": 3, "object_id": "1", "object_repr": "contributor", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 2, "fields": {"action_time": "2022-04-02T11:09:28.852Z", "user": 1, "content_type": 4, "object_id": "1", "object_repr": "admin", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"}}, {"model": "admin.logentry", "pk": 3, "fields": {"action_time": "2022-04-03T09:11:17.861Z", "user": 1, "content_type": 21, "object_id": "9", "object_repr": "Fa, Kingdom: Bacteria (taxon_id: 9, parent_id: 1)", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"Unit name1\"]}}]"}}, {"model": "admin.logentry", "pk": 4, "fields": {"action_time": "2022-04-05T09:27:30.759Z", "user": 1, "content_type": 21, "object_id": "9", "object_repr": "Fa, Kingdom: Bacteria (taxon_id: 9, parent_id: 1)", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 5, "fields": {"action_time": "2022-04-05T09:27:30.764Z", "user": 1, "content_type": 21, "object_id": "8", "object_repr": "moro, Kingdom: Bacteria (taxon_id: 8, parent_id: 1)", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 6, "fields": {"action_time": "2022-04-05T09:27:59.295Z", "user": 1, "content_type": 20, "object_id": "4", "object_repr": "aa", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 7, "fields": {"action_time": "2022-04-05T09:27:59.299Z", "user": 1, "content_type": 20, "object_id": "3", "object_repr": "c", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 8, "fields": {"action_time": "2022-04-05T09:27:59.306Z", "user": 1, "content_type": 20, "object_id": "2", "object_repr": "b", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 9, "fields": {"action_time": "2022-04-05T09:27:59.310Z", "user": 1, "content_type": 20, "object_id": "1", "object_repr": "a", "action_flag": 3, "change_message": ""}}, {"model": "auth.permission", "pk": 1, "fields": {"name": "Can add log entry", "content_type": 1, "codename": "add_logentry"}}, {"model": "auth.permission", "pk": 2, "fields": {"name": "Can change log entry", "content_type": 1, "codename": "change_logentry"}}, {"model": "auth.permission", "pk": 3, "fields": {"name": "Can delete log entry", "content_type": 1, "codename": "delete_logentry"}}, {"model": "auth.permission", "pk": 4, "fields": {"name": "Can view log entry", "content_type": 1, "codename": "view_logentry"}}, {"model": "auth.permission", "pk": 5, "fields": {"name": "Can add permission", "content_type": 2, "codename": "add_permission"}}, {"model": "auth.permission", "pk": 6, "fields": {"name": "Can change permission", "content_type": 2, "codename": "change_permission"}}, {"model": "auth.permission", "pk": 7, "fields": {"name": "Can delete permission", "content_type": 2, "codename": "delete_permission"}}, {"model": "auth.permission", "pk": 8, "fields": {"name": "Can view permission", "content_type": 2, "codename": "view_permission"}}, {"model": "auth.permission", "pk": 9, "fields": {"name": "Can add group", "content_type": 3, "codename": "add_group"}}, {"model": "auth.permission", "pk": 10, "fields": {"name": "Can change group", "content_type": 3, "codename": "change_group"}}, {"model": "auth.permission", "pk": 11, "fields": {"name": "Can delete group", "content_type": 3, "codename": "delete_group"}}, {"model": "auth.permission", "pk": 12, "fields": {"name": "Can view group", "content_type": 3, "codename": "view_group"}}, {"model": "auth.permission", "pk": 13, "fields": {"name": "Can add user", "content_type": 4, "codename": "add_user"}}, {"model": "auth.permission", "pk": 14, "fields": {"name": "Can change user", "content_type": 4, "codename": "change_user"}}, {"model": "auth.permission", "pk": 15, "fields": {"name": "Can delete user", "content_type": 4, "codename": "delete_user"}}, {"model": "auth.permission", "pk": 16, "fields": {"name": "Can view user", "content_type": 4, "codename": "view_user"}}, {"model": "auth.permission", "pk": 17, "fields": {"name": "Can add content type", "content_type": 5, "codename": "add_contenttype"}}, {"model": "auth.permission", "pk": 18, "fields": {"name": "Can change content type", "content_type": 5, "codename": "change_contenttype"}}, {"model": "auth.permission", "pk": 19, "fields": {"name": "Can delete content type", "content_type": 5, "codename": "delete_contenttype"}}, {"model": "auth.permission", "pk": 20, "fields": {"name": "Can view content type", "content_type": 5, "codename": "view_contenttype"}}, {"model": "auth.permission", "pk": 21, "fields": {"name": "Can add session", "content_type": 6, "codename": "add_session"}}, {"model": "auth.permission", "pk": 22, "fields": {"name": "Can change session", "content_type": 6, "codename": "change_session"}}, {"model": "auth.permission", "pk": 23, "fields": {"name": "Can delete session", "content_type": 6, "codename": "delete_session"}}, {"model": "auth.permission", "pk": 24, "fields": {"name": "Can view session", "content_type": 6, "codename": "view_session"}}, {"model": "auth.permission", "pk": 25, "fields": {"name": "Can add site", "content_type": 7, "codename": "add_site"}}, {"model": "auth.permission", "pk": 26, "fields": {"name": "Can change site", "content_type": 7, "codename": "change_site"}}, {"model": "auth.permission", "pk": 27, "fields": {"name": "Can delete site", "content_type": 7, "codename": "delete_site"}}, {"model": "auth.permission", "pk": 28, "fields": {"name": "Can view site", "content_type": 7, "codename": "view_site"}}, {"model": "auth.permission", "pk": 29, "fields": {"name": "Can add email address", "content_type": 8, "codename": "add_emailaddress"}}, {"model": "auth.permission", "pk": 30, "fields": {"name": "Can change email address", "content_type": 8, "codename": "change_emailaddress"}}, {"model": "auth.permission", "pk": 31, "fields": {"name": "Can delete email address", "content_type": 8, "codename": "delete_emailaddress"}}, {"model": "auth.permission", "pk": 32, "fields": {"name": "Can view email address", "content_type": 8, "codename": "view_emailaddress"}}, {"model": "auth.permission", "pk": 33, "fields": {"name": "Can add email confirmation", "content_type": 9, "codename": "add_emailconfirmation"}}, {"model": "auth.permission", "pk": 34, "fields": {"name": "Can change email confirmation", "content_type": 9, "codename": "change_emailconfirmation"}}, {"model": "auth.permission", "pk": 35, "fields": {"name": "Can delete email confirmation", "content_type": 9, "codename": "delete_emailconfirmation"}}, {"model": "auth.permission", "pk": 36, "fields": {"name": "Can view email confirmation", "content_type": 9, "codename": "view_emailconfirmation"}}, {"model": "auth.permission", "pk": 37, "fields": {"name": "Can add social account", "content_type": 10, "codename": "add_socialaccount"}}, {"model": "auth.permission", "pk": 38, "fields": {"name": "Can change social account", "content_type": 10, "codename": "change_socialaccount"}}, {"model": "auth.permission", "pk": 39, "fields": {"name": "Can delete social account", "content_type": 10, "codename": "delete_socialaccount"}}, {"model": "auth.permission", "pk": 40, "fields": {"name": "Can view social account", "content_type": 10, "codename": "view_socialaccount"}}, {"model": "auth.permission", "pk": 41, "fields": {"name": "Can add social application", "content_type": 11, "codename": "add_socialapp"}}, {"model": "auth.permission", "pk": 42, "fields": {"name": "Can change social application", "content_type": 11, "codename": "change_socialapp"}}, {"model": "auth.permission", "pk": 43, "fields": {"name": "Can delete social application", "content_type": 11, "codename": "delete_socialapp"}}, {"model": "auth.permission", "pk": 44, "fields": {"name": "Can view social application", "content_type": 11, "codename": "view_socialapp"}}, {"model": "auth.permission", "pk": 45, "fields": {"name": "Can add social application token", "content_type": 12, "codename": "add_socialtoken"}}, {"model": "auth.permission", "pk": 46, "fields": {"name": "Can change social application token", "content_type": 12, "codename": "change_socialtoken"}}, {"model": "auth.permission", "pk": 47, "fields": {"name": "Can delete social application token", "content_type": 12, "codename": "delete_socialtoken"}}, {"model": "auth.permission", "pk": 48, "fields": {"name": "Can view social application token", "content_type": 12, "codename": "view_socialtoken"}}, {"model": "auth.permission", "pk": 49, "fields": {"name": "Can add ref", "content_type": 13, "codename": "add_ref"}}, {"model": "auth.permission", "pk": 50, "fields": {"name": "Can change ref", "content_type": 13, "codename": "change_ref"}}, {"model": "auth.permission", "pk": 51, "fields": {"name": "Can delete ref", "content_type": 13, "codename": "delete_ref"}}, {"model": "auth.permission", "pk": 52, "fields": {"name": "Can view ref", "content_type": 13, "codename": "view_ref"}}, {"model": "auth.permission", "pk": 53, "fields": {"name": "Can add comment", "content_type": 14, "codename": "add_comment"}}, {"model": "auth.permission", "pk": 54, "fields": {"name": "Can change comment", "content_type": 14, "codename": "change_comment"}}, {"model": "auth.permission", "pk": 55, "fields": {"name": "Can delete comment", "content_type": 14, "codename": "delete_comment"}}, {"model": "auth.permission", "pk": 56, "fields": {"name": "Can view comment", "content_type": 14, "codename": "view_comment"}}, {"model": "auth.permission", "pk": 57, "fields": {"name": "Can add expert", "content_type": 15, "codename": "add_expert"}}, {"model": "auth.permission", "pk": 58, "fields": {"name": "Can change expert", "content_type": 15, "codename": "change_expert"}}, {"model": "auth.permission", "pk": 59, "fields": {"name": "Can delete expert", "content_type": 15, "codename": "delete_expert"}}, {"model": "auth.permission", "pk": 60, "fields": {"name": "Can view expert", "content_type": 15, "codename": "view_expert"}}, {"model": "auth.permission", "pk": 61, "fields": {"name": "Can add geographic div", "content_type": 16, "codename": "add_geographicdiv"}}, {"model": "auth.permission", "pk": 62, "fields": {"name": "Can change geographic div", "content_type": 16, "codename": "change_geographicdiv"}}, {"model": "auth.permission", "pk": 63, "fields": {"name": "Can delete geographic div", "content_type": 16, "codename": "delete_geographicdiv"}}, {"model": "auth.permission", "pk": 64, "fields": {"name": "Can view geographic div", "content_type": 16, "codename": "view_geographicdiv"}}, {"model": "auth.permission", "pk": 65, "fields": {"name": "Can add kingdom", "content_type": 17, "codename": "add_kingdom"}}, {"model": "auth.permission", "pk": 66, "fields": {"name": "Can change kingdom", "content_type": 17, "codename": "change_kingdom"}}, {"model": "auth.permission", "pk": 67, "fields": {"name": "Can delete kingdom", "content_type": 17, "codename": "delete_kingdom"}}, {"model": "auth.permission", "pk": 68, "fields": {"name": "Can view kingdom", "content_type": 17, "codename": "view_kingdom"}}, {"model": "auth.permission", "pk": 69, "fields": {"name": "Can add publication", "content_type": 18, "codename": "add_publication"}}, {"model": "auth.permission", "pk": 70, "fields": {"name": "Can change publication", "content_type": 18, "codename": "change_publication"}}, {"model": "auth.permission", "pk": 71, "fields": {"name": "Can delete publication", "content_type": 18, "codename": "delete_publication"}}, {"model": "auth.permission", "pk": 72, "fields": {"name": "Can view publication", "content_type": 18, "codename": "view_publication"}}, {"model": "auth.permission", "pk": 73, "fields": {"name": "Can add reference", "content_type": 19, "codename": "add_reference"}}, {"model": "auth.permission", "pk": 74, "fields": {"name": "Can change reference", "content_type": 19, "codename": "change_reference"}}, {"model": "auth.permission", "pk": 75, "fields": {"name": "Can delete reference", "content_type": 19, "codename": "delete_reference"}}, {"model": "auth.permission", "pk": 76, "fields": {"name": "Can view reference", "content_type": 19, "codename": "view_reference"}}, {"model": "auth.permission", "pk": 77, "fields": {"name": "Can add taxon author lkp", "content_type": 20, "codename": "add_taxonauthorlkp"}}, {"model": "auth.permission", "pk": 78, "fields": {"name": "Can change taxon author lkp", "content_type": 20, "codename": "change_taxonauthorlkp"}}, {"model": "auth.permission", "pk": 79, "fields": {"name": "Can delete taxon author lkp", "content_type": 20, "codename": "delete_taxonauthorlkp"}}, {"model": "auth.permission", "pk": 80, "fields": {"name": "Can view taxon author lkp", "content_type": 20, "codename": "view_taxonauthorlkp"}}, {"model": "auth.permission", "pk": 81, "fields": {"name": "Can add taxonomic unit", "content_type": 21, "codename": "add_taxonomicunit"}}, {"model": "auth.permission", "pk": 82, "fields": {"name": "Can change taxonomic unit", "content_type": 21, "codename": "change_taxonomicunit"}}, {"model": "auth.permission", "pk": 83, "fields": {"name": "Can delete taxonomic unit", "content_type": 21, "codename": "delete_taxonomicunit"}}, {"model": "auth.permission", "pk": 84, "fields": {"name": "Can view taxonomic unit", "content_type": 21, "codename": "view_taxonomicunit"}}, {"model": "auth.permission", "pk": 85, "fields": {"name": "Can add tu comment link", "content_type": 22, "codename": "add_tucommentlink"}}, {"model": "auth.permission", "pk": 86, "fields": {"name": "Can change tu comment link", "content_type": 22, "codename": "change_tucommentlink"}}, {"model": "auth.permission", "pk": 87, "fields": {"name": "Can delete tu comment link", "content_type": 22, "codename": "delete_tucommentlink"}}, {"model": "auth.permission", "pk": 88, "fields": {"name": "Can view tu comment link", "content_type": 22, "codename": "view_tucommentlink"}}, {"model": "auth.permission", "pk": 89, "fields": {"name": "Can add taxon unit type", "content_type": 23, "codename": "add_taxonunittype"}}, {"model": "auth.permission", "pk": 90, "fields": {"name": "Can change taxon unit type", "content_type": 23, "codename": "change_taxonunittype"}}, {"model": "auth.permission", "pk": 91, "fields": {"name": "Can delete taxon unit type", "content_type": 23, "codename": "delete_taxonunittype"}}, {"model": "auth.permission", "pk": 92, "fields": {"name": "Can view taxon unit type", "content_type": 23, "codename": "view_taxonunittype"}}, {"model": "auth.permission", "pk": 93, "fields": {"name": "Can add synonym link", "content_type": 24, "codename": "add_synonymlink"}}, {"model": "auth.permission", "pk": 94, "fields": {"name": "Can change synonym link", "content_type": 24, "codename": "change_synonymlink"}}, {"model": "auth.permission", "pk": 95, "fields": {"name": "Can delete synonym link", "content_type": 24, "codename": "delete_synonymlink"}}, {"model": "auth.permission", "pk": 96, "fields": {"name": "Can view synonym link", "content_type": 24, "codename": "view_synonymlink"}}, {"model": "auth.permission", "pk": 97, "fields": {"name": "Can add historical taxon author lkp", "content_type": 25, "codename": "add_historicaltaxonauthorlkp"}}, {"model": "auth.permission", "pk": 98, "fields": {"name": "Can change historical taxon author lkp", "content_type": 25, "codename": "change_historicaltaxonauthorlkp"}}, {"model": "auth.permission", "pk": 99, "fields": {"name": "Can delete historical taxon author lkp", "content_type": 25, "codename": "delete_historicaltaxonauthorlkp"}}, {"model": "auth.permission", "pk": 100, "fields": {"name": "Can view historical taxon author lkp", "content_type": 25, "codename": "view_historicaltaxonauthorlkp"}}, {"model": "auth.permission", "pk": 101, "fields": {"name": "Can add historical reference", "content_type": 26, "codename": "add_historicalreference"}}, {"model": "auth.permission", "pk": 102, "fields": {"name": "Can change historical reference", "content_type": 26, "codename": "change_historicalreference"}}, {"model": "auth.permission", "pk": 103, "fields": {"name": "Can delete historical reference", "content_type": 26, "codename": "delete_historicalreference"}}, {"model": "auth.permission", "pk": 104, "fields": {"name": "Can view historical reference", "content_type": 26, "codename": "view_historicalreference"}}, {"model": "auth.permission", "pk": 105, "fields": {"name": "Can add hierarchy", "content_type": 27, "codename": "add_hierarchy"}}, {"model": "auth.permission", "pk": 106, "fields": {"name": "Can change hierarchy", "content_type": 27, "codename": "change_hierarchy"}}, {"model": "auth.permission", "pk": 107, "fields": {"name": "Can delete hierarchy", "content_type": 27, "codename": "delete_hierarchy"}}, {"model": "auth.permission", "pk": 108, "fields": {"name": "Can view hierarchy", "content_type": 27, "codename": "view_hierarchy"}}, {"model": "auth.permission", "pk": 109, "fields": {"name": "Can add experts geographic div", "content_type": 28, "codename": "add_expertsgeographicdiv"}}, {"model": "auth.permission", "pk": 110, "fields": {"name": "Can change experts geographic div", "content_type": 28, "codename": "change_expertsgeographicdiv"}}, {"model": "auth.permission", "pk": 111, "fields": {"name": "Can delete experts geographic div", "content_type": 28, "codename": "delete_expertsgeographicdiv"}}, {"model": "auth.permission", "pk": 112, "fields": {"name": "Can view experts geographic div", "content_type": 28, "codename": "view_expertsgeographicdiv"}}, {"model": "auth.permission", "pk": 113, "fields": {"name": "Can add reference link", "content_type": 29, "codename": "add_referencelink"}}, {"model": "auth.permission", "pk": 114, "fields": {"name": "Can change reference link", "content_type": 29, "codename": "change_referencelink"}}, {"model": "auth.permission", "pk": 115, "fields": {"name": "Can delete reference link", "content_type": 29, "codename": "delete_referencelink"}}, {"model": "auth.permission", "pk": 116, "fields": {"name": "Can view reference link", "content_type": 29, "codename": "view_referencelink"}}, {"model": "auth.group", "pk": 1, "fields": {"name": "contributor", "permissions": [29, 30, 31, 32, 33, 34, 35, 36, 1, 2, 3, 4, 9, 10, 11, 12, 5, 6, 7, 8, 13, 14, 15, 16, 17, 18, 19, 20, 53, 54, 55, 56, 57, 58, 59, 60, 109, 110, 111, 112, 61, 62, 63, 64, 105, 106, 107, 108, 101, 102, 103, 104, 97, 98, 99, 100, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 113, 114, 115, 116, 93, 94, 95, 96, 77, 78, 79, 80, 81, 82, 83, 84, 89, 90, 91, 92, 85, 86, 87, 88, 49, 50, 51, 52, 21, 22, 23, 24, 25, 26, 27, 28, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48]}}, {"model": "auth.user", "pk": 1, "fields": {"password": "pbkdf2_sha256$260000$qAVSwN56M2alQ7X3VhMgA7$k1EMpX8IrXxv0lW7uBo4Jed3XsOEIpvqCZRm239YGQE=", "last_login": "2022-04-02T11:01:25Z", "is_superuser": true, "username": "admin", "first_name": "", "last_name": "", "email": "admin@example.com", "is_staff": true, "is_active": true, "date_joined": "2022-03-30T06:40:39Z", "groups": [1], "user_permissions": []}}, {"model": "contenttypes.contenttype", "pk": 1, "fields": {"app_label": "admin", "model": "logentry"}}, {"model": "contenttypes.contenttype", "pk": 2, "fields": {"app_label": "auth", "model": "permission"}}, {"model": "contenttypes.contenttype", "pk": 3, "fields": {"app_label": "auth", "model": "group"}}, {"model": "contenttypes.contenttype", "pk": 4, "fields": {"app_label": "auth", "model": "user"}}, {"model": "contenttypes.contenttype", "pk": 5, "fields": {"app_label": "contenttypes", "model": "contenttype"}}, {"model": "contenttypes.contenttype", "pk": 6, "fields": {"app_label": "sessions", "model": "session"}}, {"model": "contenttypes.contenttype", "pk": 7, "fields": {"app_label": "sites", "model": "site"}}, {"model": "contenttypes.contenttype", "pk": 8, "fields": {"app_label": "account", "model": "emailaddress"}}, {"model": "contenttypes.contenttype", "pk": 9, "fields": {"app_label": "account", "model": "emailconfirmation"}}, {"model": "contenttypes.contenttype", "pk": 10, "fields": {"app_label": "socialaccount", "model": "socialaccount"}}, {"model": "contenttypes.contenttype", "pk": 11, "fields": {"app_label": "socialaccount", "model": "socialapp"}}, {"model": "contenttypes.contenttype", "pk": 12, "fields": {"app_label": "socialaccount", "model": "socialtoken"}}, {"model": "contenttypes.contenttype", "pk": 13, "fields": {"app_label": "refs", "model": "ref"}}, {"model": "contenttypes.contenttype", "pk": 14, "fields": {"app_label": "front", "model": "comment"}}, {"model": "contenttypes.contenttype", "pk": 15, "fields": {"app_label": "front", "model": "expert"}}, {"model": "contenttypes.contenttype", "pk": 16, "fields": {"app_label": "front", "model": "geographicdiv"}}, {"model": "contenttypes.contenttype", "pk": 17, "fields": {"app_label": "front", "model": "kingdom"}}, {"model": "contenttypes.contenttype", "pk": 18, "fields": {"app_label": "front", "model": "publication"}}, {"model": "contenttypes.contenttype", "pk": 19, "fields": {"app_label": "front", "model": "reference"}}, {"model": "contenttypes.contenttype", "pk": 20, "fields": {"app_label": "front", "model": "taxonauthorlkp"}}, {"model": "contenttypes.contenttype", "pk": 21, "fields": {"app_label": "front", "model": "taxonomicunit"}}, {"model": "contenttypes.contenttype", "pk": 22, "fields": {"app_label": "front", "model": "tucommentlink"}}, {"model": "contenttypes.contenttype", "pk": 23, "fields": {"app_label": "front", "model": "taxonunittype"}}, {"model": "contenttypes.contenttype", "pk": 24, "fields": {"app_label": "front", "model": "synonymlink"}}, {"model": "contenttypes.contenttype", "pk": 25, "fields": {"app_label": "front", "model": "historicaltaxonauthorlkp"}}, {"model": "contenttypes.contenttype", "pk": 26, "fields": {"app_label": "front", "model": "historicalreference"}}, {"model": "contenttypes.contenttype", "pk": 27, "fields": {"app_label": "front", "model": "hierarchy"}}, {"model": "contenttypes.contenttype", "pk": 28, "fields": {"app_label": "front", "model": "expertsgeographicdiv"}}, {"model": "contenttypes.contenttype", "pk": 29, "fields": {"app_label": "front", "model": "referencelink"}}, {"model": "sessions.session", "pk": "ayeapm11vm6g29nn90b9g9woxd7jbk6z", "fields": {"session_data": ".eJxVzE1rwzAMgOH_onMI8RfEOe4-6G2HUYIsK0221A62Q2lL__uS0UtuQu8jPSFHmnBGoriG0ueChaH7fsKSInHO0MEcL1OACjLFZWuwjbiWsV8w4XUH8KrgNPPjfuL1S94SnCvo_8maOfWT34yAw84h_XLYg__BcIk1xVDS5Oqd1O-a68_oef5428ODEfO4X-PgdTugIyUb2SqyrIxhdmwbabT2qK0RJNXgrVW6YSGFJSNwaIxtpYPXHzgLVZM:1nabVV:bPRb4Y9ucz_BXNOUPanwHdaDhbYtg5L8leEbFMGI4tQ", "expire_date": "2022-04-16T11:01:25.355Z"}}, {"model": "sites.site", "pk": 1, "fields": {"domain": "localhost:8000", "name": "TaxonManager"}}, {"model": "account.emailaddress", "pk": 1, "fields": {"user": 1, "email": "admin@example.com", "verified": true, "primary": true}}, {"model": "front.reference", "pk": 1, "fields": {"authors": "Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D.", "title": "Species 2000 & ITIS Catalogue of Life, 2015 Annual Checklist", "title_html": "", "title_latex": "", "journal": "", "volume": "", "page_start": "", "page_end": "", "article_number": "", "year": 2015, "note": "ISSN 2405-917X", "note_html": "", "note_latex": "", "doi": "", "bibcode": "", "url": "", "bibtex": "@book{book,\r\nauthor = {Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D.},\r\nyear = {2015},\r\nmonth = {04},\r\npages = {},\r\ntitle = {Species 2000 & ITIS Catalogue of Life, 2015 Annual Checklist},\r\nisbn = {ISSN 2405-917X}\r\n}", "ris": null, "citeproc_json": null, "visible": 1}}, {"model": "front.reference", "pk": 2, "fields": {"authors": "Audet, A.M., Robbins, C.B. and Larivière, S.", "title": "Alopex lagopus", "title_html": "", "title_latex": "", "journal": "Mammalian species", "volume": "713", "page_start": "1", "page_end": "10", "article_number": "", "year": 2002, "note": "", "note_html": "", "note_latex": "", "doi": "", "bibcode": "", "url": "", "bibtex": "@article{audet2002alopex,\r\n  title={Alopex lagopus},\r\n  author={Audet, Alexandra M and Robbins, C Brian and Larivi{\\`e}re, Serge},\r\n  journal={Mammalian species},\r\n  number={713},\r\n  pages={1--10},\r\n  year={2002},\r\n  publisher={JSTOR}\r\n}", "ris": null, "citeproc_json": null, "visible": 1}}, {"model": "front.kingdom", "pk": 1, "fields": {"kingdom_name": "Bacteria", "update_date": null}}, {"model": "front.kingdom", "pk": 2, "fields": {"kingdom_name": "Protozoa", "update_date": null}}, {"model": "front.kingdom", "pk": 3, "fields": {"kingdom_name": "Plantae", "update_date": null}}, {"model": "front.kingdom", "pk": 4, "fields": {"kingdom_name": "Fungi", "update_date": null}}, {"model": "front.kingdom", "pk": 5, "fields": {"kingdom_name": "Animalia", "update_date": null}}, {"model": "front.kingdom", "pk": 6, "fields": {"kingdom_name": "Chromista", "update_date": null}}, {"model": "front.kingdom", "pk": 7, "fields": {"kingdom_name": "Archaea", "update_date": null}}, {"model": "front.taxonunittype", "pk": 1, "fields": {"kingdom": 1, "rank_id": 10, "rank_name": "Kingdom", "dir_parent_rank_id": 10, "req_parent_rank_id": 10, "update_date": "2022-03-03T07:26:38Z"}}, {"model": "front.taxonunittype", "pk": 2, "fields": {"kingdom": 1, "rank_id": 20, "rank_name": "Subkingdom", "dir_parent_rank_id": 10, "req_parent_rank_id": 10, "update_date": "2022-03-03T07:26:55Z"}}, {"model": "front.taxonunittype", "pk": 3, "fields": {"kingdom": 1, "rank_id": 30, "rank_name": "Phylum", "dir_parent_rank_id": 20, "req_parent_rank_id": 10, "update_date": "2022-03-03T07:27:08Z"}}, {"model": "front.taxonunittype", "pk": 4, "fields": {"kingdom": 1, "rank_id": 40, "rank_name": "Subphylum", "dir_parent_rank_id": 30, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 5, "fields": {"kingdom": 1, "rank_id": 50, "rank_name": "Superclass", "dir_parent_rank_id": 40, "req_parent_rank_id": 30, "update_date": "2022-03-03T07:28:25Z"}}, {"model": "front.taxonunittype", "pk": 6, "fields": {"kingdom": 1, "rank_id": 60, "rank_name": "Class", "dir_parent_rank_id": 50, "req_parent_rank_id": 30, "update_date": "2022-03-03T07:28:41Z"}}, {"model": "front.taxonunittype", "pk": 7, "fields": {"kingdom": 1, "rank_id": 70, "rank_name": "Subclass", "dir_parent_rank_id": 60, "req_parent_rank_id": 60, "update_date": "2022-03-03T07:28:58Z"}}, {"model": "front.taxonunittype", "pk": 8, "fields": {"kingdom": 1, "rank_id": 80, "rank_name": "Infraclass", "dir_parent_rank_id": 70, "req_parent_rank_id": 60, "update_date": "2022-03-03T07:29:13Z"}}, {"model": "front.taxonunittype", "pk": 9, "fields": {"kingdom": 1, "rank_id": 90, "rank_name": "Superorder", "dir_parent_rank_id": 80, "req_parent_rank_id": 60, "update_date": "2022-03-03T07:29:30Z"}}, {"model": "front.taxonunittype", "pk": 10, "fields": {"kingdom": 1, "rank_id": 100, "rank_name": "Order", "dir_parent_rank_id": 90, "req_parent_rank_id": 60, "update_date": "2022-03-03T07:29:42Z"}}, {"model": "front.taxonunittype", "pk": 11, "fields": {"kingdom": 1, "rank_id": 110, "rank_name": "Suborder", "dir_parent_rank_id": 100, "req_parent_rank_id": 100, "update_date": "2022-03-03T07:30:04Z"}}, {"model": "front.taxonunittype", "pk": 12, "fields": {"kingdom": 1, "rank_id": 120, "rank_name": "Infraorder", "dir_parent_rank_id": 110, "req_parent_rank_id": 100, "update_date": "2022-03-03T07:30:43Z"}}, {"model": "front.taxonunittype", "pk": 13, "fields": {"kingdom": 1, "rank_id": 130, "rank_name": "Superfamily", "dir_parent_rank_id": 120, "req_parent_rank_id": 100, "update_date": "2022-03-03T07:31:01Z"}}, {"model": "front.taxonunittype", "pk": 14, "fields": {"kingdom": 1, "rank_id": 140, "rank_name": "Family", "dir_parent_rank_id": 130, "req_parent_rank_id": 100, "update_date": "2022-03-03T07:31:14Z"}}, {"model": "front.taxonunittype", "pk": 15, "fields": {"kingdom": 1, "rank_id": 150, "rank_name": "Subfamily", "dir_parent_rank_id": 140, "req_parent_rank_id": 140, "update_date": "2022-03-03T07:31:27Z"}}, {"model": "front.taxonunittype", "pk": 16, "fields": {"kingdom": 1, "rank_id": 160, "rank_name": "Tribe", "dir_parent_rank_id": 150, "req_parent_rank_id": 140, "update_date": "2022-03-03T07:31:39Z"}}, {"model": "front.taxonunittype", "pk": 17, "fields": {"kingdom": 1, "rank_id": 170, "rank_name": "Subtribe", "dir_parent_rank_id": 160, "req_parent_rank_id": 140, "update_date": "2022-03-03T07:32:00Z"}}, {"model": "front.taxonunittype", "pk": 18, "fields": {"kingdom": 1, "rank_id": 180, "rank_name": "Genus", "dir_parent_rank_id": 170, "req_parent_rank_id": 140, "update_date": "2022-03-03T07:32:14Z"}}, {"model": "front.taxonunittype", "pk": 19, "fields": {"kingdom": 1, "rank_id": 190, "rank_name": "Subgenus", "dir_parent_rank_id": 180, "req_parent_rank_id": 180, "update_date": "2022-03-03T07:32:27Z"}}, {"model": "front.taxonunittype", "pk": 20, "fields": {"kingdom": 1, "rank_id": 220, "rank_name": "Species", "dir_parent_rank_id": 190, "req_parent_rank_id": 180, "update_date": "2022-03-03T07:32:39Z"}}, {"model": "front.taxonunittype", "pk": 21, "fields": {"kingdom": 1, "rank_id": 230, "rank_name": "Subspecies", "dir_parent_rank_id": 220, "req_parent_rank_id": 180, "update_date": "2022-03-03T07:32:51Z"}}, {"model": "front.taxonunittype", "pk": 22, "fields": {"kingdom": 2, "rank_id": 10, "rank_name": "Kingdom", "dir_parent_rank_id": 10, "req_parent_rank_id": 10, "update_date": "2022-03-03T07:48:36Z"}}, {"model": "front.taxonunittype", "pk": 23, "fields": {"kingdom": 2, "rank_id": 20, "rank_name": "Subkingdom", "dir_parent_rank_id": 10, "req_parent_rank_id": 10, "update_date": "2022-03-03T07:48:47Z"}}, {"model": "front.taxonunittype", "pk": 24, "fields": {"kingdom": 2, "rank_id": 25, "rank_name": "Infrakingdom", "dir_parent_rank_id": 20, "req_parent_rank_id": 10, "update_date": "2022-03-03T07:49:29Z"}}, {"model": "front.taxonunittype", "pk": 25, "fields": {"kingdom": 2, "rank_id": 30, "rank_name": "Phylum", "dir_parent_rank_id": 25, "req_parent_rank_id": 10, "update_date": "2022-03-03T07:49:50Z"}}, {"model": "front.taxonunittype", "pk": 26, "fields": {"kingdom": 2, "rank_id": 40, "rank_name": "Subphylum", "dir_parent_rank_id": 30, "req_parent_rank_id": 30, "update_date": "2022-03-03T07:50:06Z"}}, {"model": "front.taxonunittype", "pk": 27, "fields": {"kingdom": 2, "rank_id": 45, "rank_name": "Infraphylum", "dir_parent_rank_id": 40, "req_parent_rank_id": 30, "update_date": "2022-03-03T07:50:20Z"}}, {"model": "front.taxonunittype", "pk": 28, "fields": {"kingdom": 2, "rank_id": 47, "rank_name": "Parvphylum", "dir_parent_rank_id": 45, "req_parent_rank_id": 30, "update_date": "2022-03-03T07:50:37Z"}}, {"model": "front.taxonunittype", "pk": 29, "fields": {"kingdom": 2, "rank_id": 50, "rank_name": "Superclass", "dir_parent_rank_id": 47, "req_parent_rank_id": 30, "update_date": "2022-03-03T07:50:52Z"}}, {"model": "front.taxonunittype", "pk": 30, "fields": {"kingdom": 2, "rank_id": 60, "rank_name": "Class", "dir_parent_rank_id": 50, "req_parent_rank_id": 30, "update_date": "2022-03-03T07:51:05Z"}}, {"model": "front.taxonunittype", "pk": 31, "fields": {"kingdom": 2, "rank_id": 70, "rank_name": "Subclass", "dir_parent_rank_id": 60, "req_parent_rank_id": 60, "update_date": "2022-03-03T07:51:26Z"}}, {"model": "front.taxonunittype", "pk": 32, "fields": {"kingdom": 2, "rank_id": 80, "rank_name": "Infraclass", "dir_parent_rank_id": 70, "req_parent_rank_id": 60, "update_date": "2022-03-03T07:51:37Z"}}, {"model": "front.taxonunittype", "pk": 33, "fields": {"kingdom": 2, "rank_id": 90, "rank_name": "Superorder", "dir_parent_rank_id": 80, "req_parent_rank_id": 60, "update_date": "2022-03-03T07:51:55Z"}}, {"model": "front.taxonunittype", "pk": 34, "fields": {"kingdom": 2, "rank_id": 100, "rank_name": "Order", "dir_parent_rank_id": 90, "req_parent_rank_id": 60, "update_date": "2022-03-03T07:52:15Z"}}, {"model": "front.taxonunittype", "pk": 35, "fields": {"kingdom": 2, "rank_id": 110, "rank_name": "Suborder", "dir_parent_rank_id": 100, "req_parent_rank_id": 100, "update_date": "2022-03-03T07:55:55Z"}}, {"model": "front.taxonunittype", "pk": 36, "fields": {"kingdom": 2, "rank_id": 120, "rank_name": "Infraorder", "dir_parent_rank_id": 110, "req_parent_rank_id": 100, "update_date": "2022-03-03T07:56:10Z"}}, {"model": "front.taxonunittype", "pk": 37, "fields": {"kingdom": 2, "rank_id": 130, "rank_name": "Superfamily", "dir_parent_rank_id": 120, "req_parent_rank_id": 100, "update_date": "2022-03-03T07:56:25Z"}}, {"model": "front.taxonunittype", "pk": 38, "fields": {"kingdom": 2, "rank_id": 140, "rank_name": "Family", "dir_parent_rank_id": 130, "req_parent_rank_id": 100, "update_date": "2022-03-03T07:56:38Z"}}, {"model": "front.taxonunittype", "pk": 39, "fields": {"kingdom": 2, "rank_id": 150, "rank_name": "Subfamily", "dir_parent_rank_id": 140, "req_parent_rank_id": 140, "update_date": "2022-03-03T07:56:49Z"}}, {"model": "front.taxonunittype", "pk": 40, "fields": {"kingdom": 2, "rank_id": 160, "rank_name": "Tribe", "dir_parent_rank_id": 130, "req_parent_rank_id": 100, "update_date": "2022-03-03T07:57:03Z"}}, {"model": "front.taxonunittype", "pk": 41, "fields": {"kingdom": 2, "rank_id": 170, "rank_name": "Subtribe", "dir_parent_rank_id": 160, "req_parent_rank_id": 140, "update_date": "2022-03-03T07:57:23Z"}}, {"model": "front.taxonunittype", "pk": 42, "fields": {"kingdom": 2, "rank_id": 180, "rank_name": "Genus", "dir_parent_rank_id": 170, "req_parent_rank_id": 140, "update_date": "2022-03-03T07:57:38Z"}}, {"model": "front.taxonunittype", "pk": 43, "fields": {"kingdom": 2, "rank_id": 190, "rank_name": "Subgenus", "dir_parent_rank_id": 180, "req_parent_rank_id": 180, "update_date": "2022-03-03T07:57:50Z"}}, {"model": "front.taxonunittype", "pk": 44, "fields": {"kingdom": 2, "rank_id": 220, "rank_name": "Species", "dir_parent_rank_id": 190, "req_parent_rank_id": 180, "update_date": "2022-03-03T07:58:07Z"}}, {"model": "front.taxonunittype", "pk": 45, "fields": {"kingdom": 2, "rank_id": 230, "rank_name": "Subspecies", "dir_parent_rank_id": 220, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 46, "fields": {"kingdom": 2, "rank_id": 240, "rank_name": "Variety", "dir_parent_rank_id": 230, "req_parent_rank_id": 180, "update_date": "2022-03-03T07:58:49Z"}}, {"model": "front.taxonunittype", "pk": 47, "fields": {"kingdom": 3, "rank_id": 10, "rank_name": "Kingdom", "dir_parent_rank_id": 10, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 48, "fields": {"kingdom": 3, "rank_id": 20, "rank_name": "Subkingdom", "dir_parent_rank_id": 10, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 49, "fields": {"kingdom": 3, "rank_id": 25, "rank_name": "Infrakingdom", "dir_parent_rank_id": 20, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 50, "fields": {"kingdom": 3, "rank_id": 27, "rank_name": "Superdivision", "dir_parent_rank_id": 25, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 51, "fields": {"kingdom": 3, "rank_id": 30, "rank_name": "Division", "dir_parent_rank_id": 27, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 52, "fields": {"kingdom": 3, "rank_id": 40, "rank_name": "Subdivision", "dir_parent_rank_id": 30, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 53, "fields": {"kingdom": 3, "rank_id": 45, "rank_name": "Infradivision", "dir_parent_rank_id": 40, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 54, "fields": {"kingdom": 3, "rank_id": 50, "rank_name": "Superclass", "dir_parent_rank_id": 45, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 55, "fields": {"kingdom": 3, "rank_id": 60, "rank_name": "Class", "dir_parent_rank_id": 50, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 56, "fields": {"kingdom": 3, "rank_id": 70, "rank_name": "Subclass", "dir_parent_rank_id": 60, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 57, "fields": {"kingdom": 3, "rank_id": 80, "rank_name": "Infraclass", "dir_parent_rank_id": 70, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 58, "fields": {"kingdom": 3, "rank_id": 90, "rank_name": "Superorder", "dir_parent_rank_id": 80, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 59, "fields": {"kingdom": 3, "rank_id": 100, "rank_name": "Order", "dir_parent_rank_id": 90, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 60, "fields": {"kingdom": 3, "rank_id": 110, "rank_name": "Suborder", "dir_parent_rank_id": 100, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 61, "fields": {"kingdom": 3, "rank_id": 140, "rank_name": "Family", "dir_parent_rank_id": 110, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 62, "fields": {"kingdom": 3, "rank_id": 150, "rank_name": "Subfamily", "dir_parent_rank_id": 140, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 63, "fields": {"kingdom": 3, "rank_id": 160, "rank_name": "Tribe", "dir_parent_rank_id": 150, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 64, "fields": {"kingdom": 3, "rank_id": 170, "rank_name": "Subtribe", "dir_parent_rank_id": 160, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 65, "fields": {"kingdom": 3, "rank_id": 180, "rank_name": "Genus", "dir_parent_rank_id": 170, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 66, "fields": {"kingdom": 3, "rank_id": 190, "rank_name": "Subgenus", "dir_parent_rank_id": 180, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 67, "fields": {"kingdom": 3, "rank_id": 200, "rank_name": "Section", "dir_parent_rank_id": 190, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 68, "fields": {"kingdom": 3, "rank_id": 210, "rank_name": "Subsection", "dir_parent_rank_id": 200, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 69, "fields": {"kingdom": 3, "rank_id": 220, "rank_name": "Species", "dir_parent_rank_id": 210, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 70, "fields": {"kingdom": 3, "rank_id": 230, "rank_name": "Subspecies", "dir_parent_rank_id": 220, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 71, "fields": {"kingdom": 3, "rank_id": 240, "rank_name": "Variety", "dir_parent_rank_id": 220, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 72, "fields": {"kingdom": 3, "rank_id": 250, "rank_name": "Subvariety", "dir_parent_rank_id": 240, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 73, "fields": {"kingdom": 3, "rank_id": 260, "rank_name": "Form", "dir_parent_rank_id": 220, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 74, "fields": {"kingdom": 3, "rank_id": 270, "rank_name": "Subform", "dir_parent_rank_id": 260, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 75, "fields": {"kingdom": 4, "rank_id": 10, "rank_name": "Kingdom", "dir_parent_rank_id": 10, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 76, "fields": {"kingdom": 4, "rank_id": 20, "rank_name": "Subkingdom", "dir_parent_rank_id": 10, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 77, "fields": {"kingdom": 4, "rank_id": 30, "rank_name": "Division", "dir_parent_rank_id": 20, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 78, "fields": {"kingdom": 4, "rank_id": 40, "rank_name": "Subdivision", "dir_parent_rank_id": 30, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 79, "fields": {"kingdom": 4, "rank_id": 60, "rank_name": "Class", "dir_parent_rank_id": 40, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 80, "fields": {"kingdom": 4, "rank_id": 70, "rank_name": "Subclass", "dir_parent_rank_id": 60, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 81, "fields": {"kingdom": 4, "rank_id": 90, "rank_name": "Superorder", "dir_parent_rank_id": 70, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 82, "fields": {"kingdom": 4, "rank_id": 100, "rank_name": "Order", "dir_parent_rank_id": 90, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 83, "fields": {"kingdom": 4, "rank_id": 110, "rank_name": "Suborder", "dir_parent_rank_id": 100, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 84, "fields": {"kingdom": 4, "rank_id": 140, "rank_name": "Family", "dir_parent_rank_id": 110, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 85, "fields": {"kingdom": 4, "rank_id": 150, "rank_name": "Subfamily", "dir_parent_rank_id": 140, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 86, "fields": {"kingdom": 4, "rank_id": 160, "rank_name": "Tribe", "dir_parent_rank_id": 150, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 87, "fields": {"kingdom": 4, "rank_id": 170, "rank_name": "Subtribe", "dir_parent_rank_id": 160, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 88, "fields": {"kingdom": 4, "rank_id": 180, "rank_name": "Genus", "dir_parent_rank_id": 170, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 89, "fields": {"kingdom": 4, "rank_id": 190, "rank_name": "Subgenus", "dir_parent_rank_id": 180, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 90, "fields": {"kingdom": 4, "rank_id": 200, "rank_name": "Section", "dir_parent_rank_id": 190, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 91, "fields": {"kingdom": 4, "rank_id": 210, "rank_name": "Subsection", "dir_parent_rank_id": 200, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 92, "fields": {"kingdom": 4, "rank_id": 220, "rank_name": "Species", "dir_parent_rank_id": 210, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 93, "fields": {"kingdom": 4, "rank_id": 230, "rank_name": "Subspecies", "dir_parent_rank_id": 220, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 94, "fields": {"kingdom": 4, "rank_id": 240, "rank_name": "Variety", "dir_parent_rank_id": 220, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 95, "fields": {"kingdom": 4, "rank_id": 250, "rank_name": "Subvariety", "dir_parent_rank_id": 240, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 96, "fields": {"kingdom": 4, "rank_id": 260, "rank_name": "Form", "dir_parent_rank_id": 220, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 97, "fields": {"kingdom": 4, "rank_id": 270, "rank_name": "Subform", "dir_parent_rank_id": 260, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 98, "fields": {"kingdom": 5, "rank_id": 10, "rank_name": "Kingdom", "dir_parent_rank_id": 10, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 99, "fields": {"kingdom": 5, "rank_id": 20, "rank_name": "Subkingdom", "dir_parent_rank_id": 10, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 100, "fields": {"kingdom": 5, "rank_id": 25, "rank_name": "Infrakingdom", "dir_parent_rank_id": 20, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 101, "fields": {"kingdom": 5, "rank_id": 27, "rank_name": "Superphylum", "dir_parent_rank_id": 25, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 102, "fields": {"kingdom": 5, "rank_id": 30, "rank_name": "Phylum", "dir_parent_rank_id": 27, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 103, "fields": {"kingdom": 5, "rank_id": 40, "rank_name": "Subphylum", "dir_parent_rank_id": 30, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 104, "fields": {"kingdom": 5, "rank_id": 45, "rank_name": "Infraphylum", "dir_parent_rank_id": 40, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 105, "fields": {"kingdom": 5, "rank_id": 50, "rank_name": "Superclass", "dir_parent_rank_id": 45, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 106, "fields": {"kingdom": 5, "rank_id": 60, "rank_name": "Class", "dir_parent_rank_id": 50, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 107, "fields": {"kingdom": 5, "rank_id": 70, "rank_name": "Subclass", "dir_parent_rank_id": 60, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 108, "fields": {"kingdom": 5, "rank_id": 80, "rank_name": "Infraclass", "dir_parent_rank_id": 70, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 109, "fields": {"kingdom": 5, "rank_id": 90, "rank_name": "Superorder", "dir_parent_rank_id": 80, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 110, "fields": {"kingdom": 5, "rank_id": 100, "rank_name": "Order", "dir_parent_rank_id": 90, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 111, "fields": {"kingdom": 5, "rank_id": 110, "rank_name": "Suborder", "dir_parent_rank_id": 100, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 112, "fields": {"kingdom": 5, "rank_id": 120, "rank_name": "Infraorder", "dir_parent_rank_id": 110, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 113, "fields": {"kingdom": 5, "rank_id": 124, "rank_name": "Section", "dir_parent_rank_id": 120, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 114, "fields": {"kingdom": 5, "rank_id": 126, "rank_name": "Subsection", "dir_parent_rank_id": 124, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 115, "fields": {"kingdom": 5, "rank_id": 130, "rank_name": "Superfamily", "dir_parent_rank_id": 126, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 116, "fields": {"kingdom": 5, "rank_id": 140, "rank_name": "Family", "dir_parent_rank_id": 130, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 117, "fields": {"kingdom": 5, "rank_id": 150, "rank_name": "Subfamily", "dir_parent_rank_id": 140, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 118, "fields": {"kingdom": 5, "rank_id": 160, "rank_name": "Tribe", "dir_parent_rank_id": 150, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 119, "fields": {"kingdom": 5, "rank_id": 170, "rank_name": "Subtribe", "dir_parent_rank_id": 160, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 120, "fields": {"kingdom": 5, "rank_id": 180, "rank_name": "Genus", "dir_parent_rank_id": 170, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 121, "fields": {"kingdom": 5, "rank_id": 190, "rank_name": "Subgenus", "dir_parent_rank_id": 180, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 122, "fields": {"kingdom": 5, "rank_id": 220, "rank_name": "Species", "dir_parent_rank_id": 190, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 123, "fields": {"kingdom": 5, "rank_id": 230, "rank_name": "Subspecies", "dir_parent_rank_id": 220, "req_parent_rank_id": 220, "update_date": null}}, {"model": "front.taxonunittype", "pk": 124, "fields": {"kingdom": 5, "rank_id": 240, "rank_name": "Variety", "dir_parent_rank_id": 220, "req_parent_rank_id": 220, "update_date": null}}, {"model": "front.taxonunittype", "pk": 125, "fields": {"kingdom": 5, "rank_id": 245, "rank_name": "Form", "dir_parent_rank_id": 220, "req_parent_rank_id": 220, "update_date": null}}, {"model": "front.taxonunittype", "pk": 126, "fields": {"kingdom": 5, "rank_id": 250, "rank_name": "Race", "dir_parent_rank_id": 220, "req_parent_rank_id": 220, "update_date": null}}, {"model": "front.taxonunittype", "pk": 127, "fields": {"kingdom": 5, "rank_id": 255, "rank_name": "Stirp", "dir_parent_rank_id": 220, "req_parent_rank_id": 220, "update_date": null}}, {"model": "front.taxonunittype", "pk": 128, "fields": {"kingdom": 5, "rank_id": 260, "rank_name": "Morph", "dir_parent_rank_id": 220, "req_parent_rank_id": 220, "update_date": null}}, {"model": "front.taxonunittype", "pk": 129, "fields": {"kingdom": 5, "rank_id": 265, "rank_name": "Aberration", "dir_parent_rank_id": 220, "req_parent_rank_id": 220, "update_date": null}}, {"model": "front.taxonunittype", "pk": 130, "fields": {"kingdom": 5, "rank_id": 300, "rank_name": "Unspecified", "dir_parent_rank_id": 220, "req_parent_rank_id": 220, "update_date": null}}, {"model": "front.taxonunittype", "pk": 131, "fields": {"kingdom": 6, "rank_id": 10, "rank_name": "Kingdom", "dir_parent_rank_id": 10, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 132, "fields": {"kingdom": 6, "rank_id": 20, "rank_name": "Subkingdom", "dir_parent_rank_id": 10, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 133, "fields": {"kingdom": 6, "rank_id": 25, "rank_name": "Infrakingdom", "dir_parent_rank_id": 20, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 134, "fields": {"kingdom": 6, "rank_id": 27, "rank_name": "Superdivision", "dir_parent_rank_id": 25, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 135, "fields": {"kingdom": 6, "rank_id": 30, "rank_name": "Division", "dir_parent_rank_id": 27, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 136, "fields": {"kingdom": 6, "rank_id": 40, "rank_name": "Subdivision", "dir_parent_rank_id": 30, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 137, "fields": {"kingdom": 6, "rank_id": 45, "rank_name": "Infradivision", "dir_parent_rank_id": 40, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 138, "fields": {"kingdom": 6, "rank_id": 47, "rank_name": "Parvdivision", "dir_parent_rank_id": 45, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 139, "fields": {"kingdom": 6, "rank_id": 50, "rank_name": "Superclass", "dir_parent_rank_id": 47, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 140, "fields": {"kingdom": 6, "rank_id": 60, "rank_name": "Class", "dir_parent_rank_id": 50, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 141, "fields": {"kingdom": 6, "rank_id": 70, "rank_name": "Subclass", "dir_parent_rank_id": 60, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 142, "fields": {"kingdom": 6, "rank_id": 80, "rank_name": "Infraclass", "dir_parent_rank_id": 70, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 143, "fields": {"kingdom": 6, "rank_id": 90, "rank_name": "Superorder", "dir_parent_rank_id": 80, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 144, "fields": {"kingdom": 6, "rank_id": 100, "rank_name": "Order", "dir_parent_rank_id": 90, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 145, "fields": {"kingdom": 6, "rank_id": 110, "rank_name": "Suborder", "dir_parent_rank_id": 100, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 146, "fields": {"kingdom": 6, "rank_id": 140, "rank_name": "Family", "dir_parent_rank_id": 110, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 147, "fields": {"kingdom": 6, "rank_id": 150, "rank_name": "Subfamily", "dir_parent_rank_id": 140, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 148, "fields": {"kingdom": 6, "rank_id": 160, "rank_name": "Tribe", "dir_parent_rank_id": 150, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 149, "fields": {"kingdom": 6, "rank_id": 170, "rank_name": "Subtribe", "dir_parent_rank_id": 160, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 150, "fields": {"kingdom": 6, "rank_id": 180, "rank_name": "Genus", "dir_parent_rank_id": 170, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 151, "fields": {"kingdom": 6, "rank_id": 190, "rank_name": "Subgenus", "dir_parent_rank_id": 180, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 152, "fields": {"kingdom": 6, "rank_id": 200, "rank_name": "Section", "dir_parent_rank_id": 190, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 153, "fields": {"kingdom": 6, "rank_id": 210, "rank_name": "Subsection", "dir_parent_rank_id": 200, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 154, "fields": {"kingdom": 6, "rank_id": 220, "rank_name": "Species", "dir_parent_rank_id": 210, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 155, "fields": {"kingdom": 6, "rank_id": 230, "rank_name": "Subspecies", "dir_parent_rank_id": 220, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 156, "fields": {"kingdom": 6, "rank_id": 240, "rank_name": "Variety", "dir_parent_rank_id": 230, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 157, "fields": {"kingdom": 6, "rank_id": 250, "rank_name": "Subvariety", "dir_parent_rank_id": 240, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 158, "fields": {"kingdom": 6, "rank_id": 260, "rank_name": "Form", "dir_parent_rank_id": 250, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 159, "fields": {"kingdom": 6, "rank_id": 270, "rank_name": "Subform", "dir_parent_rank_id": 260, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 160, "fields": {"kingdom": 7, "rank_id": 10, "rank_name": "Kingdom", "dir_parent_rank_id": 10, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 161, "fields": {"kingdom": 7, "rank_id": 20, "rank_name": "Subkingdom", "dir_parent_rank_id": 10, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 162, "fields": {"kingdom": 7, "rank_id": 30, "rank_name": "Phylum", "dir_parent_rank_id": 20, "req_parent_rank_id": 10, "update_date": null}}, {"model": "front.taxonunittype", "pk": 163, "fields": {"kingdom": 7, "rank_id": 40, "rank_name": "Subphylum", "dir_parent_rank_id": 30, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 164, "fields": {"kingdom": 7, "rank_id": 50, "rank_name": "Superclass", "dir_parent_rank_id": 40, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 165, "fields": {"kingdom": 7, "rank_id": 60, "rank_name": "Class", "dir_parent_rank_id": 50, "req_parent_rank_id": 30, "update_date": null}}, {"model": "front.taxonunittype", "pk": 166, "fields": {"kingdom": 7, "rank_id": 70, "rank_name": "Subclass", "dir_parent_rank_id": 60, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 167, "fields": {"kingdom": 7, "rank_id": 80, "rank_name": "Infraclass", "dir_parent_rank_id": 70, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 168, "fields": {"kingdom": 7, "rank_id": 90, "rank_name": "Superorder", "dir_parent_rank_id": 80, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 169, "fields": {"kingdom": 7, "rank_id": 100, "rank_name": "Order", "dir_parent_rank_id": 90, "req_parent_rank_id": 60, "update_date": null}}, {"model": "front.taxonunittype", "pk": 170, "fields": {"kingdom": 7, "rank_id": 110, "rank_name": "Suborder", "dir_parent_rank_id": 100, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 171, "fields": {"kingdom": 7, "rank_id": 120, "rank_name": "Infraorder", "dir_parent_rank_id": 110, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 172, "fields": {"kingdom": 7, "rank_id": 130, "rank_name": "Superfamily", "dir_parent_rank_id": 120, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 173, "fields": {"kingdom": 7, "rank_id": 140, "rank_name": "Family", "dir_parent_rank_id": 130, "req_parent_rank_id": 100, "update_date": null}}, {"model": "front.taxonunittype", "pk": 174, "fields": {"kingdom": 7, "rank_id": 150, "rank_name": "Subfamily", "dir_parent_rank_id": 140, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 175, "fields": {"kingdom": 7, "rank_id": 160, "rank_name": "Tribe", "dir_parent_rank_id": 150, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 176, "fields": {"kingdom": 7, "rank_id": 170, "rank_name": "Subtribe", "dir_parent_rank_id": 160, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 177, "fields": {"kingdom": 7, "rank_id": 180, "rank_name": "Genus", "dir_parent_rank_id": 170, "req_parent_rank_id": 140, "update_date": null}}, {"model": "front.taxonunittype", "pk": 178, "fields": {"kingdom": 7, "rank_id": 190, "rank_name": "Subgenus", "dir_parent_rank_id": 180, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 179, "fields": {"kingdom": 7, "rank_id": 220, "rank_name": "Species", "dir_parent_rank_id": 190, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.taxonunittype", "pk": 180, "fields": {"kingdom": 7, "rank_id": 230, "rank_name": "Subspecies", "dir_parent_rank_id": 220, "req_parent_rank_id": 180, "update_date": null}}, {"model": "front.geographicdiv", "pk": 1, "fields": {"geographic_value": "Europe", "update_date": null}}, {"model": "front.geographicdiv", "pk": 2, "fields": {"geographic_value": "North America", "update_date": null}}, {"model": "front.geographicdiv", "pk": 3, "fields": {"geographic_value": "Oceania", "update_date": null}}, {"model": "front.geographicdiv", "pk": 4, "fields": {"geographic_value": "South America", "update_date": null}}, {"model": "front.geographicdiv", "pk": 5, "fields": {"geographic_value": "Southern Asia", "update_date": null}}, {"model": "front.geographicdiv", "pk": 6, "fields": {"geographic_value": "Middle America", "update_date": null}}, {"model": "front.geographicdiv", "pk": 7, "fields": {"geographic_value": "Africa", "update_date": null}}, {"model": "front.geographicdiv", "pk": 8, "fields": {"geographic_value": "Australia", "update_date": null}}, {"model": "front.geographicdiv", "pk": 9, "fields": {"geographic_value": "Caribbean", "update_date": null}}, {"model": "front.geographicdiv", "pk": 10, "fields": {"geographic_value": "Europe & Northern Asia (excluding China)", "update_date": null}}, {"model": "front.geographicdiv", "pk": 11, "fields": {"geographic_value": "Antarctica/Southern Ocean", "update_date": null}}, {"model": "front.geographicdiv", "pk": 12, "fields": {"geographic_value": "Eastern Atlantic Ocean", "update_date": null}}, {"model": "front.geographicdiv", "pk": 13, "fields": {"geographic_value": "Western Atlantic Ocean", "update_date": null}}, {"model": "front.geographicdiv", "pk": 14, "fields": {"geographic_value": "Indo-West Pacific", "update_date": null}}, {"model": "front.geographicdiv", "pk": 15, "fields": {"geographic_value": "East Pacific", "update_date": null}}, {"model": "front.taxonomicunit", "pk": 1, "fields": {"unit_ind1": null, "unit_name1": "Bacteria", "unit_ind2": null, "unit_name2": null, "unit_ind3": null, "unit_name3": null, "unit_ind4": null, "unit_name4": null, "unnamed_taxon_ind": null, "name_usage": null, "unaccept_reason": null, "credibility_rtng": null, "completeness_rtng": null, "currency_rating": null, "phylo_sort_seq": null, "initial_time_stamp": null, "parent_id": 0, "taxon_author": null, "kingdom": 1, "rank": 1, "hybrid_author_id": null, "update_date": null, "uncertain_prnt_ind": null, "n_usage": null, "complete_name": null, "references": [], "geographic_div": []}}, {"model": "front.taxonomicunit", "pk": 2, "fields": {"unit_ind1": null, "unit_name1": "Protozoa", "unit_ind2": null, "unit_name2": null, "unit_ind3": null, "unit_name3": null, "unit_ind4": null, "unit_name4": null, "unnamed_taxon_ind": null, "name_usage": null, "unaccept_reason": null, "credibility_rtng": null, "completeness_rtng": null, "currency_rating": null, "phylo_sort_seq": null, "initial_time_stamp": null, "parent_id": 0, "taxon_author": null, "kingdom": 2, "rank": 22, "hybrid_author_id": null, "update_date": null, "uncertain_prnt_ind": null, "n_usage": null, "complete_name": null, "references": [], "geographic_div": []}}, {"model": "front.taxonomicunit", "pk": 3, "fields": {"unit_ind1": null, "unit_name1": "Plantae", "unit_ind2": null, "unit_name2": null, "unit_ind3": null, "unit_name3": null, "unit_ind4": null, "unit_name4": null, "unnamed_taxon_ind": null, "name_usage": null, "unaccept_reason": null, "credibility_rtng": null, "completeness_rtng": null, "currency_rating": null, "phylo_sort_seq": null, "initial_time_stamp": null, "parent_id": 0, "taxon_author": null, "kingdom": 3, "rank": 47, "hybrid_author_id": null, "update_date": null, "uncertain_prnt_ind": null, "n_usage": null, "complete_name": null, "references": [], "geographic_div": []}}, {"model": "front.taxonomicunit", "pk": 4, "fields": {"unit_ind1": null, "unit_name1": "Fungi", "unit_ind2": null, "unit_name2": null, "unit_ind3": null, "unit_name3": null, "unit_ind4": null, "unit_name4": null, "unnamed_taxon_ind": null, "name_usage": null, "unaccept_reason": null, "credibility_rtng": null, "completeness_rtng": null, "currency_rating": null, "phylo_sort_seq": null, "initial_time_stamp": null, "parent_id": 0, "taxon_author": null, "kingdom": 4, "rank": 75, "hybrid_author_id": null, "update_date": null, "uncertain_prnt_ind": null, "n_usage": null, "complete_name": null, "references": [], "geographic_div": []}}, {"model": "front.taxonomicunit", "pk": 5, "fields": {"unit_ind1": null, "unit_name1": "Animalia", "unit_ind2": null, "unit_name2": null, "unit_ind3": null, "unit_name3": null, "unit_ind4": null, "unit_name4": null, "unnamed_taxon_ind": null, "name_usage": null, "unaccept_reason": null, "credibility_rtng": null, "completeness_rtng": null, "currency_rating": null, "phylo_sort_seq": null, "initial_time_stamp": null, "parent_id": 0, "taxon_author": null, "kingdom": 5, "rank": 98, "hybrid_author_id": null, "update_date": null, "uncertain_prnt_ind": null, "n_usage": null, "complete_name": null, "references": [], "geographic_div": []}}, {"model": "front.taxonomicunit", "pk": 6, "fields": {"unit_ind1": null, "unit_name1": "Chromista", "unit_ind2": null, "unit_name2": null, "unit_ind3": null, "unit_name3": null, "unit_ind4": null, "unit_name4": null, "unnamed_taxon_ind": null, "name_usage": null, "unaccept_reason": null, "credibility_rtng": null, "completeness_rtng": null, "currency_rating": null, "phylo_sort_seq": null, "initial_time_stamp": null, "parent_id": 0, "taxon_author": null, "kingdom": 6, "rank": 131, "hybrid_author_id": null, "update_date": null, "uncertain_prnt_ind": null, "n_usage": null, "complete_name": null, "references": [], "geographic_div": []}}, {"model": "front.taxonomicunit", "pk": 7, "fields": {"unit_ind1": null, "unit_name1": "Archaea", "unit_ind2": null, "unit_name2": null, "unit_ind3": null, "unit_name3": null, "unit_ind4": null, "unit_name4": null, "unnamed_taxon_ind": null, "name_usage": null, "unaccept_reason": null, "credibility_rtng": null, "completeness_rtng": null, "currency_rating": null, "phylo_sort_seq": null, "initial_time_stamp": null, "parent_id": 0, "taxon_author": null, "kingdom": 7, "rank": 160, "hybrid_author_id": null, "update_date": null, "uncertain_prnt_ind": null, "n_usage": null, "complete_name": null, "references": [], "geographic_div": []}}, {"model": "front.hierarchy", "pk": 4, "fields": {"hierarchy_string": "1", "taxon": 1, "parent_id": 0, "level": 0, "childrencount": 0}}, {"model": "front.hierarchy", "pk": 5, "fields": {"hierarchy_string": "2", "taxon": 2, "parent_id": 0, "level": 0, "childrencount": 0}}, {"model": "front.hierarchy", "pk": 6, "fields": {"hierarchy_string": "3", "taxon": 3, "parent_id": 0, "level": 0, "childrencount": 0}}, {"model": "front.hierarchy", "pk": 7, "fields": {"hierarchy_string": "4", "taxon": 4, "parent_id": 0, "level": 0, "childrencount": 0}}, {"model": "front.hierarchy", "pk": 8, "fields": {"hierarchy_string": "5", "taxon": 5, "parent_id": 0, "level": 0, "childrencount": 0}}, {"model": "front.hierarchy", "pk": 9, "fields": {"hierarchy_string": "6", "taxon": 6, "parent_id": 0, "level": 0, "childrencount": 0}}, {"model": "front.hierarchy", "pk": 10, "fields": {"hierarchy_string": "7", "taxon": 7, "parent_id": 0, "level": 0, "childrencount": 0}}, {"model": "front.historicaltaxonauthorlkp", "pk": 1, "fields": {"taxon_author_id": 1, "taxon_author": "a", "update_date": null, "short_author": null, "kingdom": 1, "history_date": "2022-04-03T09:48:59.368Z", "history_change_reason": null, "history_type": "+", "history_user": 1}}, {"model": "front.historicaltaxonauthorlkp", "pk": 2, "fields": {"taxon_author_id": 2, "taxon_author": "b", "update_date": null, "short_author": null, "kingdom": 1, "history_date": "2022-04-03T09:49:03.997Z", "history_change_reason": null, "history_type": "+", "history_user": 1}}, {"model": "front.historicaltaxonauthorlkp", "pk": 3, "fields": {"taxon_author_id": 3, "taxon_author": "c", "update_date": null, "short_author": null, "kingdom": 1, "history_date": "2022-04-03T09:50:22.019Z", "history_change_reason": null, "history_type": "+", "history_user": 1}}, {"model": "front.historicaltaxonauthorlkp", "pk": 4, "fields": {"taxon_author_id": 4, "taxon_author": "aa", "update_date": null, "short_author": null, "kingdom": 3, "history_date": "2022-04-03T09:50:25.482Z", "history_change_reason": null, "history_type": "+", "history_user": 1}}, {"model": "front.historicaltaxonauthorlkp", "pk": 5, "fields": {"taxon_author_id": 4, "taxon_author": "aa", "update_date": null, "short_author": null, "kingdom": 3, "history_date": "2022-04-05T09:27:59.316Z", "history_change_reason": null, "history_type": "-", "history_user": 1}}, {"model": "front.historicaltaxonauthorlkp", "pk": 6, "fields": {"taxon_author_id": 3, "taxon_author": "c", "update_date": null, "short_author": null, "kingdom": 1, "history_date": "2022-04-05T09:27:59.317Z", "history_change_reason": null, "history_type": "-", "history_user": 1}}, {"model": "front.historicaltaxonauthorlkp", "pk": 7, "fields": {"taxon_author_id": 2, "taxon_author": "b", "update_date": null, "short_author": null, "kingdom": 1, "history_date": "2022-04-05T09:27:59.317Z", "history_change_reason": null, "history_type": "-", "history_user": 1}}, {"model": "front.historicaltaxonauthorlkp", "pk": 8, "fields": {"taxon_author_id": 1, "taxon_author": "a", "update_date": null, "short_author": null, "kingdom": 1, "history_date": "2022-04-05T09:27:59.318Z", "history_change_reason": null, "history_type": "-", "history_user": 1}}]
+[
+  {
+    "model": "front.reference",
+    "pk": 1,
+    "fields": {
+      "authors": "Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D.",
+      "title": "Species 2000 & ITIS Catalogue of Life, 2015 Annual Checklist",
+      "title_html": "",
+      "title_latex": "",
+      "journal": "",
+      "volume": "",
+      "page_start": "",
+      "page_end": "",
+      "article_number": "",
+      "year": 2015,
+      "note": "ISSN 2405-917X",
+      "note_html": "",
+      "note_latex": "",
+      "doi": "",
+      "bibcode": "",
+      "url": "",
+      "bibtex": "@book{book,\r\nauthor = {Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D.},\r\nyear = {2015},\r\nmonth = {04},\r\npages = {},\r\ntitle = {Species 2000 & ITIS Catalogue of Life, 2015 Annual Checklist},\r\nisbn = {ISSN 2405-917X}\r\n}",
+      "ris": null,
+      "citeproc_json": null,
+      "visible": 1
+    }
+  },
+  {
+    "model": "front.reference",
+    "pk": 2,
+    "fields": {
+      "authors": "Audet, A.M., Robbins, C.B. and Larivière, S.",
+      "title": "Alopex lagopus",
+      "title_html": "",
+      "title_latex": "",
+      "journal": "Mammalian species",
+      "volume": "713",
+      "page_start": "1",
+      "page_end": "10",
+      "article_number": "",
+      "year": 2002,
+      "note": "",
+      "note_html": "",
+      "note_latex": "",
+      "doi": "",
+      "bibcode": "",
+      "url": "",
+      "bibtex": "@article{audet2002alopex,\r\n  title={Alopex lagopus},\r\n  author={Audet, Alexandra M and Robbins, C Brian and Larivi{\\`e}re, Serge},\r\n  journal={Mammalian species},\r\n  number={713},\r\n  pages={1--10},\r\n  year={2002},\r\n  publisher={JSTOR}\r\n}",
+      "ris": null,
+      "citeproc_json": null,
+      "visible": 1
+    }
+  },
+  {
+    "model": "front.kingdom",
+    "pk": 1,
+    "fields": {
+      "kingdom_name": "Bacteria",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.kingdom",
+    "pk": 2,
+    "fields": {
+      "kingdom_name": "Protozoa",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.kingdom",
+    "pk": 3,
+    "fields": {
+      "kingdom_name": "Plantae",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.kingdom",
+    "pk": 4,
+    "fields": {
+      "kingdom_name": "Fungi",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.kingdom",
+    "pk": 5,
+    "fields": {
+      "kingdom_name": "Animalia",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.kingdom",
+    "pk": 6,
+    "fields": {
+      "kingdom_name": "Chromista",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.kingdom",
+    "pk": 7,
+    "fields": {
+      "kingdom_name": "Archaea",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 1,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 10,
+      "rank_name": "Kingdom",
+      "dir_parent_rank_id": 10,
+      "req_parent_rank_id": 10,
+      "update_date": "2022-03-03T07:26:38Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 2,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 20,
+      "rank_name": "Subkingdom",
+      "dir_parent_rank_id": 10,
+      "req_parent_rank_id": 10,
+      "update_date": "2022-03-03T07:26:55Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 3,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 30,
+      "rank_name": "Phylum",
+      "dir_parent_rank_id": 20,
+      "req_parent_rank_id": 10,
+      "update_date": "2022-03-03T07:27:08Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 4,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 40,
+      "rank_name": "Subphylum",
+      "dir_parent_rank_id": 30,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 5,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 50,
+      "rank_name": "Superclass",
+      "dir_parent_rank_id": 40,
+      "req_parent_rank_id": 30,
+      "update_date": "2022-03-03T07:28:25Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 6,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 60,
+      "rank_name": "Class",
+      "dir_parent_rank_id": 50,
+      "req_parent_rank_id": 30,
+      "update_date": "2022-03-03T07:28:41Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 7,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 70,
+      "rank_name": "Subclass",
+      "dir_parent_rank_id": 60,
+      "req_parent_rank_id": 60,
+      "update_date": "2022-03-03T07:28:58Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 8,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 80,
+      "rank_name": "Infraclass",
+      "dir_parent_rank_id": 70,
+      "req_parent_rank_id": 60,
+      "update_date": "2022-03-03T07:29:13Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 9,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 90,
+      "rank_name": "Superorder",
+      "dir_parent_rank_id": 80,
+      "req_parent_rank_id": 60,
+      "update_date": "2022-03-03T07:29:30Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 10,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 100,
+      "rank_name": "Order",
+      "dir_parent_rank_id": 90,
+      "req_parent_rank_id": 60,
+      "update_date": "2022-03-03T07:29:42Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 11,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 110,
+      "rank_name": "Suborder",
+      "dir_parent_rank_id": 100,
+      "req_parent_rank_id": 100,
+      "update_date": "2022-03-03T07:30:04Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 12,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 120,
+      "rank_name": "Infraorder",
+      "dir_parent_rank_id": 110,
+      "req_parent_rank_id": 100,
+      "update_date": "2022-03-03T07:30:43Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 13,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 130,
+      "rank_name": "Superfamily",
+      "dir_parent_rank_id": 120,
+      "req_parent_rank_id": 100,
+      "update_date": "2022-03-03T07:31:01Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 14,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 140,
+      "rank_name": "Family",
+      "dir_parent_rank_id": 130,
+      "req_parent_rank_id": 100,
+      "update_date": "2022-03-03T07:31:14Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 15,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 150,
+      "rank_name": "Subfamily",
+      "dir_parent_rank_id": 140,
+      "req_parent_rank_id": 140,
+      "update_date": "2022-03-03T07:31:27Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 16,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 160,
+      "rank_name": "Tribe",
+      "dir_parent_rank_id": 150,
+      "req_parent_rank_id": 140,
+      "update_date": "2022-03-03T07:31:39Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 17,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 170,
+      "rank_name": "Subtribe",
+      "dir_parent_rank_id": 160,
+      "req_parent_rank_id": 140,
+      "update_date": "2022-03-03T07:32:00Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 18,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 180,
+      "rank_name": "Genus",
+      "dir_parent_rank_id": 170,
+      "req_parent_rank_id": 140,
+      "update_date": "2022-03-03T07:32:14Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 19,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 190,
+      "rank_name": "Subgenus",
+      "dir_parent_rank_id": 180,
+      "req_parent_rank_id": 180,
+      "update_date": "2022-03-03T07:32:27Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 20,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 220,
+      "rank_name": "Species",
+      "dir_parent_rank_id": 190,
+      "req_parent_rank_id": 180,
+      "update_date": "2022-03-03T07:32:39Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 21,
+    "fields": {
+      "kingdom": 1,
+      "rank_id": 230,
+      "rank_name": "Subspecies",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 180,
+      "update_date": "2022-03-03T07:32:51Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 22,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 10,
+      "rank_name": "Kingdom",
+      "dir_parent_rank_id": 10,
+      "req_parent_rank_id": 10,
+      "update_date": "2022-03-03T07:48:36Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 23,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 20,
+      "rank_name": "Subkingdom",
+      "dir_parent_rank_id": 10,
+      "req_parent_rank_id": 10,
+      "update_date": "2022-03-03T07:48:47Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 24,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 25,
+      "rank_name": "Infrakingdom",
+      "dir_parent_rank_id": 20,
+      "req_parent_rank_id": 10,
+      "update_date": "2022-03-03T07:49:29Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 25,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 30,
+      "rank_name": "Phylum",
+      "dir_parent_rank_id": 25,
+      "req_parent_rank_id": 10,
+      "update_date": "2022-03-03T07:49:50Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 26,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 40,
+      "rank_name": "Subphylum",
+      "dir_parent_rank_id": 30,
+      "req_parent_rank_id": 30,
+      "update_date": "2022-03-03T07:50:06Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 27,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 45,
+      "rank_name": "Infraphylum",
+      "dir_parent_rank_id": 40,
+      "req_parent_rank_id": 30,
+      "update_date": "2022-03-03T07:50:20Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 28,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 47,
+      "rank_name": "Parvphylum",
+      "dir_parent_rank_id": 45,
+      "req_parent_rank_id": 30,
+      "update_date": "2022-03-03T07:50:37Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 29,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 50,
+      "rank_name": "Superclass",
+      "dir_parent_rank_id": 47,
+      "req_parent_rank_id": 30,
+      "update_date": "2022-03-03T07:50:52Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 30,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 60,
+      "rank_name": "Class",
+      "dir_parent_rank_id": 50,
+      "req_parent_rank_id": 30,
+      "update_date": "2022-03-03T07:51:05Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 31,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 70,
+      "rank_name": "Subclass",
+      "dir_parent_rank_id": 60,
+      "req_parent_rank_id": 60,
+      "update_date": "2022-03-03T07:51:26Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 32,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 80,
+      "rank_name": "Infraclass",
+      "dir_parent_rank_id": 70,
+      "req_parent_rank_id": 60,
+      "update_date": "2022-03-03T07:51:37Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 33,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 90,
+      "rank_name": "Superorder",
+      "dir_parent_rank_id": 80,
+      "req_parent_rank_id": 60,
+      "update_date": "2022-03-03T07:51:55Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 34,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 100,
+      "rank_name": "Order",
+      "dir_parent_rank_id": 90,
+      "req_parent_rank_id": 60,
+      "update_date": "2022-03-03T07:52:15Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 35,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 110,
+      "rank_name": "Suborder",
+      "dir_parent_rank_id": 100,
+      "req_parent_rank_id": 100,
+      "update_date": "2022-03-03T07:55:55Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 36,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 120,
+      "rank_name": "Infraorder",
+      "dir_parent_rank_id": 110,
+      "req_parent_rank_id": 100,
+      "update_date": "2022-03-03T07:56:10Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 37,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 130,
+      "rank_name": "Superfamily",
+      "dir_parent_rank_id": 120,
+      "req_parent_rank_id": 100,
+      "update_date": "2022-03-03T07:56:25Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 38,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 140,
+      "rank_name": "Family",
+      "dir_parent_rank_id": 130,
+      "req_parent_rank_id": 100,
+      "update_date": "2022-03-03T07:56:38Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 39,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 150,
+      "rank_name": "Subfamily",
+      "dir_parent_rank_id": 140,
+      "req_parent_rank_id": 140,
+      "update_date": "2022-03-03T07:56:49Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 40,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 160,
+      "rank_name": "Tribe",
+      "dir_parent_rank_id": 130,
+      "req_parent_rank_id": 100,
+      "update_date": "2022-03-03T07:57:03Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 41,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 170,
+      "rank_name": "Subtribe",
+      "dir_parent_rank_id": 160,
+      "req_parent_rank_id": 140,
+      "update_date": "2022-03-03T07:57:23Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 42,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 180,
+      "rank_name": "Genus",
+      "dir_parent_rank_id": 170,
+      "req_parent_rank_id": 140,
+      "update_date": "2022-03-03T07:57:38Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 43,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 190,
+      "rank_name": "Subgenus",
+      "dir_parent_rank_id": 180,
+      "req_parent_rank_id": 180,
+      "update_date": "2022-03-03T07:57:50Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 44,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 220,
+      "rank_name": "Species",
+      "dir_parent_rank_id": 190,
+      "req_parent_rank_id": 180,
+      "update_date": "2022-03-03T07:58:07Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 45,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 230,
+      "rank_name": "Subspecies",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 46,
+    "fields": {
+      "kingdom": 2,
+      "rank_id": 240,
+      "rank_name": "Variety",
+      "dir_parent_rank_id": 230,
+      "req_parent_rank_id": 180,
+      "update_date": "2022-03-03T07:58:49Z"
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 47,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 10,
+      "rank_name": "Kingdom",
+      "dir_parent_rank_id": 10,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 48,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 20,
+      "rank_name": "Subkingdom",
+      "dir_parent_rank_id": 10,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 49,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 25,
+      "rank_name": "Infrakingdom",
+      "dir_parent_rank_id": 20,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 50,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 27,
+      "rank_name": "Superdivision",
+      "dir_parent_rank_id": 25,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 51,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 30,
+      "rank_name": "Division",
+      "dir_parent_rank_id": 27,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 52,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 40,
+      "rank_name": "Subdivision",
+      "dir_parent_rank_id": 30,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 53,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 45,
+      "rank_name": "Infradivision",
+      "dir_parent_rank_id": 40,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 54,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 50,
+      "rank_name": "Superclass",
+      "dir_parent_rank_id": 45,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 55,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 60,
+      "rank_name": "Class",
+      "dir_parent_rank_id": 50,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 56,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 70,
+      "rank_name": "Subclass",
+      "dir_parent_rank_id": 60,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 57,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 80,
+      "rank_name": "Infraclass",
+      "dir_parent_rank_id": 70,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 58,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 90,
+      "rank_name": "Superorder",
+      "dir_parent_rank_id": 80,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 59,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 100,
+      "rank_name": "Order",
+      "dir_parent_rank_id": 90,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 60,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 110,
+      "rank_name": "Suborder",
+      "dir_parent_rank_id": 100,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 61,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 140,
+      "rank_name": "Family",
+      "dir_parent_rank_id": 110,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 62,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 150,
+      "rank_name": "Subfamily",
+      "dir_parent_rank_id": 140,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 63,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 160,
+      "rank_name": "Tribe",
+      "dir_parent_rank_id": 150,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 64,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 170,
+      "rank_name": "Subtribe",
+      "dir_parent_rank_id": 160,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 65,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 180,
+      "rank_name": "Genus",
+      "dir_parent_rank_id": 170,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 66,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 190,
+      "rank_name": "Subgenus",
+      "dir_parent_rank_id": 180,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 67,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 200,
+      "rank_name": "Section",
+      "dir_parent_rank_id": 190,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 68,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 210,
+      "rank_name": "Subsection",
+      "dir_parent_rank_id": 200,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 69,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 220,
+      "rank_name": "Species",
+      "dir_parent_rank_id": 210,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 70,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 230,
+      "rank_name": "Subspecies",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 71,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 240,
+      "rank_name": "Variety",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 72,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 250,
+      "rank_name": "Subvariety",
+      "dir_parent_rank_id": 240,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 73,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 260,
+      "rank_name": "Form",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 74,
+    "fields": {
+      "kingdom": 3,
+      "rank_id": 270,
+      "rank_name": "Subform",
+      "dir_parent_rank_id": 260,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 75,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 10,
+      "rank_name": "Kingdom",
+      "dir_parent_rank_id": 10,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 76,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 20,
+      "rank_name": "Subkingdom",
+      "dir_parent_rank_id": 10,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 77,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 30,
+      "rank_name": "Division",
+      "dir_parent_rank_id": 20,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 78,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 40,
+      "rank_name": "Subdivision",
+      "dir_parent_rank_id": 30,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 79,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 60,
+      "rank_name": "Class",
+      "dir_parent_rank_id": 40,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 80,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 70,
+      "rank_name": "Subclass",
+      "dir_parent_rank_id": 60,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 81,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 90,
+      "rank_name": "Superorder",
+      "dir_parent_rank_id": 70,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 82,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 100,
+      "rank_name": "Order",
+      "dir_parent_rank_id": 90,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 83,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 110,
+      "rank_name": "Suborder",
+      "dir_parent_rank_id": 100,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 84,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 140,
+      "rank_name": "Family",
+      "dir_parent_rank_id": 110,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 85,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 150,
+      "rank_name": "Subfamily",
+      "dir_parent_rank_id": 140,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 86,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 160,
+      "rank_name": "Tribe",
+      "dir_parent_rank_id": 150,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 87,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 170,
+      "rank_name": "Subtribe",
+      "dir_parent_rank_id": 160,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 88,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 180,
+      "rank_name": "Genus",
+      "dir_parent_rank_id": 170,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 89,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 190,
+      "rank_name": "Subgenus",
+      "dir_parent_rank_id": 180,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 90,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 200,
+      "rank_name": "Section",
+      "dir_parent_rank_id": 190,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 91,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 210,
+      "rank_name": "Subsection",
+      "dir_parent_rank_id": 200,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 92,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 220,
+      "rank_name": "Species",
+      "dir_parent_rank_id": 210,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 93,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 230,
+      "rank_name": "Subspecies",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 94,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 240,
+      "rank_name": "Variety",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 95,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 250,
+      "rank_name": "Subvariety",
+      "dir_parent_rank_id": 240,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 96,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 260,
+      "rank_name": "Form",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 97,
+    "fields": {
+      "kingdom": 4,
+      "rank_id": 270,
+      "rank_name": "Subform",
+      "dir_parent_rank_id": 260,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 98,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 10,
+      "rank_name": "Kingdom",
+      "dir_parent_rank_id": 10,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 99,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 20,
+      "rank_name": "Subkingdom",
+      "dir_parent_rank_id": 10,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 100,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 25,
+      "rank_name": "Infrakingdom",
+      "dir_parent_rank_id": 20,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 101,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 27,
+      "rank_name": "Superphylum",
+      "dir_parent_rank_id": 25,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 102,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 30,
+      "rank_name": "Phylum",
+      "dir_parent_rank_id": 27,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 103,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 40,
+      "rank_name": "Subphylum",
+      "dir_parent_rank_id": 30,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 104,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 45,
+      "rank_name": "Infraphylum",
+      "dir_parent_rank_id": 40,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 105,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 50,
+      "rank_name": "Superclass",
+      "dir_parent_rank_id": 45,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 106,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 60,
+      "rank_name": "Class",
+      "dir_parent_rank_id": 50,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 107,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 70,
+      "rank_name": "Subclass",
+      "dir_parent_rank_id": 60,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 108,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 80,
+      "rank_name": "Infraclass",
+      "dir_parent_rank_id": 70,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 109,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 90,
+      "rank_name": "Superorder",
+      "dir_parent_rank_id": 80,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 110,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 100,
+      "rank_name": "Order",
+      "dir_parent_rank_id": 90,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 111,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 110,
+      "rank_name": "Suborder",
+      "dir_parent_rank_id": 100,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 112,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 120,
+      "rank_name": "Infraorder",
+      "dir_parent_rank_id": 110,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 113,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 124,
+      "rank_name": "Section",
+      "dir_parent_rank_id": 120,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 114,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 126,
+      "rank_name": "Subsection",
+      "dir_parent_rank_id": 124,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 115,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 130,
+      "rank_name": "Superfamily",
+      "dir_parent_rank_id": 126,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 116,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 140,
+      "rank_name": "Family",
+      "dir_parent_rank_id": 130,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 117,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 150,
+      "rank_name": "Subfamily",
+      "dir_parent_rank_id": 140,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 118,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 160,
+      "rank_name": "Tribe",
+      "dir_parent_rank_id": 150,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 119,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 170,
+      "rank_name": "Subtribe",
+      "dir_parent_rank_id": 160,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 120,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 180,
+      "rank_name": "Genus",
+      "dir_parent_rank_id": 170,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 121,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 190,
+      "rank_name": "Subgenus",
+      "dir_parent_rank_id": 180,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 122,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 220,
+      "rank_name": "Species",
+      "dir_parent_rank_id": 190,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 123,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 230,
+      "rank_name": "Subspecies",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 220,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 124,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 240,
+      "rank_name": "Variety",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 220,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 125,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 245,
+      "rank_name": "Form",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 220,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 126,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 250,
+      "rank_name": "Race",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 220,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 127,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 255,
+      "rank_name": "Stirp",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 220,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 128,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 260,
+      "rank_name": "Morph",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 220,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 129,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 265,
+      "rank_name": "Aberration",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 220,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 130,
+    "fields": {
+      "kingdom": 5,
+      "rank_id": 300,
+      "rank_name": "Unspecified",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 220,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 131,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 10,
+      "rank_name": "Kingdom",
+      "dir_parent_rank_id": 10,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 132,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 20,
+      "rank_name": "Subkingdom",
+      "dir_parent_rank_id": 10,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 133,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 25,
+      "rank_name": "Infrakingdom",
+      "dir_parent_rank_id": 20,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 134,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 27,
+      "rank_name": "Superdivision",
+      "dir_parent_rank_id": 25,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 135,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 30,
+      "rank_name": "Division",
+      "dir_parent_rank_id": 27,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 136,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 40,
+      "rank_name": "Subdivision",
+      "dir_parent_rank_id": 30,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 137,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 45,
+      "rank_name": "Infradivision",
+      "dir_parent_rank_id": 40,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 138,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 47,
+      "rank_name": "Parvdivision",
+      "dir_parent_rank_id": 45,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 139,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 50,
+      "rank_name": "Superclass",
+      "dir_parent_rank_id": 47,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 140,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 60,
+      "rank_name": "Class",
+      "dir_parent_rank_id": 50,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 141,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 70,
+      "rank_name": "Subclass",
+      "dir_parent_rank_id": 60,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 142,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 80,
+      "rank_name": "Infraclass",
+      "dir_parent_rank_id": 70,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 143,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 90,
+      "rank_name": "Superorder",
+      "dir_parent_rank_id": 80,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 144,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 100,
+      "rank_name": "Order",
+      "dir_parent_rank_id": 90,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 145,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 110,
+      "rank_name": "Suborder",
+      "dir_parent_rank_id": 100,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 146,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 140,
+      "rank_name": "Family",
+      "dir_parent_rank_id": 110,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 147,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 150,
+      "rank_name": "Subfamily",
+      "dir_parent_rank_id": 140,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 148,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 160,
+      "rank_name": "Tribe",
+      "dir_parent_rank_id": 150,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 149,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 170,
+      "rank_name": "Subtribe",
+      "dir_parent_rank_id": 160,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 150,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 180,
+      "rank_name": "Genus",
+      "dir_parent_rank_id": 170,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 151,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 190,
+      "rank_name": "Subgenus",
+      "dir_parent_rank_id": 180,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 152,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 200,
+      "rank_name": "Section",
+      "dir_parent_rank_id": 190,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 153,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 210,
+      "rank_name": "Subsection",
+      "dir_parent_rank_id": 200,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 154,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 220,
+      "rank_name": "Species",
+      "dir_parent_rank_id": 210,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 155,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 230,
+      "rank_name": "Subspecies",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 156,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 240,
+      "rank_name": "Variety",
+      "dir_parent_rank_id": 230,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 157,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 250,
+      "rank_name": "Subvariety",
+      "dir_parent_rank_id": 240,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 158,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 260,
+      "rank_name": "Form",
+      "dir_parent_rank_id": 250,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 159,
+    "fields": {
+      "kingdom": 6,
+      "rank_id": 270,
+      "rank_name": "Subform",
+      "dir_parent_rank_id": 260,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 160,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 10,
+      "rank_name": "Kingdom",
+      "dir_parent_rank_id": 10,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 161,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 20,
+      "rank_name": "Subkingdom",
+      "dir_parent_rank_id": 10,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 162,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 30,
+      "rank_name": "Phylum",
+      "dir_parent_rank_id": 20,
+      "req_parent_rank_id": 10,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 163,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 40,
+      "rank_name": "Subphylum",
+      "dir_parent_rank_id": 30,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 164,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 50,
+      "rank_name": "Superclass",
+      "dir_parent_rank_id": 40,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 165,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 60,
+      "rank_name": "Class",
+      "dir_parent_rank_id": 50,
+      "req_parent_rank_id": 30,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 166,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 70,
+      "rank_name": "Subclass",
+      "dir_parent_rank_id": 60,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 167,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 80,
+      "rank_name": "Infraclass",
+      "dir_parent_rank_id": 70,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 168,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 90,
+      "rank_name": "Superorder",
+      "dir_parent_rank_id": 80,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 169,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 100,
+      "rank_name": "Order",
+      "dir_parent_rank_id": 90,
+      "req_parent_rank_id": 60,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 170,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 110,
+      "rank_name": "Suborder",
+      "dir_parent_rank_id": 100,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 171,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 120,
+      "rank_name": "Infraorder",
+      "dir_parent_rank_id": 110,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 172,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 130,
+      "rank_name": "Superfamily",
+      "dir_parent_rank_id": 120,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 173,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 140,
+      "rank_name": "Family",
+      "dir_parent_rank_id": 130,
+      "req_parent_rank_id": 100,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 174,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 150,
+      "rank_name": "Subfamily",
+      "dir_parent_rank_id": 140,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 175,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 160,
+      "rank_name": "Tribe",
+      "dir_parent_rank_id": 150,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 176,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 170,
+      "rank_name": "Subtribe",
+      "dir_parent_rank_id": 160,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 177,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 180,
+      "rank_name": "Genus",
+      "dir_parent_rank_id": 170,
+      "req_parent_rank_id": 140,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 178,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 190,
+      "rank_name": "Subgenus",
+      "dir_parent_rank_id": 180,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 179,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 220,
+      "rank_name": "Species",
+      "dir_parent_rank_id": 190,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonunittype",
+    "pk": 180,
+    "fields": {
+      "kingdom": 7,
+      "rank_id": 230,
+      "rank_name": "Subspecies",
+      "dir_parent_rank_id": 220,
+      "req_parent_rank_id": 180,
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.geographicdiv",
+    "pk": 1,
+    "fields": {
+      "geographic_value": "Europe",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.geographicdiv",
+    "pk": 2,
+    "fields": {
+      "geographic_value": "North America",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.geographicdiv",
+    "pk": 3,
+    "fields": {
+      "geographic_value": "Oceania",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.geographicdiv",
+    "pk": 4,
+    "fields": {
+      "geographic_value": "South America",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.geographicdiv",
+    "pk": 5,
+    "fields": {
+      "geographic_value": "Southern Asia",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.geographicdiv",
+    "pk": 6,
+    "fields": {
+      "geographic_value": "Middle America",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.geographicdiv",
+    "pk": 7,
+    "fields": {
+      "geographic_value": "Africa",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.geographicdiv",
+    "pk": 8,
+    "fields": {
+      "geographic_value": "Australia",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.geographicdiv",
+    "pk": 9,
+    "fields": {
+      "geographic_value": "Caribbean",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.geographicdiv",
+    "pk": 10,
+    "fields": {
+      "geographic_value": "Europe & Northern Asia (excluding China)",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.geographicdiv",
+    "pk": 11,
+    "fields": {
+      "geographic_value": "Antarctica/Southern Ocean",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.geographicdiv",
+    "pk": 12,
+    "fields": {
+      "geographic_value": "Eastern Atlantic Ocean",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.geographicdiv",
+    "pk": 13,
+    "fields": {
+      "geographic_value": "Western Atlantic Ocean",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.geographicdiv",
+    "pk": 14,
+    "fields": {
+      "geographic_value": "Indo-West Pacific",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.geographicdiv",
+    "pk": 15,
+    "fields": {
+      "geographic_value": "East Pacific",
+      "update_date": null
+    }
+  },
+  {
+    "model": "front.taxonomicunit",
+    "pk": 1,
+    "fields": {
+      "unit_ind1": null,
+      "unit_name1": "Bacteria",
+      "unit_ind2": null,
+      "unit_name2": null,
+      "unit_ind3": null,
+      "unit_name3": null,
+      "unit_ind4": null,
+      "unit_name4": null,
+      "unnamed_taxon_ind": null,
+      "name_usage": null,
+      "unaccept_reason": null,
+      "credibility_rtng": null,
+      "completeness_rtng": null,
+      "currency_rating": null,
+      "phylo_sort_seq": null,
+      "initial_time_stamp": null,
+      "parent_id": 0,
+      "taxon_author": null,
+      "kingdom": 1,
+      "rank": 1,
+      "hybrid_author_id": null,
+      "update_date": null,
+      "uncertain_prnt_ind": null,
+      "n_usage": null,
+      "complete_name": null,
+      "references": [],
+      "geographic_div": [],
+      "expert": []
+    }
+  },
+  {
+    "model": "front.taxonomicunit",
+    "pk": 2,
+    "fields": {
+      "unit_ind1": null,
+      "unit_name1": "Protozoa",
+      "unit_ind2": null,
+      "unit_name2": null,
+      "unit_ind3": null,
+      "unit_name3": null,
+      "unit_ind4": null,
+      "unit_name4": null,
+      "unnamed_taxon_ind": null,
+      "name_usage": null,
+      "unaccept_reason": null,
+      "credibility_rtng": null,
+      "completeness_rtng": null,
+      "currency_rating": null,
+      "phylo_sort_seq": null,
+      "initial_time_stamp": null,
+      "parent_id": 0,
+      "taxon_author": null,
+      "kingdom": 2,
+      "rank": 22,
+      "hybrid_author_id": null,
+      "update_date": null,
+      "uncertain_prnt_ind": null,
+      "n_usage": null,
+      "complete_name": null,
+      "references": [],
+      "geographic_div": [],
+      "expert": []
+    }
+  },
+  {
+    "model": "front.taxonomicunit",
+    "pk": 3,
+    "fields": {
+      "unit_ind1": null,
+      "unit_name1": "Plantae",
+      "unit_ind2": null,
+      "unit_name2": null,
+      "unit_ind3": null,
+      "unit_name3": null,
+      "unit_ind4": null,
+      "unit_name4": null,
+      "unnamed_taxon_ind": null,
+      "name_usage": null,
+      "unaccept_reason": null,
+      "credibility_rtng": null,
+      "completeness_rtng": null,
+      "currency_rating": null,
+      "phylo_sort_seq": null,
+      "initial_time_stamp": null,
+      "parent_id": 0,
+      "taxon_author": null,
+      "kingdom": 3,
+      "rank": 47,
+      "hybrid_author_id": null,
+      "update_date": null,
+      "uncertain_prnt_ind": null,
+      "n_usage": null,
+      "complete_name": null,
+      "references": [],
+      "geographic_div": [],
+      "expert": []
+    }
+  },
+  {
+    "model": "front.taxonomicunit",
+    "pk": 4,
+    "fields": {
+      "unit_ind1": null,
+      "unit_name1": "Fungi",
+      "unit_ind2": null,
+      "unit_name2": null,
+      "unit_ind3": null,
+      "unit_name3": null,
+      "unit_ind4": null,
+      "unit_name4": null,
+      "unnamed_taxon_ind": null,
+      "name_usage": null,
+      "unaccept_reason": null,
+      "credibility_rtng": null,
+      "completeness_rtng": null,
+      "currency_rating": null,
+      "phylo_sort_seq": null,
+      "initial_time_stamp": null,
+      "parent_id": 0,
+      "taxon_author": null,
+      "kingdom": 4,
+      "rank": 75,
+      "hybrid_author_id": null,
+      "update_date": null,
+      "uncertain_prnt_ind": null,
+      "n_usage": null,
+      "complete_name": null,
+      "references": [],
+      "geographic_div": [],
+      "expert": []
+    }
+  },
+  {
+    "model": "front.taxonomicunit",
+    "pk": 5,
+    "fields": {
+      "unit_ind1": null,
+      "unit_name1": "Animalia",
+      "unit_ind2": null,
+      "unit_name2": null,
+      "unit_ind3": null,
+      "unit_name3": null,
+      "unit_ind4": null,
+      "unit_name4": null,
+      "unnamed_taxon_ind": null,
+      "name_usage": null,
+      "unaccept_reason": null,
+      "credibility_rtng": null,
+      "completeness_rtng": null,
+      "currency_rating": null,
+      "phylo_sort_seq": null,
+      "initial_time_stamp": null,
+      "parent_id": 0,
+      "taxon_author": null,
+      "kingdom": 5,
+      "rank": 98,
+      "hybrid_author_id": null,
+      "update_date": null,
+      "uncertain_prnt_ind": null,
+      "n_usage": null,
+      "complete_name": null,
+      "references": [],
+      "geographic_div": [],
+      "expert": []
+    }
+  },
+  {
+    "model": "front.taxonomicunit",
+    "pk": 6,
+    "fields": {
+      "unit_ind1": null,
+      "unit_name1": "Chromista",
+      "unit_ind2": null,
+      "unit_name2": null,
+      "unit_ind3": null,
+      "unit_name3": null,
+      "unit_ind4": null,
+      "unit_name4": null,
+      "unnamed_taxon_ind": null,
+      "name_usage": null,
+      "unaccept_reason": null,
+      "credibility_rtng": null,
+      "completeness_rtng": null,
+      "currency_rating": null,
+      "phylo_sort_seq": null,
+      "initial_time_stamp": null,
+      "parent_id": 0,
+      "taxon_author": null,
+      "kingdom": 6,
+      "rank": 131,
+      "hybrid_author_id": null,
+      "update_date": null,
+      "uncertain_prnt_ind": null,
+      "n_usage": null,
+      "complete_name": null,
+      "references": [],
+      "geographic_div": [],
+      "expert": []
+    }
+  },
+  {
+    "model": "front.taxonomicunit",
+    "pk": 7,
+    "fields": {
+      "unit_ind1": null,
+      "unit_name1": "Archaea",
+      "unit_ind2": null,
+      "unit_name2": null,
+      "unit_ind3": null,
+      "unit_name3": null,
+      "unit_ind4": null,
+      "unit_name4": null,
+      "unnamed_taxon_ind": null,
+      "name_usage": null,
+      "unaccept_reason": null,
+      "credibility_rtng": null,
+      "completeness_rtng": null,
+      "currency_rating": null,
+      "phylo_sort_seq": null,
+      "initial_time_stamp": null,
+      "parent_id": 0,
+      "taxon_author": null,
+      "kingdom": 7,
+      "rank": 160,
+      "hybrid_author_id": null,
+      "update_date": null,
+      "uncertain_prnt_ind": null,
+      "n_usage": null,
+      "complete_name": null,
+      "references": [],
+      "geographic_div": [],
+      "expert": []
+    }
+  },
+  {
+    "model": "front.hierarchy",
+    "pk": 4,
+    "fields": {
+      "hierarchy_string": "1",
+      "taxon": 1,
+      "parent_id": 0,
+      "level": 0,
+      "childrencount": 0
+    }
+  },
+  {
+    "model": "front.hierarchy",
+    "pk": 5,
+    "fields": {
+      "hierarchy_string": "2",
+      "taxon": 2,
+      "parent_id": 0,
+      "level": 0,
+      "childrencount": 0
+    }
+  },
+  {
+    "model": "front.hierarchy",
+    "pk": 6,
+    "fields": {
+      "hierarchy_string": "3",
+      "taxon": 3,
+      "parent_id": 0,
+      "level": 0,
+      "childrencount": 0
+    }
+  },
+  {
+    "model": "front.hierarchy",
+    "pk": 7,
+    "fields": {
+      "hierarchy_string": "4",
+      "taxon": 4,
+      "parent_id": 0,
+      "level": 0,
+      "childrencount": 0
+    }
+  },
+  {
+    "model": "front.hierarchy",
+    "pk": 8,
+    "fields": {
+      "hierarchy_string": "5",
+      "taxon": 5,
+      "parent_id": 0,
+      "level": 0,
+      "childrencount": 0
+    }
+  },
+  {
+    "model": "front.hierarchy",
+    "pk": 9,
+    "fields": {
+      "hierarchy_string": "6",
+      "taxon": 6,
+      "parent_id": 0,
+      "level": 0,
+      "childrencount": 0
+    }
+  },
+  {
+    "model": "front.hierarchy",
+    "pk": 10,
+    "fields": {
+      "hierarchy_string": "7",
+      "taxon": 7,
+      "parent_id": 0,
+      "level": 0,
+      "childrencount": 0
+    }
+  },
+  {
+    "model": "auth.user",
+    "fields": {
+      "password": "pbkdf2_sha256$260000$eScDae9rUyP3DhoN9P1ftY$dLe2p1QWutCdYhdLO6gSep19fL86yeOjWdaWDoxu158=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "admin@example.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2022-04-26T11:40:08.160Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "sessions.session",
+    "pk": "ayeapm11vm6g29nn90b9g9woxd7jbk6z",
+    "fields": {
+      "session_data": ".eJxVzE1rwzAMgOH_onMI8RfEOe4-6G2HUYIsK0221A62Q2lL__uS0UtuQu8jPSFHmnBGoriG0ueChaH7fsKSInHO0MEcL1OACjLFZWuwjbiWsV8w4XUH8KrgNPPjfuL1S94SnCvo_8maOfWT34yAw84h_XLYg__BcIk1xVDS5Oqd1O-a68_oef5428ODEfO4X-PgdTugIyUb2SqyrIxhdmwbabT2qK0RJNXgrVW6YSGFJSNwaIxtpYPXHzgLVZM:1nabVV:bPRb4Y9ucz_BXNOUPanwHdaDhbYtg5L8leEbFMGI4tQ",
+      "expire_date": "2022-04-16T11:01:25.355Z"
+    }
+  },
+  {
+    "model": "sites.site",
+    "fields": {
+      "domain": "localhost:8000",
+      "name": "TaxonManager"
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 1,
+    "fields": {
+      "user": [
+        "admin"
+      ],
+      "email": "admin@example.com",
+      "verified": true,
+      "primary": true
+    }
+  },
+  {
+    "model": "front.historicaltaxonauthorlkp",
+    "pk": 1,
+    "fields": {
+      "taxon_author_id": 1,
+      "taxon_author": "a",
+      "update_date": null,
+      "short_author": null,
+      "kingdom": 1,
+      "history_date": "2022-04-03T09:48:59.368Z",
+      "history_change_reason": null,
+      "history_type": "+",
+      "history_user": [
+        "admin"
+      ]
+    }
+  },
+  {
+    "model": "front.historicaltaxonauthorlkp",
+    "pk": 2,
+    "fields": {
+      "taxon_author_id": 2,
+      "taxon_author": "b",
+      "update_date": null,
+      "short_author": null,
+      "kingdom": 1,
+      "history_date": "2022-04-03T09:49:03.997Z",
+      "history_change_reason": null,
+      "history_type": "+",
+      "history_user": [
+        "admin"
+      ]
+    }
+  },
+  {
+    "model": "front.historicaltaxonauthorlkp",
+    "pk": 3,
+    "fields": {
+      "taxon_author_id": 3,
+      "taxon_author": "c",
+      "update_date": null,
+      "short_author": null,
+      "kingdom": 1,
+      "history_date": "2022-04-03T09:50:22.019Z",
+      "history_change_reason": null,
+      "history_type": "+",
+      "history_user": [
+        "admin"
+      ]
+    }
+  },
+  {
+    "model": "front.historicaltaxonauthorlkp",
+    "pk": 4,
+    "fields": {
+      "taxon_author_id": 4,
+      "taxon_author": "aa",
+      "update_date": null,
+      "short_author": null,
+      "kingdom": 3,
+      "history_date": "2022-04-03T09:50:25.482Z",
+      "history_change_reason": null,
+      "history_type": "+",
+      "history_user": [
+        "admin"
+      ]
+    }
+  },
+  {
+    "model": "front.historicaltaxonauthorlkp",
+    "pk": 5,
+    "fields": {
+      "taxon_author_id": 4,
+      "taxon_author": "aa",
+      "update_date": null,
+      "short_author": null,
+      "kingdom": 3,
+      "history_date": "2022-04-05T09:27:59.316Z",
+      "history_change_reason": null,
+      "history_type": "-",
+      "history_user": [
+        "admin"
+      ]
+    }
+  },
+  {
+    "model": "front.historicaltaxonauthorlkp",
+    "pk": 6,
+    "fields": {
+      "taxon_author_id": 3,
+      "taxon_author": "c",
+      "update_date": null,
+      "short_author": null,
+      "kingdom": 1,
+      "history_date": "2022-04-05T09:27:59.317Z",
+      "history_change_reason": null,
+      "history_type": "-",
+      "history_user": [
+        "admin"
+      ]
+    }
+  },
+  {
+    "model": "front.historicaltaxonauthorlkp",
+    "pk": 7,
+    "fields": {
+      "taxon_author_id": 2,
+      "taxon_author": "b",
+      "update_date": null,
+      "short_author": null,
+      "kingdom": 1,
+      "history_date": "2022-04-05T09:27:59.317Z",
+      "history_change_reason": null,
+      "history_type": "-",
+      "history_user": [
+        "admin"
+      ]
+    }
+  },
+  {
+    "model": "front.historicaltaxonauthorlkp",
+    "pk": 8,
+    "fields": {
+      "taxon_author_id": 1,
+      "taxon_author": "a",
+      "update_date": null,
+      "short_author": null,
+      "kingdom": 1,
+      "history_date": "2022-04-05T09:27:59.318Z",
+      "history_change_reason": null,
+      "history_type": "-",
+      "history_user": [
+        "admin"
+      ]
+    }
+  }
+]

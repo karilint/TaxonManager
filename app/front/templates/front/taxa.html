@@ -2,10 +2,6 @@
 {% load static pyref_tags %}
 
 <body>
-  <p>
-    <a href="">Taxa list</a> | <a href="/add-taxon">Add taxon</a> |
-    <a href="/taxa-search">Search</a>
-  </p>
 
   <div class="container">
     <h1>Taxa list</h1>
@@ -34,11 +30,6 @@
     <table style="width:60%; border-collapse: collapse">
           {% for taxon in page_obj %}
           <tr class="liststaxon">
-            {% with test=user.groups.all|length %}
-            {% if test > 0 %}
-            <td width="3.0%"><a href="{% url 'front:add-taxon' taxon.pk %}"><img src="{% static 'refs/images/pencil.svg' %}" /></td>
-            {% endif %}
-            {% endwith %}
 
             <td width="40.0%" id="hover_link"><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.unit_name1 }}</a></td>
             <td style="font-size:x-small" width="11.0%">{{ taxon.kingdom }}</td>

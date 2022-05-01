@@ -32,6 +32,7 @@ urlpatterns = [
     path('add-author/', views.add_author, name='add-author'),
     path('doi-autofill/', views.doi_auto_fill, name='doi_auto_fill'),
     path('bibtex-autofill/', views.bibtex_auto_fill, name='bibtex_auto_fill'),
-    path('error/<str:message>', views.error, name='error')
+    path('error/<str:message>', views.error, name='error'),
+    path('help/', views.help, name='help')
 ]
 

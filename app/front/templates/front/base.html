@@ -37,7 +37,7 @@
                             <div class="w3-hide-medium w3-hide-small">
                                 <img src="{% static "images/nowdatabase.jpg" %}" alt="now database" height="115" width="150" class="responsive" id="header_image">
                                 <div id="image_credit_header">Picture_©_Noira_Martiskainen</div>
-                                <h2 class="title-logo"><a href="/" id="welcome_header">Welcome</a></h2>
+                                <h2 class="title-logo"><a href="/" id="welcome_header">TaxonManager</a></h2>
                             </div>
                         </div>
                     </div>
@@ -90,42 +90,52 @@
                 </div>
                 <h4 class="w3-bar-item" id="sideHeader">Features</h4>
                 <table>
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/taxa"> Taxa </a></th></tr>
-                    <tr><th>{% if user.is_authenticated %}
+                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/taxa"> Taxa list </a></th></tr>
+                    <tr><th>{% with test=user.groups.all|length %}
+                        {% if test > 0 %}
                         <a class="w3-bar-item w3-button" id="sideButton" href="/add-taxon"> Add new taxon </a>
                         {% else %}
                         <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/add-taxon"> Add new taxon </a>
                         {% endif %}
+                        {% endwith %}
                     </th>
                     </tr>
+                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/taxa-search"> Taxa search </a></th></tr>
                     <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/experts"> Experts </a></th></tr>
                     <tr>
-                        <th>{% if user.is_authenticated %}
+                        <th>{% with test=user.groups.all|length %}
+                            {% if test > 0 %}
                         <a class="w3-bar-item w3-button" id="sideButton" href="/add-expert"> Add new expert </a>
                         {% else %}
                         <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/add-expert"> Add new expert </a>
                         {% endif %}
+                        {% endwith %}
                     </th>
                     <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/authors"> Authors </a></th></tr>
                     <tr>
-                        <th>{% if user.is_authenticated %}
+                        <th>{% with test=user.groups.all|length %}
+                            {% if test > 0 %}
                         <a class="w3-bar-item w3-button" id="sideButton" href="/add-author"> Add new author </a>
                         {% else %}
                         <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/add-author"> Add new author </a>
                         {% endif %}
+                        {% endwith%}
                     </th>
                     </tr>
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/references"> References </a></th></tr>
-                    <tr><th>{% if user.is_authenticated %}
+                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/references"> Reference list </a></th></tr>
+                    <tr><th>{% with test=user.groups.all|length %}
+                        {% if test > 0 %}
                         <a class="w3-bar-item w3-button" id="sideButton" href="/add-references"> Add reference </a>
                         {% else %}
                         <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/add-references"> Add reference </a>
                         {% endif %}
+                        {% endwith %}
                     </th>
+                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/search"> Reference search </a></th></tr>
                     </tr>
                     
                     
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/"> Help </a></th></tr>
+                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/help"> Help </a></th></tr>
                     <tr><th> <div class="w3-hide-large image_text">
                         <img src="{% static "images/nowdatabase.jpg" %}" alt="now database" height="95" width="120" class="responsive">
                         <div id="image_credit">Picture © Noira Martiskainen</div>

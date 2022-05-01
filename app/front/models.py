@@ -470,7 +470,7 @@ class Expert(models.Model):
     # TODO: expert_id_prefix left out, this is a char field
     # that only contains EXP presumably for all rows.
     expert = models.CharField(max_length=100)
-    exp_comment = models.CharField(max_length=500)
+    exp_comment = models.CharField(max_length=500, null=True, blank=True)
     update_date = models.DateTimeField(null=True, blank=True)
     geographic_div = models.ManyToManyField(GeographicDiv)
 

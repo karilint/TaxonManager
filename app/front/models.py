@@ -517,6 +517,23 @@ class TaxonomicUnit(models.Model):
         'Comment', through='TuCommentLink'
     )
 
+    def save(self, *args, **kwargs):
+        super(TaxonomicUnit, self).save(*args, **kwargs)
+        if len(Hierarchy.objects.filter(taxon = self)) != 1:
+            return
+        currenthy = Hierarchy.objects.get(taxon = self)
+        for hy in Hierarchy.objects.filter(hierarchy_string__contains=currenthy.hierarchy_string):
+            hylist = hy.hierarchy_string.split("-")
+            print("-".join(hylist))
+            hylist.reverse()
+            for i in range(len(hylist)-1):
+                hylist[i+1] = str(TaxonomicUnit.objects.get(taxon_id = TaxonomicUnit.objects.get(taxon_id = hylist[i]).parent_id).taxon_id)
+            hylist.reverse()
+            hy.hierarchy_string = "-".join(hylist)
+            print("-".join(hylist))
+            hy.save()
+        
+
     def __str__(self):
         return f"{self.unit_name1}, Kingdom: {self.kingdom} (taxon_id: {self.taxon_id}, parent_id: {self.parent_id})"
 

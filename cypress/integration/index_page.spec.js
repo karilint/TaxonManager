@@ -414,7 +414,7 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.get("#id_taxonnomic_types").select("Infrakingdom", { force: true })
     cy.get("#id_rank_name").select("Plantae", { force: true })
     cy.get("#id_unit_name1").type("Plantae2")
-    cy.get("#id_references").select("1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Testi otsikko", { force: true })
+    cy.get("#id_references").select("1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Species 2000 & ITIS Catalogue of Life, 2015 Annual Checklist", { force: true })
     cy.contains("Submit").click()
 
     cy.visit("http://localhost:8000/add-taxon/")
@@ -422,7 +422,7 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.get("#id_taxonnomic_types").select("Superdivision", { force: true })
     cy.get("#id_rank_name").select("Plantae2", { force: true })
     cy.get("#id_unit_name1").type("Plantae3")
-    cy.get("#id_references").select("1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Testi otsikko", { force: true })
+    cy.get("#id_references").select("1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Species 2000 & ITIS Catalogue of Life, 2015 Annual Checklist", { force: true })
     cy.contains("Submit").click()
 
     cy.visit("http://localhost:8000/add-taxon/")
@@ -430,12 +430,12 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.get("#id_taxonnomic_types").select("Division", { force: true })
     cy.get("#id_rank_name").select("Plantae3", { force: true })
     cy.get("#id_unit_name1").type("Plantae4")
-    cy.get("#id_references").select("1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Testi otsikko", { force: true })
+    cy.get("#id_references").select("1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Species 2000 & ITIS Catalogue of Life, 2015 Annual Checklist", { force: true })
     cy.contains("Submit").click()
 
     cy.visit("http://localhost:8000/taxa/")
     cy.contains("Plantae2").click()
-    cy.visit("http://localhost:8000/add-taxon/13")
+    cy.get('a > img').click()
 
     //check that information is displayed correctly
     cy.get("#id_kingdom_name").should("have.value", 3)
@@ -444,36 +444,27 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.get("#id_unit_name1").should("have.value", "Plantae2")
     cy.get("#id_references").contains('1')
 
-    //alert if kingdom is tried to change
-    //cy.get("#id_kingdom_name").select("Bacteria", { force: true })
-    //cy.on("window:alert", (str) => {
-      //expect(str).to.equal("Taxon cannot be moved to another kingdom")
-    //})
-
     //change from infakingdom to subkingdom
     cy.get("#id_taxonnomic_types").select("Subkingdom", { force: true })
     cy.get("#id_rank_name").select("Plantae", { force: true })
     cy.contains("Submit").click()
 
-    cy.contains("Plantae4").click()
     cy.contains("Plantae")
     cy.contains("Plantae2")
-    cy.contains("Plantae3")
     cy.contains("Subkingdom")
     cy.contains("Infrakingdom").should("not.exist")
 
     //change from subkingdom to superdivision  --> two taxons have same rank
-    // cy.contains("Plantae2").click()
-    // cy.visit("http://localhost:8000/add-taxon/13")
-    // cy.get("#id_taxonnomic_types").select("Superdivision", { force: true })
-    // cy.get("#id_rank_name").select("Plantae", { force: true })
-    // cy.contains("Submit").click()
+    cy.visit("http://localhost:8000/taxa/")
+    cy.contains("Plantae2").click()
+    cy.get('a > img').click()
+    cy.get("#id_taxonnomic_types").select("Superdivision", { force: true })
+    cy.get("#id_rank_name").select("Plantae", { force: true })
+    cy.contains("Submit").click()
 
-    // cy.contains("Plantae4").click()
-    // cy.contains("Plantae")
-    // cy.contains("Plantae2")
-    // cy.contains("Plantae3")
-    // cy.contains("Subkingdom").should("not.exist")
+    cy.contains("Plantae")
+    cy.contains("Plantae2")
+    cy.contains("Subkingdom").should("not.exist")
     
   })
 

@@ -463,17 +463,17 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains("Infrakingdom").should("not.exist")
 
     //change from subkingdom to superdivision  --> two taxons have same rank
-    cy.contains("Plantae2").click()
-    cy.visit("http://localhost:8000/add-taxon/13")
-    cy.get("#id_taxonnomic_types").select("Superdivision", { force: true })
-    cy.get("#id_rank_name").select("Plantae", { force: true })
-    cy.contains("Submit").click()
+    // cy.contains("Plantae2").click()
+    // cy.visit("http://localhost:8000/add-taxon/13")
+    // cy.get("#id_taxonnomic_types").select("Superdivision", { force: true })
+    // cy.get("#id_rank_name").select("Plantae", { force: true })
+    // cy.contains("Submit").click()
 
-    cy.contains("Plantae4").click()
-    cy.contains("Plantae")
-    cy.contains("Plantae2")
-    cy.contains("Plantae3")
-    cy.contains("Subkingdom").should("not.exist")
+    // cy.contains("Plantae4").click()
+    // cy.contains("Plantae")
+    // cy.contains("Plantae2")
+    // cy.contains("Plantae3")
+    // cy.contains("Subkingdom").should("not.exist")
     
   })
 

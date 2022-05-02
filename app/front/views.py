@@ -151,7 +151,10 @@ def taxon_add(request, pk = None):
             except TaxonomicUnit.DoesNotExist:
                 # form was filled incorrectly
                 print("saving new unit did not workout; do something")
-            return HttpResponseRedirect('/taxa')
+            if pk is not None:
+                return HttpResponseRedirect('/hierarchy/{}'.format(pk)) 
+            else:
+                return HttpResponseRedirect('/taxa')
 
     # if a GET (or any other method) we'll create a blank form
     else:

@@ -8,6 +8,7 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from urllib.error import HTTPError
 from .utils import ensure_https, add_optional_kv
+from django.utils import timezone
 
 # (null=True, blank=True) allows empty fields, makes testing easier for now
 
@@ -462,6 +463,10 @@ class TaxonAuthorLkp(models.Model):
     kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
     short_author = models.CharField(max_length=100, null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        self.update_date = timezone.now()
+        return super(TaxonAuthorLkp, self).save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.taxon_author}"
 
@@ -473,6 +478,10 @@ class Expert(models.Model):
     exp_comment = models.CharField(max_length=500, null=True, blank=True)
     update_date = models.DateTimeField(null=True, blank=True)
     geographic_div = models.ManyToManyField(GeographicDiv)
+
+    def save(self, *args, **kwargs):
+            self.update_date = timezone.now()
+            return super(Expert, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.expert}"

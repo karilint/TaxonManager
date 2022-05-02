@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 from django import forms
-
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
@@ -15,7 +14,7 @@ from django.contrib.auth.decorators import user_passes_test
 from front.models import Reference, get_ref_from_doi
 from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom, Expert, SynonymLink, Reference, GeographicDiv
 from front.utils import canonicalize_doi
-from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm
+from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm, DoiForm, BibtexForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
@@ -24,13 +23,16 @@ from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynony
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 import csv, urllib.parse
-
+import requests
+import re
 
 def index(request):
     return render(request, 'front/index.html')
 
 
 # !! Temporary address for login page, references view and adding a reference
+
+
 def login(request):
     return render(request, 'front/login.html')
 
@@ -437,8 +439,12 @@ def import_data_from_excel(request):
                                                                 name_usage = "valid",
                                                                 complete_name=taxon["taxon_name"].lower().capitalize())
 
-                taxonunit[0].references.add(dummy_reference)
-                taxonunit[0].geographic_div.add(dummy_geographic_div)
+                if level == TaxonUnitType.objects.get(kingdom=Kingdom.objects.get(kingdom_name="Animalia"), rank_name = "Species"):
+                    taxonunit[0].unit_name1 = namelist[-2]
+                    taxonunit[0].unit_name2 = namelist[-1]
+                    
+                #taxonunit[0].references.add(dummy_reference)
+                #taxonunit[0].geographic_div.add(dummy_geographic_div)
                 if taxonunit[1]:
                     taxonunit[0].save()
                     create_hierarchystring(taxonunit[0])
@@ -510,10 +516,108 @@ def refs_add(request, pk=None):
         except Reference.DoesNotExist:
             ref = None
         form = RefForm(instance=ref)
-
+    doi_form = DoiForm(initial={'doi':'10.'})
+    bibtex_form = BibtexForm(initial={'bib':'@'})
+    c['doiform'] = doi_form
+    c['bibtexform'] = bibtex_form
     c['form'] = form
     return render(request, 'front/add-reference.html', c)
 
+def _fill_form_with_initial_values(parsed_bibtex: dict, bibtex: dict):
+    """Fills RefForm with initial values by bibtex"""
+    initial_values = {'author': '', 'title':'', 'doi':'',
+     'journal':'', 'year':'', 'volume':'', 'number':'',
+     'url':'', 'bibtex':'', 'page_start':'', 'page_end':''}
+
+    for key in initial_values.keys():
+        if key in parsed_bibtex.keys():
+            initial_values[key] = parsed_bibtex[key]
+    if 'pages' in parsed_bibtex.keys():
+        splitted = parsed_bibtex['pages'].split('-')
+        pages = []
+        for c in splitted:
+            try:
+                pages.append(int(c))
+            except:
+                continue
+        initial_values['page_start'] = pages[0]
+        initial_values['page_end'] = pages[len(pages)-1]       
+
+    form = RefForm(initial={
+    'authors': initial_values['author'],
+    'title': initial_values['title'],
+    'doi': initial_values['doi'],
+    'journal': initial_values['journal'],
+    'year': initial_values['year'],
+    'volume': initial_values['volume'],
+    'article_number': initial_values['number'],
+    'url': initial_values['url'],
+    'page_start': initial_values['page_start'],
+    'page_end': initial_values['page_end'],
+    'bibtex':bibtex
+    })
+
+    return form
+
+def _parse_bibtex(bibtex_string):
+    """ Parses bibtex string to a dictionary """
+    from bibtexparser.bparser import BibTexParser
+    from bibtexparser.bibdatabase import as_text
+    bp = BibTexParser(interpolate_strings=False)
+    bib_database = bp.parse(bibtex_string)
+    return bib_database.entries[0]
+
+def doi_auto_fill(request):
+    """ Autofills reference details using bibtex
+    information fetched from dx.doi API.
+
+    Args:
+        request (GET): http://dx.doi.org/10.1038/nrd842
+
+    Returns:
+        string: reference information in bibtex format
+    """
+    
+    doi_form = DoiForm(request.POST)
+    bibtex_form = BibtexForm(initial={'bib':'@'})
+    form = RefForm()
+
+    if doi_form.is_valid():
+
+
+        url = 'https://dx.doi.org/{}'.format(doi_form.cleaned_data.get("doi"))
+        payload={}
+        headers = {'Accept': 'application/x-bibtex'}
+        response = requests.request("GET", url, headers=headers, data=payload)
+        bib = _parse_bibtex(response.text)
+        form = _fill_form_with_initial_values(bib, response.text)
+
+
+    context= {'form': form, 'doiform': doi_form, 'bibtexform': bibtex_form}
+    return render(request, 'front/add-reference.html', context)
+
+def bibtex_auto_fill(request):
+    """ Autofills reference details using bibtex
+    information fetched from dx.doi API.
+
+    Args:
+        request (GET): http://dx.doi.org/10.1038/nrd842
+
+    Returns:
+        string: reference information in bibtex format
+    """
+    
+    doi_form = DoiForm(initial={'doi':'10.'})
+    bibtex_form = BibtexForm(request.POST)
+    form = RefForm()
+
+    if bibtex_form.is_valid():
+        bibtex_string = bibtex_form.cleaned_data.get("bib")
+        bib = _parse_bibtex(bibtex_string)
+        form = _fill_form_with_initial_values(bib, bibtex_string)
+
+    context= {'form': form, 'doiform': doi_form, 'bibtexform': bibtex_form}
+    return render(request, 'front/add-reference.html', context)
 
 def delete(request, pk):
     if request.user.groups.filter(name='contributors').exists():

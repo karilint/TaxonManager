@@ -439,8 +439,12 @@ def import_data_from_excel(request):
                                                                 name_usage = "valid",
                                                                 complete_name=taxon["taxon_name"].lower().capitalize())
 
-                taxonunit[0].references.add(dummy_reference)
-                taxonunit[0].geographic_div.add(dummy_geographic_div)
+                if level == TaxonUnitType.objects.get(kingdom=Kingdom.objects.get(kingdom_name="Animalia"), rank_name = "Species"):
+                    taxonunit[0].unit_name1 = namelist[-2]
+                    taxonunit[0].unit_name2 = namelist[-1]
+                    
+                #taxonunit[0].references.add(dummy_reference)
+                #taxonunit[0].geographic_div.add(dummy_geographic_div)
                 if taxonunit[1]:
                     taxonunit[0].save()
                     create_hierarchystring(taxonunit[0])

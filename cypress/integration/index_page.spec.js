@@ -435,7 +435,7 @@ describe("Taxonmanager, when logged in as contributor", function () {
 
     cy.visit("http://localhost:8000/taxa/")
     cy.contains("Plantae2").click()
-    cy.visit("http://localhost:8000/add-taxon/13")
+    cy.get('a > img').click()
 
     //check that information is displayed correctly
     cy.get("#id_kingdom_name").should("have.value", 3)
@@ -444,35 +444,26 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.get("#id_unit_name1").should("have.value", "Plantae2")
     cy.get("#id_references").contains('1')
 
-    //alert if kingdom is tried to change
-    //cy.get("#id_kingdom_name").select("Bacteria", { force: true })
-    //cy.on("window:alert", (str) => {
-      //expect(str).to.equal("Taxon cannot be moved to another kingdom")
-    //})
-
     //change from infakingdom to subkingdom
     cy.get("#id_taxonnomic_types").select("Subkingdom", { force: true })
     cy.get("#id_rank_name").select("Plantae", { force: true })
     cy.contains("Submit").click()
 
-    cy.contains("Plantae4").click()
     cy.contains("Plantae")
     cy.contains("Plantae2")
-    cy.contains("Plantae3")
     cy.contains("Subkingdom")
     cy.contains("Infrakingdom").should("not.exist")
 
     //change from subkingdom to superdivision  --> two taxons have same rank
+    cy.visit("http://localhost:8000/taxa/")
     cy.contains("Plantae2").click()
-    cy.visit("http://localhost:8000/add-taxon/13")
+    cy.get('a > img').click()
     cy.get("#id_taxonnomic_types").select("Superdivision", { force: true })
     cy.get("#id_rank_name").select("Plantae", { force: true })
     cy.contains("Submit").click()
 
-    cy.contains("Plantae4").click()
     cy.contains("Plantae")
     cy.contains("Plantae2")
-    cy.contains("Plantae3")
     cy.contains("Subkingdom").should("not.exist")
     
   })

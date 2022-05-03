@@ -819,12 +819,12 @@ def add_junior_synonym(request, taxon_id=None):
                 if len(children) > 0:
                     for child in children:
                         child.parent_id = taxon_id
-                        hierarchyObject = Hierarchy.objects.get(taxon=child)
+                        #hierarchyObject = Hierarchy.objects.get(taxon=child)
                         child.save()
-                        hierarchy = hierarchyObject.hierarchy_string.split("-")
-                        hierarchy[-2] = taxon_id
-                        hierarchyObject.hierarchy_string = "-".join(hierarchy)
-                        hierarchyObject.save()
+                        #hierarchy = hierarchyObject.hierarchy_string.split("-")
+                        #hierarchy[-2] = taxon_id
+                        #hierarchyObject.hierarchy_string = "-".join(hierarchy)
+                        #hierarchyObject.save()
                         
             except:
                 print("error in adding junior synonym")

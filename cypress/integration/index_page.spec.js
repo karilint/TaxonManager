@@ -155,15 +155,29 @@ describe("Taxonmanager, when logged in as contributor", function () {
     // Submit
     cy.contains("Submit").click()
 
-    // Add reference using DOI
+    // Add reference using DOI autofill
     cy.visit("http://localhost:8000/add-references/")
-    cy.get("#id_doi").type("10.1109/SMC.2016.7844781")
+    cy.get("#id_autodoi").type("1109/SMC.2016.7844781")
+    cy.get("#id_doisubmit").click()
+    cy.contains("Submit").click()
+
+    // Add reference using BibTex autofill
+    cy.visit("http://localhost:8000/add-references/")
+    cy.get("#id_autobibtex").type(
+      "article{taxa, title={Example title}, author={Example author}, doi={10.1109/EIConRus49466.2020.9039057}," +
+        "journal={Example journal}, volume={32}, number={3}, pages={183--196}, year={2000}}",
+      {
+        parseSpecialCharSequences: false,
+      }
+    )
+    cy.get("#id_bibsubmit").click()
     cy.contains("Submit").click()
 
     // check that added references are listed
     cy.visit("http://localhost:8000/references/")
     cy.contains("Testi Kirjoittaja")
-    cy.contains("10.1109/SMC.2016.7844781")
+    cy.contains("10.1109/smc.2016.7844781")
+    cy.contains("Example author")
   })
   it("Edit and delete reference", () => {
     cy.visit("http://localhost:8000/add-references/1")
@@ -191,7 +205,7 @@ describe("Taxonmanager, when logged in as contributor", function () {
 
     // Search reference with no input
     cy.get(".btn").click()
-    cy.contains("4 Results")
+    cy.contains("5 Results")
 
     // Search reference with correct input
     cy.get("#id_author").type("Testi Kirjoittaja")
@@ -202,12 +216,6 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.get("#id_title").type("0")
     cy.get(".btn").click()
     cy.contains("0 Results")
-
-    // Search reference with DOI
-    //cy.get("#id_title").clear()
-    //cy.get("#id_doi").type("10.1109/SMC.2016.7844781")
-    //cy.get(".btn").click()
-    //cy.contains("1 Results")
   })
 
   it("Contributor can add authors on add-author page", () => {
@@ -307,14 +315,17 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.get("#id_taxonnomic_types").select("Subkingdom", { force: true })
     cy.get("#id_rank_name").select("Bacteria", { force: true })
     cy.get("#id_unit_name1").type("Test Subkingdom")
-    cy.get("#id_references").select("1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Testi otsikko", { force: true })
+    cy.get("#id_references").select(
+      "1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Testi otsikko",
+      { force: true }
+    )
     cy.contains("Submit").click()
 
     // Added taxon is lised on the taxon page
     cy.visit("http://localhost:8000/taxa/")
     cy.contains("Test Subkingdom")
 
-    // check that new taxa added is listed in the dropdown options 
+    // check that new taxa added is listed in the dropdown options
     cy.visit("http://localhost:8000/add-taxon/")
     cy.get("#id_kingdom_name").select("Bacteria", { force: true })
     cy.get("#id_taxonnomic_types").select("Phylum", { force: true })
@@ -333,7 +344,6 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.get("#id_taxonnomic_types").eq(0).should("contain", "Division")
     cy.get("#id_taxonnomic_types").eq(0).should("not.contain", "Phylum")
     cy.get("#id_taxonnomic_types").eq(0).should("not.contain", "Subphylum")
-
   })
 
   it("Taxon hiearchy displays correct infromation", () => {
@@ -345,8 +355,10 @@ describe("Taxonmanager, when logged in as contributor", function () {
 
     cy.contains("References")
     cy.contains("Testi otsikko")
-    cy.contains("Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D.")
-  
+    cy.contains(
+      "Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D."
+    )
+
     // Check that links in hiearchy works
     cy.get(".hiearchy-lists").contains("Bacteria").click()
     cy.contains("Subkingdom").should("not.exist")
@@ -355,66 +367,81 @@ describe("Taxonmanager, when logged in as contributor", function () {
   it("Adding taxon as junior synonym", () => {
     cy.visit("http://localhost:8000/add-taxon")
     cy.contains("Is junior synonym:").click()
-    cy.get('#id_kingdom_name').select('Bacteria', { force: true })
-    cy.get('#id_taxonnomic_types').select('Subkingdom', { force: true })
-    cy.get('#id_rank_name').select('Bacteria', { force: true })
-    cy.get('#id_unit_name1').type('Test of adding as junior synonym')
-    cy.get('#id_references').select('2: Audet, A.M., Robbins, C.B. and Larivière, S., Alopex lagopus', { force: true })
-    cy.get('#id_geographic_div').select('Europe', { force: true })
-    cy.get('#id_senior_synonym').select('Bacteria', { force: true })
+    cy.get("#id_kingdom_name").select("Bacteria", { force: true })
+    cy.get("#id_taxonnomic_types").select("Subkingdom", { force: true })
+    cy.get("#id_rank_name").select("Bacteria", { force: true })
+    cy.get("#id_unit_name1").type("Test of adding as junior synonym")
+    cy.get("#id_references").select(
+      "2: Audet, A.M., Robbins, C.B. and Larivière, S., Alopex lagopus",
+      { force: true }
+    )
+    cy.get("#id_geographic_div").select("Europe", { force: true })
+    cy.get("#id_senior_synonym").select("Bacteria", { force: true })
     cy.contains("Submit").click()
-    
+
     cy.visit("http://localhost:8000/taxa")
     cy.contains("Test of adding as junior synonym").click()
     cy.contains("Senior synonym:")
   })
-  
+
   it("Adding a junior synonym to a taxon", () => {
     cy.visit("http://localhost:8000/add-taxon")
-    cy.get('#id_kingdom_name').select('Bacteria', { force: true })
-    cy.get('#id_taxonnomic_types').select('Subkingdom', { force: true })
-    cy.get('#id_rank_name').select('Bacteria', { force: true })
-    cy.get('#id_unit_name1').type('aajstat1')
-    cy.get('#id_references').select('2: Audet, A.M., Robbins, C.B. and Larivière, S., Alopex lagopus', { force: true })
-    cy.get('#id_geographic_div').select('Europe', { force: true })
+    cy.get("#id_kingdom_name").select("Bacteria", { force: true })
+    cy.get("#id_taxonnomic_types").select("Subkingdom", { force: true })
+    cy.get("#id_rank_name").select("Bacteria", { force: true })
+    cy.get("#id_unit_name1").type("aajstat1")
+    cy.get("#id_references").select(
+      "2: Audet, A.M., Robbins, C.B. and Larivière, S., Alopex lagopus",
+      { force: true }
+    )
+    cy.get("#id_geographic_div").select("Europe", { force: true })
     cy.contains("Submit").click()
-    
+
     cy.visit("http://localhost:8000/add-taxon")
-    cy.get('#id_kingdom_name').select('Bacteria', { force: true })
-    cy.get('#id_taxonnomic_types').select('Subkingdom', { force: true })
-    cy.get('#id_rank_name').select('Bacteria', { force: true })
-    cy.get('#id_unit_name1').type('aajstat2')
-    cy.get('#id_references').select('2: Audet, A.M., Robbins, C.B. and Larivière, S., Alopex lagopus', { force: true })
-    cy.get('#id_geographic_div').select('Europe', { force: true })
+    cy.get("#id_kingdom_name").select("Bacteria", { force: true })
+    cy.get("#id_taxonnomic_types").select("Subkingdom", { force: true })
+    cy.get("#id_rank_name").select("Bacteria", { force: true })
+    cy.get("#id_unit_name1").type("aajstat2")
+    cy.get("#id_references").select(
+      "2: Audet, A.M., Robbins, C.B. and Larivière, S., Alopex lagopus",
+      { force: true }
+    )
+    cy.get("#id_geographic_div").select("Europe", { force: true })
     cy.contains("Submit").click()
-    
+
     cy.visit("http://localhost:8000/add-taxon")
-    cy.get('#id_kingdom_name').select('Bacteria', { force: true })
-    cy.get('#id_taxonnomic_types').select('Phylum', { force: true })
-    cy.get('#id_rank_name').select('aajstat1', { force: true })
-    cy.get('#id_unit_name1').type('aajstatchild')
-    cy.get('#id_references').select('2: Audet, A.M., Robbins, C.B. and Larivière, S., Alopex lagopus', { force: true })
-    cy.get('#id_geographic_div').select('Europe', { force: true })
+    cy.get("#id_kingdom_name").select("Bacteria", { force: true })
+    cy.get("#id_taxonnomic_types").select("Phylum", { force: true })
+    cy.get("#id_rank_name").select("aajstat1", { force: true })
+    cy.get("#id_unit_name1").type("aajstatchild")
+    cy.get("#id_references").select(
+      "2: Audet, A.M., Robbins, C.B. and Larivière, S., Alopex lagopus",
+      { force: true }
+    )
+    cy.get("#id_geographic_div").select("Europe", { force: true })
     cy.contains("Submit").click()
-    
+
     cy.visit("http://localhost:8000/taxa")
     cy.contains("aajstat2").click()
     cy.contains("Add junior synonym").click()
-    cy.get('#id_synonym_id').select('aajstat1', { force: true })
+    cy.get("#id_synonym_id").select("aajstat1", { force: true })
     cy.contains("Submit").click()
-    cy.contains('aajstat1')
+    cy.contains("aajstat1")
     cy.visit("http://localhost:8000/taxa")
     cy.contains("aajstatchild").click()
     cy.contains("aajstat2")
   })
-  
+
   it("Taxon can be edited", () => {
     cy.visit("http://localhost:8000/add-taxon/")
     cy.get("#id_kingdom_name").select("Plantae", { force: true })
     cy.get("#id_taxonnomic_types").select("Infrakingdom", { force: true })
     cy.get("#id_rank_name").select("Plantae", { force: true })
     cy.get("#id_unit_name1").type("Plantae2")
-    cy.get("#id_references").select("1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Testi otsikko", { force: true })
+    cy.get("#id_references").select(
+      "1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Testi otsikko",
+      { force: true }
+    )
     cy.contains("Submit").click()
 
     cy.visit("http://localhost:8000/add-taxon/")
@@ -422,7 +449,10 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.get("#id_taxonnomic_types").select("Superdivision", { force: true })
     cy.get("#id_rank_name").select("Plantae2", { force: true })
     cy.get("#id_unit_name1").type("Plantae3")
-    cy.get("#id_references").select("1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Testi otsikko", { force: true })
+    cy.get("#id_references").select(
+      "1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Testi otsikko",
+      { force: true }
+    )
     cy.contains("Submit").click()
 
     cy.visit("http://localhost:8000/add-taxon/")
@@ -430,19 +460,22 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.get("#id_taxonnomic_types").select("Division", { force: true })
     cy.get("#id_rank_name").select("Plantae3", { force: true })
     cy.get("#id_unit_name1").type("Plantae4")
-    cy.get("#id_references").select("1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Testi otsikko", { force: true })
+    cy.get("#id_references").select(
+      "1: Orrell, Thomas and Roskov, Yuri and Kunze, Thomas and Abucay, Luisa and Culham, Alastair and Bailly, Nicolas and Kirk, Paul and Bourgoin, Thierry and Decock, Wim and De Wever, Aaike and DeWalt, R.E. and Nicolson, D., Testi otsikko",
+      { force: true }
+    )
     cy.contains("Submit").click()
 
     cy.visit("http://localhost:8000/taxa/")
     cy.contains("Plantae2").click()
-    cy.get('a > img').click()
+    cy.get("a > img").click()
 
     //check that information is displayed correctly
     cy.get("#id_kingdom_name").should("have.value", 3)
     cy.get("#id_taxonnomic_types").should("have.value", "Infrakingdom")
     cy.get("#id_rank_name").should("have.value", "Plantae")
     cy.get("#id_unit_name1").should("have.value", "Plantae2")
-    cy.get("#id_references").contains('1')
+    cy.get("#id_references").contains("1")
 
     //change from infakingdom to subkingdom
     cy.get("#id_taxonnomic_types").select("Subkingdom", { force: true })
@@ -457,7 +490,7 @@ describe("Taxonmanager, when logged in as contributor", function () {
     //change from subkingdom to superdivision  --> two taxons have same rank
     cy.visit("http://localhost:8000/taxa/")
     cy.contains("Plantae2").click()
-    cy.get('a > img').click()
+    cy.get("a > img").click()
     cy.get("#id_taxonnomic_types").select("Superdivision", { force: true })
     cy.get("#id_rank_name").select("Plantae", { force: true })
     cy.contains("Submit").click()
@@ -465,17 +498,15 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.contains("Plantae")
     cy.contains("Plantae2")
     cy.contains("Subkingdom").should("not.exist")
-    
   })
 
   it("Search finds a junior and senior synonym to a taxon", () => {
     // Actual test to find junior and senior synonym
     cy.visit("http://localhost:8000/taxa-search/")
-    cy.get('#id_synonyms').type('Test of adding as junior synonym')
+    cy.get("#id_synonyms").type("Test of adding as junior synonym")
     cy.get(".btn").click()
     cy.contains("Bacteria")
-    cy.contains('Test of adding as junior synonym')
-
+    cy.contains("Test of adding as junior synonym")
   })
 
   // Best to keep this as the last one as user no longer
@@ -492,9 +523,4 @@ describe("Taxonmanager, when logged in as contributor", function () {
     cy.visit("http://localhost:8000/add-references/")
     cy.contains("Add or Edit Reference").should("not.exist")
   })
-
 })
-
-
-  
-

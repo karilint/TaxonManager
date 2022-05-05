@@ -30,7 +30,7 @@ import re
 
 
 class DoiForm(forms.Form):
-    doi = forms.CharField(widget= forms.TextInput(attrs={'id':'autodoi'}))
+    doi = forms.CharField(widget= forms.TextInput(attrs={'id':'id_autodoi'}))
 
     def clean_doi(self):
         doi = self.cleaned_data['doi']
@@ -42,7 +42,7 @@ class DoiForm(forms.Form):
         return self.cleaned_data['doi']
 
 class BibtexForm(forms.Form):
-    bib = forms.CharField(widget=forms.Textarea(attrs={'rows':5, 'cols':60}))
+    bib = forms.CharField(widget=forms.Textarea(attrs={'id': 'id_autobibtex', 'rows':5, 'cols':60}))
 
     def clean_bib(self):
         bib = self.cleaned_data['bib']

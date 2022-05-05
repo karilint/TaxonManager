@@ -36,8 +36,8 @@ class DoiForm(forms.Form):
         doi = self.cleaned_data['doi']
         if doi is None or doi.strip() == '':
             raise forms.ValidationError('Doi cannot be left blank')
-        # if (re.compile(r'/^10.\d{4,9}/[-._;()/:A-Z0-9]+$/i').match(doi)) == None:
-        #     raise forms.ValidationError('Doi is invalid')
+        if re.compile(r"^10(?:\.[^\s\/]+)?\/").match(doi) == None:
+            raise forms.ValidationError('Doi is invalid')
 
         return self.cleaned_data['doi']
 
@@ -49,7 +49,9 @@ class BibtexForm(forms.Form):
         if bib is None or bib.strip() == '':
             raise forms.ValidationError('BibTex cannot be left blank')
         if not bib.startswith('@'):    
-            raise forms.ValidationError('BibTex is invalid')
+            raise forms.ValidationError('BibTex is invalid, BibTex should start with "@"')
+        if not bib.endswith('}'):    
+            raise forms.ValidationError('BibTex is invalid, BibTex should end with "}"')
     
         return self.cleaned_data['bib']
 

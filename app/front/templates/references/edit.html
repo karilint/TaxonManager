@@ -9,9 +9,16 @@
 
 <h1>Add or Edit Reference</h1>
 
-{% if form.errors %}
+{% if form.errors or messages %}
 <p class="errorlist">Please correct the errors below.</p>
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
 {% endif %}
+
+
 <br>
 <p><i>Fill the fields by inserting reference's DOI or BibTex</i></p>
 <form action="/doi-autofill/" method="POST">

@@ -59,7 +59,7 @@ class BibtexForm(forms.Form):
 class RefForm(forms.ModelForm):
     class Meta:
         model = Reference
-        exclude = ['ris', 'citeproc_json', 'visible']
+        exclude = ['ris', 'citeproc_json', 'visible', 'note_latex', 'note_html', 'title_html', 'title_latex']
 
     def clean_doi(self):
         doi = self.cleaned_data['doi']

@@ -587,12 +587,10 @@ def doi_auto_fill(request):
     if doi_form.is_valid():
 
         url = 'https://dx.doi.org/{}'.format(doi_form.cleaned_data.get("doi"))
-        print(url)
         payload={}
         headers = {'Accept': 'application/x-bibtex'}
         try:   
             response = requests.request("GET", url, headers=headers, data=payload)
-            print(response.text)
             bib = _parse_bibtex(response.text)
             form = _fill_form_with_initial_values(bib, response.text)
                        

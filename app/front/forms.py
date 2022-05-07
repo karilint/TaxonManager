@@ -30,26 +30,28 @@ import re
 
 
 class DoiForm(forms.Form):
-    doi = forms.CharField(widget= forms.TextInput(attrs={'id':'autodoi'}))
+    doi = forms.CharField(widget= forms.TextInput(attrs={'id':'id_autodoi'}))
 
     def clean_doi(self):
         doi = self.cleaned_data['doi']
         if doi is None or doi.strip() == '':
             raise forms.ValidationError('Doi cannot be left blank')
-        # if (re.compile(r'/^10.\d{4,9}/[-._;()/:A-Z0-9]+$/i').match(doi)) == None:
-        #     raise forms.ValidationError('Doi is invalid')
+        if re.compile(r"^10(?:\.[^\s\/]+)?\/").match(doi) == None:
+            raise forms.ValidationError('Doi is invalid')
 
         return self.cleaned_data['doi']
 
 class BibtexForm(forms.Form):
-    bib = forms.CharField(widget=forms.Textarea(attrs={'rows':5, 'cols':60}))
+    bib = forms.CharField(widget=forms.Textarea(attrs={'id': 'id_autobibtex', 'rows':5, 'cols':60}))
 
     def clean_bib(self):
         bib = self.cleaned_data['bib']
         if bib is None or bib.strip() == '':
             raise forms.ValidationError('BibTex cannot be left blank')
         if not bib.startswith('@'):    
-            raise forms.ValidationError('BibTex is invalid')
+            raise forms.ValidationError('BibTex is invalid, BibTex should start with "@"')
+        if not bib.endswith('}'):    
+            raise forms.ValidationError('BibTex is invalid, BibTex should end with "}"')
     
         return self.cleaned_data['bib']
 
@@ -57,7 +59,7 @@ class BibtexForm(forms.Form):
 class RefForm(forms.ModelForm):
     class Meta:
         model = Reference
-        exclude = ['ris', 'citeproc_json', 'visible']
+        exclude = ['ris', 'citeproc_json', 'visible', 'note_latex', 'note_html', 'title_html', 'title_latex']
 
     def clean_doi(self):
         doi = self.cleaned_data['doi']

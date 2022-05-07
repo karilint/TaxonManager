@@ -11,20 +11,19 @@ from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import user_passes_test
-from front.models import Reference, get_ref_from_doi
+from front.models import Reference
 from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom, Expert, SynonymLink, Reference, GeographicDiv
 from front.utils import canonicalize_doi
 from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm, DoiForm, BibtexForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
-
 from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm
 from front.filters import RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 import csv, urllib.parse
 import requests
-import re
+from django.contrib import messages
 
 def index(request):
     return render(request, 'front/index.html')
@@ -587,14 +586,16 @@ def doi_auto_fill(request):
 
     if doi_form.is_valid():
 
-
         url = 'https://dx.doi.org/{}'.format(doi_form.cleaned_data.get("doi"))
         payload={}
         headers = {'Accept': 'application/x-bibtex'}
-        response = requests.request("GET", url, headers=headers, data=payload)
-        bib = _parse_bibtex(response.text)
-        form = _fill_form_with_initial_values(bib, response.text)
-
+        try:   
+            response = requests.request("GET", url, headers=headers, data=payload)
+            bib = _parse_bibtex(response.text)
+            form = _fill_form_with_initial_values(bib, response.text)
+                       
+        except:
+            messages.error(request, 'Data could not be retrieved')
 
     context= {'form': form, 'doiform': doi_form, 'bibtexform': bibtex_form}
     return render(request, 'front/add-reference.html', context)
@@ -616,8 +617,11 @@ def bibtex_auto_fill(request):
 
     if bibtex_form.is_valid():
         bibtex_string = bibtex_form.cleaned_data.get("bib")
-        bib = _parse_bibtex(bibtex_string)
-        form = _fill_form_with_initial_values(bib, bibtex_string)
+        try:
+            bib = _parse_bibtex(bibtex_string)
+            form = _fill_form_with_initial_values(bib, bibtex_string)
+        except IndexError:
+            messages.error(request, 'BibTex not in the correct format.')
 
     context= {'form': form, 'doiform': doi_form, 'bibtexform': bibtex_form}
     return render(request, 'front/add-reference.html', context)
@@ -631,29 +635,6 @@ def delete(request, pk):
         ref.save()
         return HttpResponseRedirect('/references')
     return HttpResponseRedirect('/references')
-
-
-def resolve(request, pk=None):
-    # Look up DOI and pre-populate form, render to front/add.html
-    if request.method == 'GET':
-        doi = request.GET.get('doi')
-        doi = canonicalize_doi(doi)
-        if not pk:
-            try:
-                # We're trying to add a reference but one with the same DOI
-                # is in the database already.
-                ref = Reference.objects.get(doi=doi)
-                return HttpResponseRedirect(f'/front/add-reference/{ref.pk}')
-            except Reference.DoesNotExist:
-                ref = None
-        else:
-            ref = get_object_or_404(Reference, pk=pk)
-        ref = get_ref_from_doi(doi, ref)
-        form = RefForm(instance=Reference)
-        c = {'form': form, 'pk': pk if pk else ''}
-        return render(request, 'front/add-reference.html', c)
-    raise Http404
-
 
 def view_taxa(request):
     # Get all the taxa

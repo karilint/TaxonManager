@@ -31,11 +31,14 @@
           {% for taxon in page_obj %}
           <tr class="liststaxon">
 
-            <td width="40.0%" id="hover_link"><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.unit_name1 }}</a></td>
+            <td width="40.0%" id="hover_link"><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a></td>
             <td style="font-size:x-small" width="11.0%">{{ taxon.kingdom }}</td>
             <td style="font-size:x-small" width="11.0%">{{ taxon.rank.rank_name }}</td>
-            <td style="font-size:x-small" width="60.0%">{{ taxon.n_usage }}</td>  
-
+            {% if taxon.n_usage is None %}
+              <td style="font-size:x-small" width="60.0%"></td>  
+            {% else %}
+              <td style="font-size:x-small" width="60.0%">{{ taxon.n_usage }}</td>  
+            {% endif %}
           </tr>
           {% endfor %}
   </table>

@@ -4,14 +4,14 @@
 
 <body>
     {% if taxonomic_unit.taxon_author %}
-    <h1><i>{{taxonomic_unit.unit_name1}}</i> ({{taxonomic_unit.taxon_author}}) 
+    <h1><i>{{taxonomic_unit.complete_name}}</i> ({{taxonomic_unit.taxon_author}}) 
         {% with test=user.groups.all|length %}
         {% if test > 0 %}
         <a href="{% url 'front:add-taxon' taxonomic_unit.taxon_id %}"><img src="{% static 'refs/images/pencil.svg' %}"/></a>
         {% endif %}
         {% endwith %}</h1>
     {% else %}
-    <h1><i>{{taxonomic_unit.unit_name1}}</i> 
+    <h1><i>{{taxonomic_unit.complete_name}}</i> 
         {% with test=user.groups.all|length %}
         {% if test > 0 %}
         <a href="{% url 'front:add-taxon' taxonomic_unit.taxon_id %}"><img src="{% static 'refs/images/pencil.svg' %}"/></a>
@@ -40,13 +40,13 @@
             {% if isJunior %}
             <td class="datatype" valign="top" align="left" width="35%">Senior synonym:</td>
             <td class="datafield" width="65%">
-                <a href={{ seniorSynonym.taxon_id }}>{{ seniorSynonym.unit_name1 }}</a>
+                <a href={{ seniorSynonym.taxon_id }}>{{ seniorSynonym.complete_name }}</a>
             </td>
             {% else %}
             <td class="datatype" valign="top" align="left" width="35%">Synonyms:</td>
             <td class="datafield" width="65%">
                 {% for synonym in synonyms %}
-                <a href={{ synonym.taxon_id }}>{{ synonym.unit_name1 }},</a>
+                <a href={{ synonym.taxon_id }}>{{ synonym.complete_name }},</a>
                 {% endfor %}
                 <a href="{% url 'front:add_junior_synonym' taxon_id=taxonomic_unit.taxon_id %}">Add junior synonym</a>
             </td>
@@ -92,13 +92,24 @@
             {% for name, root in name_list %}
             <tr>
             <td class="datatype" valign="top" width="35%">{{ name |safe }}:</td>
-            <td class="datafield" width="65%"><a href="{% url 'front:hierarchy' root.taxon_id %}">{{ root.unit_name1 }}</td>
+            <td class="datafield" width="65%"><a href="{% url 'front:hierarchy' root.taxon_id %}">{{ root.complete_name }}</td>
             </tr>
             {% endfor %}
+            <td class="datatype" valign="top" width="35%"></td>
+
+            {% if childTaxa %}
+                <td class="datafield" width="65%"><b>Direct Children:</b></td>
+                {% for taxon in childTaxa %}
+                    <tr>
+                        <td class="w3-right-align" width="35%">{{ taxon.rank.rank_name |safe }}:</td>
+                        <td class="datafield" width="65%"><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</td>
+                        </tr>
+                {% endfor %}
+            {% endif %}
+
     </table>
     {% endif %}
     
-
     <table class="hierarchy" style="width:80%">
         <th class="whiteboxhead" colspan="2" align="left">References</th>
 

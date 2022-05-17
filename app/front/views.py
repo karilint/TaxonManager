@@ -721,6 +721,7 @@ def search_taxa(request):
 def view_hierarchy(request, parent_id=None):
     """ View for individual taxon """
     chosenTaxon = TaxonomicUnit.objects.get(taxon_id=parent_id)
+    childTaxa = TaxonomicUnit.objects.filter(parent_id=chosenTaxon.taxon_id)
     hierarchyObject = Hierarchy.objects.get(taxon=chosenTaxon)
     # Get the synonym_ids of those taxons, where the accepted_taxon_id matches with
     # chosenTaxon.taxon_id, i.e., the ids of those taxons that are synonyms
@@ -770,6 +771,7 @@ def view_hierarchy(request, parent_id=None):
 
     context = {
         'taxonomic_unit': chosenTaxon,
+        'childTaxa': childTaxa,
         # 'hierarchies': result,
         'name_list': name_list,
         'references': references[0],

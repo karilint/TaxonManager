@@ -1,6 +1,7 @@
 import string
 from xxlimited import new
 from django import template
+from django.db import connection
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
@@ -722,6 +723,24 @@ def view_hierarchy(request, parent_id=None):
     """ View for individual taxon """
     chosenTaxon = TaxonomicUnit.objects.get(taxon_id=parent_id)
     childTaxa = TaxonomicUnit.objects.filter(parent_id=chosenTaxon.taxon_id)
+
+    # Select experts
+    percentage = '%'
+    taxon_experts = Expert.objects.raw("""
+        SELECT DISTINCT e.id, e.expert
+        FROM front_expert e
+        JOIN front_taxonomicunit_expert et ON et.expert_id=e.id
+        JOIN front_expertsgeographicdiv eg ON eg.expert_id=e.id
+        JOIN front_taxonomicunit tu ON tu.taxon_id=et.taxonomicunit_id
+        JOIN front_hierarchy h ON h.hierarchy_string LIKE CONCAT(%s,'-', tu.taxon_id ,'-',%s)
+        or h.hierarchy_string LIKE CONCAT(%s,'-', tu.taxon_id)
+        JOIN front_taxonomicunit tu2 ON tu2.taxon_id=h.taxon_id
+        JOIN front_geographicdiv g ON g.id=eg.geographic_id
+        JOIN front_taxonomicunit_geographic_div tug ON tug.taxonomicunit_id=tu2.taxon_id
+        AND tug.geographicdiv_id=eg.geographic_id
+        WHERE tu2.taxon_id = %s
+        """, [percentage, percentage, percentage, chosenTaxon.taxon_id])
+
     hierarchyObject = Hierarchy.objects.get(taxon=chosenTaxon)
     # Get the synonym_ids of those taxons, where the accepted_taxon_id matches with
     # chosenTaxon.taxon_id, i.e., the ids of those taxons that are synonyms
@@ -771,6 +790,7 @@ def view_hierarchy(request, parent_id=None):
 
     context = {
         'taxonomic_unit': chosenTaxon,
+        'taxon_experts': taxon_experts,
         'childTaxa': childTaxa,
         # 'hierarchies': result,
         'name_list': name_list,

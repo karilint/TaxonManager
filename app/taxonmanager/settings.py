@@ -31,7 +31,13 @@ if ALLOWED_HOSTS_ENV:
 else:
     ALLOWED_HOSTS.append('*')
 
-
+# The Debug Toolbar is shown only if your IP address is listed in Django’s INTERNAL_IPS setting.
+if DEBUG:
+    import os  # only if you haven't already imported this
+    import socket  # only if you haven't already imported this
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+    
 # Application definition
 
 INSTALLED_APPS = [
@@ -50,7 +56,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites'
+    'django.contrib.sites',
+    'debug_toolbar',
 ]
 
 CACHES = {
@@ -109,6 +116,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'taxonmanager.urls'

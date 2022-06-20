@@ -36,6 +36,8 @@ class TaxonFilter(django_filters.FilterSet):
                     lookup_expr='icontains')
     rank_name = django_filters.CharFilter(field_name='rank__rank_name', label='Rank name',
                     lookup_expr='icontains')
+    complete_name = django_filters.CharFilter(field_name='complete_name', label='Complete name',
+                    lookup_expr='icontains')
     expert_name = django_filters.CharFilter(field_name='expert__expert', label='Expert',
                     lookup_expr='icontains')
     author_name = django_filters.CharFilter(field_name='taxon_author__taxon_author', label='Author',
@@ -102,7 +104,7 @@ class TaxonFilter(django_filters.FilterSet):
     def filter_by_any_field(self, queryset, name, value):
         return queryset.filter(
             Q(unit_name1__icontains=value) | Q(unit_name2__icontains=value) | Q(unit_name3__icontains=value) | Q(unit_name4__icontains=value)
-            | Q(kingdom__kingdom_name__icontains=value) | Q(rank__rank_name__icontains=value)
+            | Q(kingdom__kingdom_name__icontains=value) | Q(rank__rank_name__icontains=value) | Q(complete_name__icontains=value)
             )
 
     class Meta:

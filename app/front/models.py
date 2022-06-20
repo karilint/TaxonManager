@@ -10,6 +10,7 @@ from urllib.error import HTTPError
 from .utils import ensure_https, add_optional_kv
 from django.utils import timezone
 from django_userforeignkey.models.fields import UserForeignKey
+from simple_history.models import HistoricalRecords
 
 # (null=True, blank=True) allows empty fields, makes testing easier for now
 
@@ -18,6 +19,7 @@ class BaseModel(models.Model):
     modified_by = UserForeignKey(auto_user=True, related_name='%(class)s_modifiedby')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords(inherit=True)
     
     class Meta:
         abstract = True

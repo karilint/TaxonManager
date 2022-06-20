@@ -16,8 +16,8 @@ from django_userforeignkey.models.fields import UserForeignKey
 class BaseModel(models.Model):
     created_by = UserForeignKey(auto_user_add=True, related_name='%(class)s_createdby')
     modified_by = UserForeignKey(auto_user=True, related_name='%(class)s_modifiedby')
-    created_at = models.DateTimeField(default=timezone.now())
-    updated_at = models.DateTimeField(default=timezone.now())
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
         abstract = True

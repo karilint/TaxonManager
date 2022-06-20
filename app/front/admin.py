@@ -3,6 +3,10 @@ from front.models import (Comment, Expert, ExpertsGeographicDiv, GeographicDiv, 
 Reference, ReferenceLink, SynonymLink, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, TuCommentLink)
 from simple_history.admin import SimpleHistoryAdmin
 
+
+# class BaseModelAdmin(admin.ModelAdmin):
+#     readonly_fields = ('created_by', 'modified_by', 'created_at', 'updated_at')
+
 admin.site.register(Comment, SimpleHistoryAdmin)
 admin.site.register(Expert, SimpleHistoryAdmin)
 admin.site.register(ExpertsGeographicDiv, SimpleHistoryAdmin)
@@ -17,3 +21,4 @@ admin.site.register(TaxonAuthorLkp, SimpleHistoryAdmin)
 admin.site.register(TaxonomicUnit, SimpleHistoryAdmin)
 admin.site.register(TaxonUnitType, SimpleHistoryAdmin)
 admin.site.register(TuCommentLink, SimpleHistoryAdmin)
+

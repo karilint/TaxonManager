@@ -9,10 +9,18 @@ from requests.packages.urllib3.util.retry import Retry
 from urllib.error import HTTPError
 from .utils import ensure_https, add_optional_kv
 from django.utils import timezone
+from django_userforeignkey.models.fields import UserForeignKey
 
 # (null=True, blank=True) allows empty fields, makes testing easier for now
 
-class Reference(models.Model):
+class BaseModel(models.Model):
+    created_by = UserForeignKey(auto_user_add=True, related_name='%(class)s_createdby')
+    modified_by = UserForeignKey(auto_user=True, related_name='%(class)s_modifiedby')
+    
+    class Meta:
+        abstract = True
+
+class Reference(BaseModel):
     """A literature reference, for example a journal article, book etc."""
 
     source_type = 'article'
@@ -231,7 +239,7 @@ class Reference(models.Model):
         return d
 
 
-class Comment(models.Model):
+class Comment(BaseModel):
     commentator = models.CharField(max_length=100)
     comment_detail = models.TextField(max_length=2000)
     comment_time_stamp = models.DateTimeField(null=True, blank=True)
@@ -241,7 +249,7 @@ class Comment(models.Model):
         return f"{self.commentator} ({self.comment_time_stamp})"
 
 
-class Kingdom(models.Model):
+class Kingdom(BaseModel):
     kingdom_name = models.CharField(max_length=20)
     update_date = models.DateTimeField(null=True, blank=True)
 
@@ -249,7 +257,7 @@ class Kingdom(models.Model):
         return f"{self.kingdom_name}"
 
 
-class TaxonUnitType(models.Model):
+class TaxonUnitType(BaseModel):
     class Meta:
         unique_together = (('kingdom', 'rank_id'))
 
@@ -263,7 +271,7 @@ class TaxonUnitType(models.Model):
     def __str__(self):
         return f"Kingdom: {self.kingdom}, rank_name: {self.rank_name}, rank_id:{self.rank_id}"
 
-class GeographicDiv(models.Model):
+class GeographicDiv(BaseModel):
     """ Model of a geographical division """
 
     geographic_value = models.CharField(max_length=45, null=True, blank=True)
@@ -277,7 +285,7 @@ class GeographicDiv(models.Model):
     def __str__(self):
         return f"{self.geographic_value}"
 
-class TaxonAuthorLkp(models.Model):
+class TaxonAuthorLkp(BaseModel):
     class Meta:
         unique_together = (('taxon_author_id', 'kingdom_id'))
 
@@ -294,7 +302,7 @@ class TaxonAuthorLkp(models.Model):
     def __str__(self):
         return f"{self.taxon_author}"
 
-class Expert(models.Model):
+class Expert(BaseModel):
     """ Database model of Experts table """
     # TODO: expert_id_prefix left out, this is a char field
     # that only contains EXP presumably for all rows.
@@ -310,7 +318,7 @@ class Expert(models.Model):
     def __str__(self):
         return f"{self.expert}"
 
-class TaxonomicUnit(models.Model):
+class TaxonomicUnit(BaseModel):
     """
     Taxonomic Units
     """
@@ -373,7 +381,7 @@ class TaxonomicUnit(models.Model):
     def __str__(self):
         return f"{self.unit_name1}, Kingdom: {self.kingdom} (taxon_id: {self.taxon_id}, parent_id: {self.parent_id})"
 
-class Hierarchy(models.Model):
+class Hierarchy(BaseModel):
     """
     Describes hierarchies, I guess?
     """
@@ -388,7 +396,7 @@ class Hierarchy(models.Model):
         return f"hierarchy_string: {self.hierarchy_string}"
 
 
-class TuCommentLink(models.Model):
+class TuCommentLink(BaseModel):
     """
     Many-to-many table between Comment and TaxonomicUnit tables
     """
@@ -404,7 +412,7 @@ class TuCommentLink(models.Model):
         return f"taxon_id: {self.taxon}, comment_id: {self.comment}"
 
 
-class Publication(models.Model):
+class Publication(BaseModel):
     class Meta:
         unique_together = (('pub_id_prefix', 'publication_id'))
 
@@ -427,7 +435,7 @@ class Publication(models.Model):
         return f"Title: {self.title} Author: {self.reference_author}, Publication name: {self.publication_name}"
 
 
-class ReferenceLink(models.Model):
+class ReferenceLink(BaseModel):
     class Meta:
         unique_together = (('taxon', 'doc_id_prefix', 'documentation'))
 
@@ -457,7 +465,7 @@ class ReferenceLink(models.Model):
         return f"taxon_id: {self.taxon}, documentation_id = {self.documentation}"
 
 
-class ExpertsGeographicDiv(models.Model):
+class ExpertsGeographicDiv(BaseModel):
     """ join-table between Expert and
     GeographicDiv tables """
     # FIXME: Connecting the ExpertsGeographicDiv with TSN might not work
@@ -472,7 +480,7 @@ class ExpertsGeographicDiv(models.Model):
         return f"geographic_id: {self.geographic}, expert: {self.expert}"
 
 
-class SynonymLink(models.Model):
+class SynonymLink(BaseModel):
     # FIXME: Couldn't get this to work with two FKs with both pointing to
     # tsn column in TaxonomicUnit table
     synonym_id = models.IntegerField()

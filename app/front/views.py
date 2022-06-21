@@ -170,7 +170,6 @@ def taxon_add(request, pk = None):
             'unit_name2': taxon.unit_name2,
             'unit_name3': taxon.unit_name3,
             'unit_name4': taxon.unit_name4,
-            'references': taxon.references.values_list('id', flat=True),
             'geographic_div': taxon.geographic_div.values_list('id', flat=True)
              })
 

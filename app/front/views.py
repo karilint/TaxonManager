@@ -96,13 +96,18 @@ def taxon_add(request, pk = None):
                     kingdom_name=form.cleaned_data['kingdom_name'])
                 rank_of_new_taxon = TaxonUnitType.objects.get(
                     rank_name=form.cleaned_data['taxonnomic_types'], kingdom=kingdom)
-                
 
                 parent = TaxonomicUnit.objects.get(
                     unit_name1=form.cleaned_data['rank_name'],
                     kingdom=kingdom
                 )
-
+                # fill complete_name field
+                if rank_of_new_taxon.rank_name.lower() == 'species' and kingdom.kingdom_name.lower() == 'animalia':
+                    new_unit.complete_name = new_unit.unit_name1 # TODO genus + species
+                elif rank_of_new_taxon.rank_name.lower() == 'subspecies' and kingdom.kingdom_name.lower() == 'animalia':
+                    new_unit.complete_name = new_unit.unit_name1 # TODO genus + species + subspecies
+                else:
+                    new_unit.complete_name = new_unit.unit_name1
                 # set new unit's parent
                 new_unit.parent_id = parent.taxon_id
                 # and kingdom based on parent
@@ -141,7 +146,8 @@ def taxon_add(request, pk = None):
                 for expert in experts:
                     new_unit.expert.add(expert)
                 author = form.cleaned_data['taxon_author_id']
-                new_unit.taxon_author_id=author.taxon_author_id
+                if author:
+                    new_unit.taxon_author_id=author.taxon_author_id
                 new_unit.save()
                
                 if pk:

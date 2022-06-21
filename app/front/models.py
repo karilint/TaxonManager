@@ -246,16 +246,13 @@ class Reference(BaseModel):
 class Comment(BaseModel):
     commentator = models.CharField(max_length=100)
     comment_detail = models.TextField(max_length=2000)
-    comment_time_stamp = models.DateTimeField(null=True, blank=True)
-    update_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.commentator} ({self.comment_time_stamp})"
+        return f"{self.commentator}"
 
 
 class Kingdom(BaseModel):
     kingdom_name = models.CharField(max_length=20)
-    update_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.kingdom_name}"
@@ -270,7 +267,6 @@ class TaxonUnitType(BaseModel):
     rank_name = models.CharField(max_length=15)
     dir_parent_rank_id = models.IntegerField(null=True, blank=True)
     req_parent_rank_id = models.IntegerField(null=True, blank=True)
-    update_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"Kingdom: {self.kingdom}, rank_name: {self.rank_name}, rank_id:{self.rank_id}"
@@ -279,7 +275,6 @@ class GeographicDiv(BaseModel):
     """ Model of a geographical division """
 
     geographic_value = models.CharField(max_length=45, null=True, blank=True)
-    update_date = models.DateTimeField(null=True, blank=True)
 
     # Relationship defining experts for a given geographical area
     # experts = models.ManyToManyField(
@@ -295,13 +290,8 @@ class TaxonAuthorLkp(BaseModel):
 
     taxon_author_id = models.AutoField(primary_key=True)
     taxon_author = models.CharField(max_length=100, null=True, blank=True)
-    update_date = models.DateTimeField(null=True, blank=True)
     kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
     short_author = models.CharField(max_length=100, null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        self.update_date = timezone.now()
-        return super(TaxonAuthorLkp, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.taxon_author}"
@@ -312,12 +302,7 @@ class Expert(BaseModel):
     # that only contains EXP presumably for all rows.
     expert = models.CharField(max_length=100)
     exp_comment = models.CharField(max_length=500, null=True, blank=True)
-    update_date = models.DateTimeField(null=True, blank=True)
     geographic_div = models.ManyToManyField(GeographicDiv)
-
-    def save(self, *args, **kwargs):
-            self.update_date = timezone.now()
-            return super(Expert, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.expert}"
@@ -342,14 +327,12 @@ class TaxonomicUnit(BaseModel):
     completeness_rtng = models.CharField(max_length=10, null=True, blank=True)
     currency_rating = models.CharField(max_length=7, null=True, blank=True)
     phylo_sort_seq = models.IntegerField(null=True, blank=True)
-    initial_time_stamp = models.DateTimeField(null=True, blank=True)
     parent_id = models.IntegerField()
     taxon_author = models.ForeignKey(
         TaxonAuthorLkp, on_delete=models.CASCADE, null=True, blank=True)
     kingdom = models.ForeignKey(Kingdom, on_delete=models.CASCADE)
     rank = models.ForeignKey(TaxonUnitType, on_delete=models.CASCADE, null=True)
     hybrid_author_id = models.IntegerField(null=True, blank=True)
-    update_date = models.DateTimeField(null=True, blank=True)
     uncertain_prnt_ind = models.CharField(max_length=3, null=True, blank=True)
     n_usage = models.CharField(max_length=12, null=True, blank=True)
     complete_name = models.CharField(max_length=300, null=True, blank=True)
@@ -410,7 +393,6 @@ class TuCommentLink(BaseModel):
         Comment,
         on_delete=models.CASCADE
     )
-    update_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"taxon_id: {self.taxon}, comment_id: {self.comment}"
@@ -433,7 +415,6 @@ class Publication(BaseModel):
     issn = models.CharField(max_length=40, null=True, blank=True)
     pages = models.CharField(max_length=15, null=True, blank=True)
     pub_comment = models.CharField(max_length=500, null=True, blank=True)
-    update_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"Title: {self.title} Author: {self.reference_author}, Publication name: {self.publication_name}"
@@ -463,7 +444,6 @@ class ReferenceLink(BaseModel):
     init_itis_desc_ind = models.CharField(max_length=1)
     change_track_id = models.IntegerField()
     vernacular_name = models.CharField(max_length=80)
-    update_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"taxon_id: {self.taxon}, documentation_id = {self.documentation}"
@@ -489,12 +469,10 @@ class SynonymLink(BaseModel):
     # tsn column in TaxonomicUnit table
     synonym_id = models.IntegerField()
     taxon_id_accepted = models.ForeignKey(TaxonomicUnit, on_delete=models.CASCADE)
-    update_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return "synonym_id: {}, taxon_id_accepted: {}, update_date: {}".format(
+        return "synonym_id: {}, taxon_id_accepted: {}".format(
             self.synonym_id,
             self.taxon_id_accepted,
-            self.update_date
         )
 

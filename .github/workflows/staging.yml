@@ -24,23 +24,10 @@ jobs:
         run: |
           python manage.py makemigrations
           python manage.py migrate
-        working-directory: ./app      
-      - name: Load test data
-        run: |
-          python manage.py loaddata test.json
-        working-directory: ./app
-      - name: Run unit tests
-        run: python manage.py test -v2
         working-directory: ./app
       - name: Run backend
         run: python manage.py runserver &
         working-directory: ./app
-
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
-        with:
-            wait-on: http://localhost:8000
-            config: baseUrl=http://localhost:8000
 
   docker:
     runs-on: ubuntu-latest

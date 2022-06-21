@@ -128,7 +128,7 @@ def taxon_add(request, pk = None):
 
                 #add SynonymLink
                 if form.cleaned_data["is_junior_synonym"] and form.cleaned_data["senior_synonym"] != "":
-                    SynonymLink.objects.create(synonym_id = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["unit_name1"]).taxon_id, taxon_id_accepted=TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["senior_synonym"]), update_date = datetime.now()).save()
+                    SynonymLink.objects.create(synonym_id = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["unit_name1"]).taxon_id, taxon_id_accepted=TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["senior_synonym"])).save()
                         
                 new_unit.save()
                 refs = form.cleaned_data['references']
@@ -141,7 +141,7 @@ def taxon_add(request, pk = None):
                 for expert in experts:
                     new_unit.expert.add(expert)
                 author = form.cleaned_data['taxon_author_id']
-                new_unit.taxon_author_id=author
+                new_unit.taxon_author_id=author.taxon_author_id
                 new_unit.save()
                
                 if pk:
@@ -816,7 +816,7 @@ def add_junior_synonym(request, taxon_id=None):
                     taxon.name_usage = "invalid"
                     taxon.unaccept_reason= "junior synonym"
                 taxon.save()
-                SynonymLink.objects.create(synonym_id = taxon.taxon_id, taxon_id_accepted = TaxonomicUnit.objects.get(taxon_id = taxon_id), update_date = datetime.now()).save()
+                SynonymLink.objects.create(synonym_id = taxon.taxon_id, taxon_id_accepted = TaxonomicUnit.objects.get(taxon_id = taxon_id)).save()
                 children = TaxonomicUnit.objects.filter(parent_id = taxon.taxon_id)
                 if len(children) > 0:
                     for child in children:

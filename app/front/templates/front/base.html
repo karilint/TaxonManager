@@ -113,14 +113,40 @@
                             <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Edit </a>                 
                             {% endif %}
                         {% else %}
-                        <a class="w3-bar-item w3-button disabled" id="sideButton_notAvailable" href="/"> Edit </a>
+                        <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Edit </a>
                         {% endif %}
                         {% endwith %}
                     </th></tr>
 
                     <tr><th>{% with test=user.groups.all|length %}
                         {% if test > 0 %}
-                            {% if 'hierarchy' in request.path or request.path == '/taxa/' or request.path == '/add-taxon/' %}
+                            {% if 'hierarchy' in request.path or request.path == '/add-expert/' or '/add-taxon/' in request.path or request.path == '/add-author/' or 'add-references/' in request.path %}
+                            <a class="w3-bar-item w3-button" id="sideButton" href="{% url 'front:add-taxon' taxonomic_unit.taxon_id %}"> Cancel </a>
+                            {% else %}
+                            <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Cancel </a>                 
+                            {% endif %}
+                        {% else %}
+                        <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Cancel </a>
+                        {% endif %}
+                        {% endwith %}
+                    </th></tr>
+
+                    <tr><th>{% with test=user.groups.all|length %}
+                        {% if test > 0 %}
+                        {% if 'hierarchy' in request.path or request.path == '/add-expert/' or '/add-taxon/' in request.path or request.path == '/add-author/' or 'add-references/' in request.path %}
+                            <a class="w3-bar-item w3-button" id="sideButton" href="{% url 'front:add-taxon' taxonomic_unit.taxon_id %}"> Save </a>
+                            {% else %}
+                            <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Save </a>                 
+                            {% endif %}
+                        {% else %}
+                        <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Save </a>
+                        {% endif %}
+                        {% endwith %}
+                    </th></tr>
+
+                    <tr><th>{% with test=user.groups.all|length %}
+                        {% if test > 0 %}
+                            {% if 'hierarchy' in request.path or request.path == '/taxa/' or '/add-taxon/' in request.path %}
                             <a class="w3-bar-item w3-button" id="sideButton" href="/add-taxon"> Add taxon </a>
                             {% elif request.path == '/references/' or request.path == '/add-references/' %}
                             <a class="w3-bar-item w3-button" id="sideButton" href="/add-references"> Add reference </a>
@@ -129,10 +155,10 @@
                             {% elif request.path == '/authors/' or request.path == '/add-author/' %}
                             <a class="w3-bar-item w3-button" id="sideButton" href="/add-author"> Add author </a>
                             {% else %}
-                            <div class="w3-bar-item w3-button" id="sideButton_notAvailable"> Add </div>                            
+                            <div class="w3-bar-item w3-button" id="sideButton_notAvailable"> Add new </div>                            
                             {% endif %}
                         {% else %}
-                        <div class="w3-bar-item w3-button" id="sideButton_notAvailable"> Add </div> 
+                        <div class="w3-bar-item w3-button" id="sideButton_notAvailable"> Add new </div> 
                         {% endif %}
                         {% endwith %}
                     </th></tr>

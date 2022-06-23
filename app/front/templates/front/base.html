@@ -102,9 +102,9 @@
 
                     <tr><th>
                         <div class="div-line"><hr></div>
-                        <!-- <p>URL of this page: {{ request.path }}</p> -->
                     </th></tr>
 
+                    <!-- Edit button -->
                     <tr><th>{% with test=user.groups.all|length %}
                         {% if test > 0 %}
                             {% if 'hierarchy' in request.path %}
@@ -118,10 +118,17 @@
                         {% endwith %}
                     </th></tr>
 
+                    <!-- Cancel button -->
                     <tr><th>{% with test=user.groups.all|length %}
                         {% if test > 0 %}
-                            {% if 'hierarchy' in request.path or request.path == '/add-expert/' or '/add-taxon/' in request.path or request.path == '/add-author/' or 'add-references/' in request.path %}
-                            <a class="w3-bar-item w3-button" id="sideButton" href="{% url 'front:add-taxon' taxonomic_unit.taxon_id %}"> Cancel </a>
+                            {% if '/add-taxon/' in request.path %}
+                            <a class="w3-bar-item w3-button" id="sideButton" href="/taxa/"> Cancel </a>
+                            {% elif 'add-references/' in request.path %}
+                            <a class="w3-bar-item w3-button" id="sideButton" href="/references/"> Cancel </a>
+                            {% elif request.path == '/add-expert/' %}
+                            <a class="w3-bar-item w3-button" id="sideButton" href="/experts/"> Cancel </a>
+                            {% elif request.path == '/add-author/' %}
+                            <a class="w3-bar-item w3-button" id="sideButton" href="/authors/"> Cancel </a>
                             {% else %}
                             <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Cancel </a>                 
                             {% endif %}
@@ -131,6 +138,7 @@
                         {% endwith %}
                     </th></tr>
 
+                    <!-- Save button -->
                     <tr><th>{% with test=user.groups.all|length %}
                         {% if test > 0 %}
                         {% if 'hierarchy' in request.path or request.path == '/add-expert/' or '/add-taxon/' in request.path or request.path == '/add-author/' or 'add-references/' in request.path %}
@@ -144,9 +152,10 @@
                         {% endwith %}
                     </th></tr>
 
+                    <!-- Add new button -->
                     <tr><th>{% with test=user.groups.all|length %}
                         {% if test > 0 %}
-                            {% if 'hierarchy' in request.path or request.path == '/taxa/' or '/add-taxon/' in request.path %}
+                            {% if 'hierarchy' in request.path or '/taxa/' in request.path %}
                             <a class="w3-bar-item w3-button" id="sideButton" href="/add-taxon"> Add taxon </a>
                             {% elif request.path == '/references/' or request.path == '/add-references/' %}
                             <a class="w3-bar-item w3-button" id="sideButton" href="/add-references"> Add reference </a>

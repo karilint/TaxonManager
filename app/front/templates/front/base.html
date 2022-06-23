@@ -96,39 +96,39 @@
 
                     <!-- Navigation buttons -->
                     {% if '/taxa/' in request.path or '/hierarchy' in request.path or '/add-taxon/' in request.path or '/add_junior_synonym/' in request.path %}
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton_activated" href="/taxa"> Taxa </a></th></tr>
+                    <tr><th><a title = "Taxon list" class="w3-bar-item w3-button" id="sideButton_activated" href="/taxa"> Taxa </a></th></tr>
                     {% else %}
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/taxa"> Taxa </a></th></tr>
+                    <tr><th><a title = "Taxon list" class="w3-bar-item w3-button" id="sideButton" href="/taxa"> Taxa </a></th></tr>
                     {% endif %}
 
                     {% if '/taxa-search/' in request.path %}
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton_activated" href="/taxa-search"> Taxon search </a></th></tr>
+                    <tr><th><a title = "Advanced taxon search" class="w3-bar-item w3-button" id="sideButton_activated" href="/taxa-search"> Taxon search </a></th></tr>
                     {% else %}
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/taxa-search"> Taxon search </a></th></tr>
+                    <tr><th><a title = "Advanced taxon search" class="w3-bar-item w3-button" id="sideButton" href="/taxa-search"> Taxon search </a></th></tr>
                     {% endif %}
                 
                     {% if request.path == '/references/' or 'add-references/' in request.path or request.path == '/doi-autofill/' or request.path == '/bibtex-autofill/' %}
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton_activated" href="/references"> References </a></th></tr>
+                    <tr><th><a title = "Reference list" class="w3-bar-item w3-button" id="sideButton_activated" href="/references"> References </a></th></tr>
                     {% else %}
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/references"> References </a></th></tr>
+                    <tr><th><a title = "Reference list" class="w3-bar-item w3-button" id="sideButton" href="/references"> References </a></th></tr>
                     {% endif %}
 
                     {% if request.path == '/search/' %}
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton_activated" href="/search"> Reference search </a></th></tr>
+                    <tr><th><a title = "Advanced reference search" class="w3-bar-item w3-button" id="sideButton_activated" href="/search"> Reference search </a></th></tr>
                     {% else %}
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/search"> Reference search </a></th></tr>
+                    <tr><th><a title = "Advanced reference search" class="w3-bar-item w3-button" id="sideButton" href="/search"> Reference search </a></th></tr>
                     {% endif %}
 
                     {% if request.path == '/experts/' or request.path == '/add-expert/' %}
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton_activated" href="/experts"> Experts </a></th></tr>
+                    <tr><th><a title = "Expert list" class="w3-bar-item w3-button" id="sideButton_activated" href="/experts"> Experts </a></th></tr>
                     {% else %}
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/experts"> Experts </a></th></tr>
+                    <tr><th><a title = "Expert list" class="w3-bar-item w3-button" id="sideButton" href="/experts"> Experts </a></th></tr>
                     {% endif %}
 
                     {% if request.path == '/authors/' or request.path == '/add-author/' %}
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton_activated" href="/authors"> Authors </a></th></tr>
+                    <tr><th><a title = "Author list" class="w3-bar-item w3-button" id="sideButton_activated" href="/authors"> Authors </a></th></tr>
                     {% else %}
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/authors"> Authors </a></th></tr>
+                    <tr><th><a title = "Author list" class="w3-bar-item w3-button" id="sideButton" href="/authors"> Authors </a></th></tr>
                     {% endif %}
                     
                     <tr><th>
@@ -139,7 +139,7 @@
                     <tr><th>{% with test=user.groups.all|length %}
                         {% if test > 0 %}
                             {% if 'hierarchy' in request.path %}
-                            <a class="w3-bar-item w3-button" id="sideButton" href="{% url 'front:add-taxon' taxonomic_unit.taxon_id %}"> Edit taxon </a>
+                            <a title = "Edit this taxon" class="w3-bar-item w3-button" id="sideButton" href="{% url 'front:add-taxon' taxonomic_unit.taxon_id %}"> Edit taxon </a>
                             {% else %}
                             <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Edit </a>                 
                             {% endif %}
@@ -153,13 +153,13 @@
                     <tr><th>{% with test=user.groups.all|length %}
                         {% if test > 0 %}
                             {% if '/add-taxon/' in request.path or '/add_junior_synonym/' in request.path %}
-                            <a class="w3-bar-item w3-button" id="sideButton" href="/taxa/"> Cancel </a>
+                            <a title = "Cancel editing this taxon" class="w3-bar-item w3-button" id="sideButton" href="/taxa/"> Cancel </a>
                             {% elif 'add-references/' in request.path or request.path == '/doi-autofill/' or request.path == '/bibtex-autofill/' %}
-                            <a class="w3-bar-item w3-button" id="sideButton" href="/references/"> Cancel </a>
+                            <a title = "Cancel editing this reference" class="w3-bar-item w3-button" id="sideButton" href="/references/"> Cancel </a>
                             {% elif request.path == '/add-expert/' %}
-                            <a class="w3-bar-item w3-button" id="sideButton" href="/experts/"> Cancel </a>
+                            <a title = "Cancel adding this expert" class="w3-bar-item w3-button" id="sideButton" href="/experts/"> Cancel </a>
                             {% elif request.path == '/add-author/' %}
-                            <a class="w3-bar-item w3-button" id="sideButton" href="/authors/"> Cancel </a>
+                            <a title = "Cancel adding this author" class="w3-bar-item w3-button" id="sideButton" href="/authors/"> Cancel </a>
                             {% else %}
                             <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Cancel </a>                 
                             {% endif %}
@@ -173,9 +173,9 @@
                     <tr><th>{% with test=user.groups.all|length %}
                         {% if test > 0 %}
                         {% if request.path == '/add-expert/' or '/add-taxon/' in request.path or request.path == '/add-author/' or '/add_junior_synonym/' in request.path %}
-                            <button type="submit" form="parent-form" class="w3-bar-item w3-button" id="sideButton"> Save </button>
+                            <button title = "Save this object" type="submit" form="parent-form" class="w3-bar-item w3-button" id="sideButton"> Save </button>
                             {% elif 'add-references/' in request.path or request.path == '/doi-autofill/' or request.path == '/bibtex-autofill/' %}
-                            <button type="submit" name="submit" value="Submit" form="reference-form" class="w3-bar-item w3-button" id="sideButton"> Save </button>
+                            <button title = "Save this reference" type="submit" name="submit" value="Submit" form="reference-form" class="w3-bar-item w3-button" id="sideButton"> Save </button>
                             {% else %}
                             <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Save </a>                 
                             {% endif %}
@@ -189,13 +189,13 @@
                     <tr><th>{% with test=user.groups.all|length %}
                         {% if test > 0 %}
                             {% if 'hierarchy' in request.path or '/taxa/' in request.path %}
-                            <a class="w3-bar-item w3-button" id="sideButton" href="/add-taxon"> Add taxon </a>
+                            <a title = "Add a new taxon to the database" class="w3-bar-item w3-button" id="sideButton" href="/add-taxon"> Add taxon </a>
                             {% elif request.path == '/references/' %}
-                            <a class="w3-bar-item w3-button" id="sideButton" href="/add-references"> Add reference </a>
+                            <a title = "Add a new reference to the database" class="w3-bar-item w3-button" id="sideButton" href="/add-references"> Add reference </a>
                             {% elif request.path == '/experts/' %}
-                            <a class="w3-bar-item w3-button" id="sideButton" href="/add-expert"> Add expert </a>
+                            <a title = "Add a new expert to the database" class="w3-bar-item w3-button" id="sideButton" href="/add-expert"> Add expert </a>
                             {% elif request.path == '/authors/' %}
-                            <a class="w3-bar-item w3-button" id="sideButton" href="/add-author"> Add author </a>
+                            <a title = "Add a new author to the database" class="w3-bar-item w3-button" id="sideButton" href="/add-author"> Add author </a>
                             {% else %}
                             <div class="w3-bar-item w3-button" id="sideButton_notAvailable"> Add new </div>                            
                             {% endif %}
@@ -205,13 +205,16 @@
                         {% endwith %}
                     </th></tr>
 
-
-  
                     <tr><th>
                         <div class="div-line"><hr></div>
                     </th></tr>
 
-                    <tr><th><a class="w3-bar-item w3-button" id="sideButton" href="/help"> Help </a></th></tr>
+                    {% if request.path == '/help/' %}
+                    <tr><th><a title = "Help" class="w3-bar-item w3-button" id="sideButton_activated" href="/help"> Help </a></th></tr>
+                    {% else %}
+                    <tr><th><a title = "Help" class="w3-bar-item w3-button" id="sideButton" href="/help"> Help </a></th></tr>
+                    {% endif %}
+
                     <tr><th> <div class="w3-hide-large image_text">
                         <img src="{% static "images/nowdatabase.jpg" %}" alt="now database" height="95" width="120" class="responsive">
                         <div id="image_credit">Picture © Noira Martiskainen</div>

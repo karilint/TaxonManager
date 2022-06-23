@@ -123,7 +123,7 @@
                         {% if test > 0 %}
                             {% if '/add-taxon/' in request.path %}
                             <a class="w3-bar-item w3-button" id="sideButton" href="/taxa/"> Cancel </a>
-                            {% elif 'add-references/' in request.path %}
+                            {% elif 'add-references/' in request.path or request.path == '/doi-autofill/' or request.path == '/bibtex-autofill/' %}
                             <a class="w3-bar-item w3-button" id="sideButton" href="/references/"> Cancel </a>
                             {% elif request.path == '/add-expert/' %}
                             <a class="w3-bar-item w3-button" id="sideButton" href="/experts/"> Cancel </a>
@@ -141,8 +141,10 @@
                     <!-- Save button -->
                     <tr><th>{% with test=user.groups.all|length %}
                         {% if test > 0 %}
-                        {% if 'hierarchy' in request.path or request.path == '/add-expert/' or '/add-taxon/' in request.path or request.path == '/add-author/' or 'add-references/' in request.path %}
-                            <a class="w3-bar-item w3-button" id="sideButton" href="{% url 'front:add-taxon' taxonomic_unit.taxon_id %}"> Save </a>
+                        {% if request.path == '/add-expert/' or '/add-taxon/' in request.path or request.path == '/add-author/' %}
+                            <button type="submit" form="parent-form" class="w3-bar-item w3-button" id="sideButton"> Save </button>
+                            {% elif 'add-references/' in request.path or request.path == '/doi-autofill/' or request.path == '/bibtex-autofill/' %}
+                            <button type="submit" name="submit" value="Submit" form="reference-form" class="w3-bar-item w3-button" id="sideButton"> Save </button>
                             {% else %}
                             <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Save </a>                 
                             {% endif %}
@@ -157,11 +159,11 @@
                         {% if test > 0 %}
                             {% if 'hierarchy' in request.path or '/taxa/' in request.path %}
                             <a class="w3-bar-item w3-button" id="sideButton" href="/add-taxon"> Add taxon </a>
-                            {% elif request.path == '/references/' or request.path == '/add-references/' %}
+                            {% elif request.path == '/references/' %}
                             <a class="w3-bar-item w3-button" id="sideButton" href="/add-references"> Add reference </a>
-                            {% elif request.path == '/experts/' or request.path == '/add-expert/' %}
+                            {% elif request.path == '/experts/' %}
                             <a class="w3-bar-item w3-button" id="sideButton" href="/add-expert"> Add expert </a>
-                            {% elif request.path == '/authors/' or request.path == '/add-author/' %}
+                            {% elif request.path == '/authors/' %}
                             <a class="w3-bar-item w3-button" id="sideButton" href="/add-author"> Add author </a>
                             {% else %}
                             <div class="w3-bar-item w3-button" id="sideButton_notAvailable"> Add new </div>                            

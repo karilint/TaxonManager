@@ -39,7 +39,7 @@
 <br>
 
 
-<form action="{% url 'front:add-references' pk %}" method="post" class="add-ref-form">
+<form action="{% url 'front:add-references' pk %}" method="post" id="reference-form" class="add-ref-form">
 {% csrf_token %}
 
 {{ form.non_field_errors }}
@@ -57,7 +57,6 @@
 
 {% endfor %}
 
-<input type="submit" name="submit" value="Submit">
 </form>
 
 {% endblock %}

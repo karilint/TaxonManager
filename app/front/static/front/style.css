@@ -323,6 +323,14 @@ select[name="reference"] {
   font-weight: normal;
 }
 
+#sideButton_activated {
+  background-color: #e9f8cc;
+  text-align: center;
+  padding: 3px 16px !important;
+  border: 2px solid #3f2503 !important;
+  font-weight: normal;
+}
+
 #sideButton_notAvailable {
   text-align: center;
   padding: 3px 16px !important;

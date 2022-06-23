@@ -205,6 +205,12 @@
                         {% endwith %}
                     </th></tr>
 
+                    {% if user.is_superuser %}
+                    <tr><th>
+                        <a title = "Admin panel" class="w3-bar-item w3-button" id="sideButton" href="{% url 'admin:index' %}"> Admin </a>
+                    </th></tr>
+                    {% endif %}
+                    
                     <tr><th>
                         <div class="div-line"><hr></div>
                     </th></tr>

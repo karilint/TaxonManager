@@ -16,6 +16,16 @@
   </form>
 
 <script>
+  var form = document.getElementById("parent-form")
+
+  form.addEventListener("submit", (e) => {
+    if (confirm("Submit the data?")) {
+      form.submit()
+    } else {
+      e.preventDefault()
+    }
+  })
+      
   $(document).ready(function(){
     $("#id_synonym_id").select2({
       width: '200px'

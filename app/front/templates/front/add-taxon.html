@@ -46,6 +46,12 @@
       if (error.length > 0) {
         e.preventDefault()
         window.alert(error.join(", "));
+      } else {
+        if (confirm("Submit the data?")) {
+            form.submit()
+        } else {
+          e.preventDefault()
+        }
       }
     })
 

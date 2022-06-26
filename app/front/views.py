@@ -474,7 +474,7 @@ def view_reference(request):
     return render(request, 'front/references.html', c)
 
 
-def search(request):
+def search_references(request):
     ref_list = Reference.objects.all().filter(visible=1)
     ref_filter = RefFilter(request.GET, queryset=ref_list)
     nresults = ref_filter.qs.count()

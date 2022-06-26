@@ -113,10 +113,10 @@
                     <tr><th><a title = "Reference list" class="w3-bar-item w3-button" id="sideButton" href="/references"> References </a></th></tr>
                     {% endif %}
 
-                    {% if request.path == '/search/' %}
-                    <tr><th><a title = "Advanced reference search" class="w3-bar-item w3-button" id="sideButton_activated" href="/search"> Reference search </a></th></tr>
+                    {% if request.path == '/references-search/' %}
+                    <tr><th><a title = "Advanced reference search" class="w3-bar-item w3-button" id="sideButton_activated" href="/references-search"> Reference search </a></th></tr>
                     {% else %}
-                    <tr><th><a title = "Advanced reference search" class="w3-bar-item w3-button" id="sideButton" href="/search"> Reference search </a></th></tr>
+                    <tr><th><a title = "Advanced reference search" class="w3-bar-item w3-button" id="sideButton" href="/references-search"> Reference search </a></th></tr>
                     {% endif %}
 
                     {% if request.path == '/experts/' or request.path == '/add-expert/' %}

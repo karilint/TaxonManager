@@ -144,7 +144,7 @@
                             <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Edit </a>                 
                             {% endif %}
                         {% else %}
-                        <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Edit </a>
+                            <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Edit </a>
                         {% endif %}
                         {% endwith %}
                     </th></tr>
@@ -153,9 +153,17 @@
                     <tr><th>{% with test=user.groups.all|length %}
                         {% if test > 0 %}
                             {% if '/add-taxon/' in request.path or '/add_junior_synonym/' in request.path %}
-                            <a title = "Cancel editing this taxon" class="w3-bar-item w3-button" id="sideButton" href="/taxa/"> Cancel </a>
+                                {% if title == 'Edit' %}
+                                <a title = "Cancel editing this taxon" class="w3-bar-item w3-button" id="sideButton" href="{% url 'front:hierarchy' taxon.taxon_id %}"> Cancel </a>
+                                {% else %}
+                                <a title = "Cancel adding this taxon" class="w3-bar-item w3-button" id="sideButton" href="/taxa/"> Cancel </a>
+                                {% endif %}
                             {% elif 'add-references/' in request.path or request.path == '/doi-autofill/' or request.path == '/bibtex-autofill/' %}
-                            <a title = "Cancel editing this reference" class="w3-bar-item w3-button" id="sideButton" href="/references/"> Cancel </a>
+                                {% if title == 'Edit' %}
+                                <a title = "Cancel editing this reference" class="w3-bar-item w3-button" id="sideButton" href="/references/"> Cancel </a>
+                                {% else %}
+                                <a title = "Cancel adding this reference" class="w3-bar-item w3-button" id="sideButton" href="/references/"> Cancel </a>
+                                {% endif %}
                             {% elif request.path == '/add-expert/' %}
                             <a title = "Cancel adding this expert" class="w3-bar-item w3-button" id="sideButton" href="/experts/"> Cancel </a>
                             {% elif request.path == '/add-author/' %}
@@ -164,7 +172,7 @@
                             <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Cancel </a>                 
                             {% endif %}
                         {% else %}
-                        <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Cancel </a>
+                            <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Cancel </a>
                         {% endif %}
                         {% endwith %}
                     </th></tr>
@@ -186,12 +194,12 @@
                             <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Save </a>                 
                             {% endif %}
                         {% else %}
-                        <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Save </a>
+                            <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Save </a>
                         {% endif %}
                         {% endwith %}
                     </th></tr>
 
-                    <!-- Add new button -->
+                    <!-- Add button -->
                     <tr><th>{% with test=user.groups.all|length %}
                         {% if test > 0 %}
                             {% if 'hierarchy' in request.path or '/taxa/' in request.path %}
@@ -203,10 +211,10 @@
                             {% elif request.path == '/authors/' %}
                             <a title = "Add a new author to the database" class="w3-bar-item w3-button" id="sideButton" href="/add-author"> Add author </a>
                             {% else %}
-                            <div class="w3-bar-item w3-button" id="sideButton_notAvailable"> Add new </div>                            
+                            <div class="w3-bar-item w3-button" id="sideButton_notAvailable"> Add </div>                            
                             {% endif %}
                         {% else %}
-                        <div class="w3-bar-item w3-button" id="sideButton_notAvailable"> Add new </div> 
+                            <div class="w3-bar-item w3-button" id="sideButton_notAvailable"> Add </div> 
                         {% endif %}
                         {% endwith %}
                     </th></tr>

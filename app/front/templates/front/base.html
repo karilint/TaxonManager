@@ -172,8 +172,14 @@
                     <!-- Save button -->
                     <tr><th>{% with test=user.groups.all|length %}
                         {% if test > 0 %}
-                        {% if request.path == '/add-expert/' or '/add-taxon/' in request.path or request.path == '/add-author/' or '/add_junior_synonym/' in request.path %}
-                            <button title = "Save this object" type="submit" form="parent-form" class="w3-bar-item w3-button" id="sideButton"> Save </button>
+                            {% if request.path == '/add-expert/'%}
+                            <button title = "Save this expert" type="submit" form="parent-form" class="w3-bar-item w3-button" id="sideButton"> Save </button>
+                            {% elif request.path == '/add-author/'%}
+                            <button title = "Save this author" type="submit" form="parent-form" class="w3-bar-item w3-button" id="sideButton"> Save </button>
+                            {% elif '/add-taxon/' in request.path%}
+                            <button title = "Save this taxon" type="submit" form="parent-form" class="w3-bar-item w3-button" id="sideButton"> Save </button>
+                            {% elif '/add_junior_synonym/' in request.path%}
+                            <button title = "Save this junior synonym" type="submit" form="parent-form" class="w3-bar-item w3-button" id="sideButton"> Save </button>
                             {% elif 'add-references/' in request.path or request.path == '/doi-autofill/' or request.path == '/bibtex-autofill/' %}
                             <button title = "Save this reference" type="submit" name="submit" value="Submit" form="reference-form" class="w3-bar-item w3-button" id="sideButton"> Save </button>
                             {% else %}

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'front.apps.FrontConfig',
     'simple_history',
     'treebeard',
+    'rest_framework',
     'django_select2',
     'django.contrib.admin',
     'django.contrib.auth',

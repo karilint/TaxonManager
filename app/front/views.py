@@ -166,6 +166,7 @@ def taxon_add(request, pk = None):
     else:
         # edit existing taxon
         try:
+            c['title'] = 'Edit'
             taxon = TaxonomicUnit.objects.get(pk=pk)
             parent =TaxonomicUnit.objects.get(pk=taxon.parent_id)
 
@@ -180,6 +181,7 @@ def taxon_add(request, pk = None):
              })
 
         except TaxonomicUnit.DoesNotExist:
+            c['title'] = 'Add'
             form = TaxonForm()
     
     c['form'] = form
@@ -474,7 +476,7 @@ def view_reference(request):
     return render(request, 'front/references.html', c)
 
 
-def search(request):
+def search_references(request):
     ref_list = Reference.objects.all().filter(visible=1)
     ref_filter = RefFilter(request.GET, queryset=ref_list)
     nresults = ref_filter.qs.count()
@@ -521,8 +523,10 @@ def refs_add(request, pk=None):
     else:
         try:
             ref = Reference.objects.get(pk=pk)
+            c['title'] = 'Edit'
         except Reference.DoesNotExist:
             ref = None
+            c['title'] = 'Add'
         form = RefForm(instance=ref)
     doi_form = DoiForm(initial={'doi':'10.'})
     bibtex_form = BibtexForm(initial={'bib':'@'})

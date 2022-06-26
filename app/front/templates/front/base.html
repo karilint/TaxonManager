@@ -154,7 +154,7 @@
                         {% if test > 0 %}
                             {% if '/add-taxon/' in request.path or '/add_junior_synonym/' in request.path %}
                                 {% if title == 'Edit' %}
-                                <a title = "Cancel editing this taxon" class="w3-bar-item w3-button" id="sideButton" href="{% url 'front:hierarchy' taxon.taxon_id %}"> Cancel </a>
+                                <a title = "Cancel editing this taxon" class="w3-bar-item w3-button" id="sideButton" href="{% url 'front:hierarchy' pk %}"> Cancel </a>
                                 {% else %}
                                 <a title = "Cancel adding this taxon" class="w3-bar-item w3-button" id="sideButton" href="/taxa/"> Cancel </a>
                                 {% endif %}

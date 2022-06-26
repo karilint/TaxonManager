@@ -7,7 +7,11 @@
 
 {% block content %}
 
-<h1>{{title}} reference</h1>
+{% if title %}
+    <h1>{{title}} reference</h1>
+{% else %}
+    <h1>Add reference</h1>
+{% endif %}
 
 {% if form.errors or messages %}
 <p class="errorlist">Please correct the errors below.</p>

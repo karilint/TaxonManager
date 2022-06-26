@@ -59,4 +59,17 @@
 
 </form>
 
+<script>
+    var form = document.getElementById("reference-form");
+
+    form.addEventListener("submit", (e) => {
+        if (confirm("Submit the data?")) {
+            form.submit()
+        } else {
+          e.preventDefault()
+        }
+      })
+</script>
+
+
 {% endblock %}

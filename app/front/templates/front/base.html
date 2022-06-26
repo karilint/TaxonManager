@@ -155,7 +155,7 @@
                             {% if '/add-taxon/' in request.path or '/add_junior_synonym/' in request.path %}
                                 {% if title == 'Edit' %}
                                 <!-- href="{% url 'front:hierarchy' pk causes javascript bugs on staging server -->
-                                <a title = "Cancel editing this taxon" class="w3-bar-item w3-button" id="sideButton" href="/taxa/"> Cancel </a>
+                                <a title = "Cancel editing this taxon" class="w3-bar-item w3-button" id="sideButton" href="{{request.META.HTTP_REFERER|escape}}"> Cancel </a>
                                 {% else %}
                                 <a title = "Cancel adding this taxon" class="w3-bar-item w3-button" id="sideButton" href="/taxa/"> Cancel </a>
                                 {% endif %}

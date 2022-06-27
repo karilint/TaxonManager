@@ -72,3 +72,22 @@ class TaxonomicUnitSerializer(serializers.ModelSerializer):
         model = models.TaxonomicUnit
         fields = ['taxon_id', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'parent_id',
                   'taxon_author', 'kingdom', 'rank', 'complete_name', 'references', 'geographic_div', 'expert']
+
+
+class HiearchySerializer(serializers.ModelSerializer):
+    taxon = serializers.SlugRelatedField(
+        queryset=models.TaxonomicUnit.objects.all(), slug_field='complete_name')
+
+    class Meta:
+        model = models.Hierarchy
+        fields = ['id', 'hierarchy_string', 'taxon', 'parent_id', 'level']
+
+
+class SynonymLinkSerializer(serializers.ModelSerializer):
+
+    taxon_id_accepted = serializers.SlugRelatedField(
+        queryset=models.TaxonomicUnit.objects.all(), slug_field='complete_name')
+
+    class Meta:
+        model = models.SynonymLink
+        fields = ['id', 'synonym_id', 'taxon_id_accepted']

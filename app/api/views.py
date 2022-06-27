@@ -41,3 +41,13 @@ class ExpertViewSet(viewsets.ModelViewSet):
 class TaxonomicUnitViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TaxonomicUnitSerializer
     queryset = models.TaxonomicUnit.objects.all()
+
+
+class HierarchyViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.HiearchySerializer
+    queryset = models.Hierarchy.objects.all()
+
+
+class SynonymLinkViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.SynonymLinkSerializer
+    queryset = models.SynonymLink.objects.all()

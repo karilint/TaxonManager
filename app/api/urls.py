@@ -16,6 +16,10 @@ router.register('experts', views.ExpertViewSet, basename='expert')
 
 router.register('taxonomicunits', views.TaxonomicUnitViewSet,
                 basename='taxonomicunit')
+router.register('hierarchys', views.HierarchyViewSet,
+                basename='hierarchy')
+router.register('synonymlinks', views.SynonymLinkViewSet,
+                basename='synonymlink')
 
 
 urlpatterns = [

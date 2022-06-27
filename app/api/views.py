@@ -2,6 +2,10 @@ from rest_framework import viewsets
 from front import models
 from api import serializers
 
+# settings.py :    'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+#     ]
+
 
 class ReferenceViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ReferenceSerializer

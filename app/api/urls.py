@@ -1,6 +1,12 @@
-from django.urls import path
-from . import views
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from api import views
 
-app_name = 'api'
+
+
+router = DefaultRouter()
+router.register('kingdoms', views.KingdomViewSet, basename='kingdom')
+router.register('authors', views.AuthorViewSet, basename='authors_urls')
+
 urlpatterns = [
-    path('get-data/', views.getData)]
+    path('', include(router.urls))]

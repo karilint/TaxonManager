@@ -48,9 +48,15 @@ class ExpertViewSet(viewsets.ModelViewSet):
 class TaxonomicUnitViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TaxonomicUnitSerializer
     queryset = models.TaxonomicUnit.objects.all()
-    # filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    # search_fields = ['kingdom_name', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div', 'expert', 'taxon_author']
-    # filter_fields = ['kingdom_name', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div', 'expert', 'taxon_author']
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filter_fields = ['taxon_id', 'unit_name1', 'unit_name2',
+                     'unit_name3', 'unit_name4', 'kingdom',
+                     'rank', 'complete_name', 'expert',
+                     'taxon_author', 'geographic_div']
+    search_fields = ['taxon_id', 'unit_name1', 'unit_name2',
+                     'unit_name3', 'unit_name4', 'kingdom__kingdom_name',
+                     'rank__rank_name', 'complete_name', 'expert__expert',
+                     'taxon_author__taxon_author', 'geographic_div__geographic_value']
 
 
 class HierarchyViewSet(viewsets.ModelViewSet):

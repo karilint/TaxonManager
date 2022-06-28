@@ -1,6 +1,9 @@
 from rest_framework import viewsets
 from front import models
 from api import serializers
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+
 
 # settings.py :    'DEFAULT_PERMISSION_CLASSES': [
 #         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
@@ -45,6 +48,9 @@ class ExpertViewSet(viewsets.ModelViewSet):
 class TaxonomicUnitViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TaxonomicUnitSerializer
     queryset = models.TaxonomicUnit.objects.all()
+    # filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    # search_fields = ['kingdom_name', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div', 'expert', 'taxon_author']
+    # filter_fields = ['kingdom_name', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div', 'expert', 'taxon_author']
 
 
 class HierarchyViewSet(viewsets.ModelViewSet):

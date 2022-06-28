@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'simple_history',
     'treebeard',
     'rest_framework',
+    'rest_framework_filters',
     'django_select2',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -58,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django_filters',
     'django_userforeignkey',
     'debug_toolbar',
 ]
@@ -225,7 +227,10 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_FILTER_BACKENDS': (
+    'rest_framework_filters.backends.RestFrameworkFilterBackend',
+    ),
 }
 
 ACCOUNT_EMAIL_REQUIRED = True

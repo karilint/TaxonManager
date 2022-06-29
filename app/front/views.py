@@ -134,8 +134,8 @@ def taxon_add(request, pk = None):
                 #add SynonymLink
                 if form.cleaned_data["is_junior_synonym"] and form.cleaned_data["senior_synonym"] != "":
                     SynonymLink.objects.create(synonym_id = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["unit_name1"]).taxon_id, taxon_id_accepted=TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["senior_synonym"])).save()
-                        
-                new_unit.save()
+                    new_unit.save()
+                
                 refs = form.cleaned_data['references']
                 for ref in refs:
                     new_unit.references.add(ref)

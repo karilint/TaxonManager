@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from front import models
+from front import models, views
 
 
 class ReferenceSerializer(serializers.ModelSerializer):
@@ -73,6 +73,10 @@ class TaxonomicUnitSerializer(serializers.ModelSerializer):
         fields = ['taxon_id', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'parent_id',
                   'taxon_author', 'kingdom', 'rank', 'complete_name', 'references', 'geographic_div', 'expert']
 
+    def create(self, validated_data):
+        taxon = super().create(validated_data)
+        views.create_hierarchystring(taxon)
+        return taxon
 
 class HiearchySerializer(serializers.ModelSerializer):
     taxon = serializers.SlugRelatedField(

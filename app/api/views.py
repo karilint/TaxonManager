@@ -15,11 +15,6 @@ class ReferenceViewSet(viewsets.ModelViewSet):
     queryset = models.Reference.objects.all()
 
 
-class CommentViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.CommentSerializer
-    queryset = models.Comment.objects.all()
-
-
 class KingdomViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.KingdomSerializer
     queryset = models.Kingdom.objects.all()
@@ -67,3 +62,8 @@ class HierarchyViewSet(viewsets.ModelViewSet):
 class SynonymLinkViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.SynonymLinkSerializer
     queryset = models.SynonymLink.objects.all()
+
+
+# class CommentViewSet(viewsets.ModelViewSet):
+#     serializer_class = serializers.CommentSerializer
+#     queryset = models.Comment.objects.all()

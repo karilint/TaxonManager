@@ -5,7 +5,7 @@ from api import views
 
 router = DefaultRouter()
 router.register('references', views.ReferenceViewSet, basename='reference')
-router.register('comments', views.CommentViewSet, basename='comment')
+
 router.register('kingdoms', views.KingdomViewSet, basename='kingdom')
 router.register('taxonunitypes', views.TaxonUnitTypeViewSet,
                 basename='taxonunittype')
@@ -20,6 +20,7 @@ router.register('hierarchys', views.HierarchyViewSet,
                 basename='hierarchy')
 router.register('synonymlinks', views.SynonymLinkViewSet,
                 basename='synonymlink')
+# router.register('comments', views.CommentViewSet, basename='comment')
 
 
 urlpatterns = [

@@ -5,13 +5,8 @@ from front import models, views
 class ReferenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Reference
-        fields = ['id', 'authors', 'title', 'doi', 'url']
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Comment
-        fields = ['id', 'commentator', 'comment_detail']
+        fields = ['id', 'authors', 'title', 'journal',
+                  'volume', 'page_start', 'page_end', 'doi', 'url', 'bibtex']
 
 
 class KingdomSerializer(serializers.ModelSerializer):
@@ -78,6 +73,7 @@ class TaxonomicUnitSerializer(serializers.ModelSerializer):
         views.create_hierarchystring(taxon)
         return taxon
 
+
 class HiearchySerializer(serializers.ModelSerializer):
     taxon = serializers.SlugRelatedField(
         queryset=models.TaxonomicUnit.objects.all(), slug_field='complete_name')
@@ -95,3 +91,9 @@ class SynonymLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.SynonymLink
         fields = ['id', 'synonym_id', 'taxon_id_accepted']
+
+
+# class CommentSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = models.Comment
+#         fields = ['id', 'commentator', 'comment_detail']

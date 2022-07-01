@@ -192,40 +192,26 @@ def taxon_add(request, pk = None):
 
 
 def move_taxon_update_hierarchystring(taxon):
-    start = datetime.now()
     currentHierarchy = Hierarchy.objects.get(taxon = taxon)
-    print('current hierarchy', currentHierarchy)
     # get the old Hierarchy object's parent's id
     idToBeChanged = currentHierarchy.parent_id 
-    print('idtobechanged', idToBeChanged)
     # get the old parent for comparison
     oldParent = TaxonomicUnit.objects.get(pk = idToBeChanged)
-    print('oldparent', oldParent)
-    
     # update Hierarchy object's parent's id;
-    currentHierarchy.parent_id = taxon.parent_id
-    
+    currentHierarchy.parent_id = taxon.parent_id 
     # establish current depth
     idsInHierarchystring = currentHierarchy.hierarchy_string.split('-')
     depth = len(idsInHierarchystring)
     
     # fetch all the objects that contain the old id in hierarchystring
-    hierarchies= Hierarchy.objects.filter(hierarchy_string__contains=idToBeChanged)
-    print('total amount of hierarchies', len(hierarchies))
-    limit = 0
-    for h in hierarchies:
-        print(h)
-        limit += 1
-        if limit == 100:
-            break
-    
+    hierarchies= Hierarchy.objects.filter(hierarchy_string__contains='-'+str(idToBeChanged)+'-')
+
     # new parent for comparison below
     parent = TaxonomicUnit.objects.get(pk = taxon.parent_id)
 
     # levels increase
     if oldParent.rank.rank_id < parent.rank.rank_id:
             hierarchies = Hierarchy.objects.filter(hierarchy_string__contains=taxon.pk)
-            print('levels increase, amount of hierarchies', len(hierarchies))
             parentHierarchyString = Hierarchy.objects.get(taxon = parent)
             parentString = parentHierarchyString.hierarchy_string
             
@@ -259,7 +245,6 @@ def move_taxon_update_hierarchystring(taxon):
         parentHierarchy = Hierarchy.objects.get(taxon = parent) 
         parentString = parentHierarchy.hierarchy_string
         parentIds=parentString.split('-')
-        print('decrease, amount of hierarchies', len(hierarchies))
         for hierarchy in hierarchies:
             delete = []
             parentIds = parentString.split('-')
@@ -292,11 +277,8 @@ def move_taxon_update_hierarchystring(taxon):
 
                 hierarchy.save()
 
-
-
     # child moves on the same level
     elif oldParent.rank.rank_id == parent.rank.rank_id:
-        print('same level, amount of hierarchies', len(hierarchies))      
         for hierarchy in hierarchies:
             
             currentString= hierarchy.hierarchy_string
@@ -305,7 +287,7 @@ def move_taxon_update_hierarchystring(taxon):
             
             # handle child
             if currentLength == depth:
-                newString= currentString.replace(str(idToBeChanged), str(currentHierarchy.parent_id))
+                newString= currentString.replace(str(idToBeChanged), str(currentHierarchy.parent_id), 1)
                 hierarchy.hierarchy_string=newString
                 # update hierarchy's parent also
                 hierarchy.parent_id = taxon.parent_id
@@ -314,13 +296,9 @@ def move_taxon_update_hierarchystring(taxon):
             # handle child's children and their children and so on forth
             if currentLength > depth:
                 # only update string
-                newString= currentString.replace(str(idToBeChanged), str(currentHierarchy.parent_id))
+                newString= currentString.replace(str(idToBeChanged), str(currentHierarchy.parent_id), 1)
                 hierarchy.hierarchy_string=newString      
                 hierarchy.save()
-
-    end = datetime.now()
-    print('time wasted in move_taxon_update_hierarchystring:', end-start)
-
 
 def create_hierarchystring(taxon):
     hierarchystring = []

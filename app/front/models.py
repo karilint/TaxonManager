@@ -11,7 +11,6 @@ from .utils import ensure_https, add_optional_kv
 from django.utils import timezone
 from django_userforeignkey.models.fields import UserForeignKey
 from simple_history.models import HistoricalRecords
-from datetime import datetime
 
 # (null=True, blank=True) allows empty fields, makes testing easier for now
 
@@ -345,32 +344,6 @@ class TaxonomicUnit(BaseModel):
     comments = models.ManyToManyField(
         'Comment', through='TuCommentLink'
     )
-
-    # def save(self, *args, **kwargs):
-    #     super(TaxonomicUnit, self).save(*args, **kwargs)
-    #     if len(Hierarchy.objects.filter(taxon = self)) != 1:
-    #         return
-    #     try:
-    #         start = datetime.now()
-    #         print('taxon', self)
-    #         currenthy = Hierarchy.objects.get(taxon = self)
-    #         hierarchies = Hierarchy.objects.filter(hierarchy_string__contains=currenthy.hierarchy_string)
-    #         print('amount of hierarchies', len(hierarchies))
-    #         for hy in hierarchies:
-    #             hylist = hy.hierarchy_string.split("-")
-    #             print("-".join(hylist))
-    #             hylist.reverse()
-    #             for i in range(len(hylist)-1):
-    #                 hylist[i+1] = str(TaxonomicUnit.objects.get(taxon_id = TaxonomicUnit.objects.get(taxon_id = hylist[i]).parent_id).taxon_id)
-    #             hylist.reverse()
-    #             hy.hierarchy_string = "-".join(hylist)
-    #             print("-".join(hylist))
-    #             hy.save()
-    #         end = datetime.now()
-    #         print('time wasted in custom save:', end-start)
-    #     except:
-    #         print("error in updating hierarchies")
-        
 
     def __str__(self):
         return f"{self.unit_name1}, Kingdom: {self.kingdom} (taxon_id: {self.taxon_id}, parent_id: {self.parent_id})"

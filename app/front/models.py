@@ -11,6 +11,7 @@ from .utils import ensure_https, add_optional_kv
 from django.utils import timezone
 from django_userforeignkey.models.fields import UserForeignKey
 from simple_history.models import HistoricalRecords
+from datetime import datetime
 
 # (null=True, blank=True) allows empty fields, makes testing easier for now
 
@@ -350,8 +351,12 @@ class TaxonomicUnit(BaseModel):
         if len(Hierarchy.objects.filter(taxon = self)) != 1:
             return
         try:
+            start = datetime.now()
+            print('taxon', self)
             currenthy = Hierarchy.objects.get(taxon = self)
-            for hy in Hierarchy.objects.filter(hierarchy_string__contains=currenthy.hierarchy_string):
+            hierarchies = Hierarchy.objects.filter(hierarchy_string__contains=currenthy.hierarchy_string)
+            print('amount of hierarchies', len(hierarchies))
+            for hy in hierarchies:
                 hylist = hy.hierarchy_string.split("-")
                 print("-".join(hylist))
                 hylist.reverse()
@@ -361,6 +366,8 @@ class TaxonomicUnit(BaseModel):
                 hy.hierarchy_string = "-".join(hylist)
                 print("-".join(hylist))
                 hy.save()
+            end = datetime.now()
+            print('time wasted in custom save:', end-start)
         except:
             print("error in updating hierarchies")
         

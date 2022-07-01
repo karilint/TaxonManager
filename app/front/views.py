@@ -5,6 +5,7 @@ from django.db import connection
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
+
 # Create your views here.
 from django import forms
 from django.shortcuts import render, get_object_or_404
@@ -191,11 +192,15 @@ def taxon_add(request, pk = None):
 
 
 def move_taxon_update_hierarchystring(taxon):
+    start = datetime.now()
     currentHierarchy = Hierarchy.objects.get(taxon = taxon)
+    print('current hierarchy', currentHierarchy)
     # get the old Hierarchy object's parent's id
     idToBeChanged = currentHierarchy.parent_id 
+    print('idtobechanged', idToBeChanged)
     # get the old parent for comparison
     oldParent = TaxonomicUnit.objects.get(pk = idToBeChanged)
+    print('oldparent', oldParent)
     
     # update Hierarchy object's parent's id;
     currentHierarchy.parent_id = taxon.parent_id
@@ -206,6 +211,9 @@ def move_taxon_update_hierarchystring(taxon):
     
     # fetch all the objects that contain the old id in hierarchystring
     hierarchies= Hierarchy.objects.filter(hierarchy_string__contains=idToBeChanged)
+    print('amount of hierarchies', len(hierarchies))
+    for h in hierarchies:
+        print(h)
     
     # new parent for comparison below
     parent = TaxonomicUnit.objects.get(pk = taxon.parent_id)
@@ -280,6 +288,7 @@ def move_taxon_update_hierarchystring(taxon):
                 hierarchy.save()
 
 
+
     # child moves on the same level
     elif oldParent.rank.rank_id == parent.rank.rank_id:        
         for hierarchy in hierarchies:
@@ -301,6 +310,9 @@ def move_taxon_update_hierarchystring(taxon):
                 newString= currentString.replace(str(idToBeChanged), str(currentHierarchy.parent_id))
                 hierarchy.hierarchy_string=newString      
                 hierarchy.save()
+
+    end = datetime.now()
+    print('time wasted in move_taxon_update_hierarchystring:', end-start)
 
 
 def create_hierarchystring(taxon):

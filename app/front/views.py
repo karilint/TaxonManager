@@ -211,9 +211,13 @@ def move_taxon_update_hierarchystring(taxon):
     
     # fetch all the objects that contain the old id in hierarchystring
     hierarchies= Hierarchy.objects.filter(hierarchy_string__contains=idToBeChanged)
-    print('amount of hierarchies', len(hierarchies))
+    print('total amount of hierarchies', len(hierarchies))
+    limit = 0
     for h in hierarchies:
         print(h)
+        limit += 1
+        if limit == 100:
+            break
     
     # new parent for comparison below
     parent = TaxonomicUnit.objects.get(pk = taxon.parent_id)
@@ -221,6 +225,7 @@ def move_taxon_update_hierarchystring(taxon):
     # levels increase
     if oldParent.rank.rank_id < parent.rank.rank_id:
             hierarchies = Hierarchy.objects.filter(hierarchy_string__contains=taxon.pk)
+            print('levels increase, amount of hierarchies', len(hierarchies))
             parentHierarchyString = Hierarchy.objects.get(taxon = parent)
             parentString = parentHierarchyString.hierarchy_string
             
@@ -246,7 +251,7 @@ def move_taxon_update_hierarchystring(taxon):
     # levels decrease
     elif oldParent.rank.rank_id > parent.rank.rank_id:      
         # old parent info
-        oldParentHierarchy = Hierarchy.objects.get(taxon=oldParent) 
+        oldParentHierarchy = Hierarchy.objects.get(taxon=oldParent)
         oldparentString = oldParentHierarchy.hierarchy_string
         oldParentIds = oldparentString.split('-')
 
@@ -254,7 +259,7 @@ def move_taxon_update_hierarchystring(taxon):
         parentHierarchy = Hierarchy.objects.get(taxon = parent) 
         parentString = parentHierarchy.hierarchy_string
         parentIds=parentString.split('-')
-    
+        print('decrease, amount of hierarchies', len(hierarchies))
         for hierarchy in hierarchies:
             delete = []
             parentIds = parentString.split('-')
@@ -290,8 +295,10 @@ def move_taxon_update_hierarchystring(taxon):
 
 
     # child moves on the same level
-    elif oldParent.rank.rank_id == parent.rank.rank_id:        
+    elif oldParent.rank.rank_id == parent.rank.rank_id:
+        print('same level, amount of hierarchies', len(hierarchies))      
         for hierarchy in hierarchies:
+            
             currentString= hierarchy.hierarchy_string
             currentArray = currentString.split('-')
             currentLength = len(currentArray)

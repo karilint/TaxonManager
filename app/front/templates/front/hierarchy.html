@@ -1,21 +1,10 @@
 {% extends "front/base.html" %}
 {% block content %}
-    {% load static pyref_tags %}
     <body>
         {% if taxonomic_unit.taxon_author %}
-            <h1><i>{{taxonomic_unit.complete_name}}</i> ({{taxonomic_unit.taxon_author}}) 
-            {% with test=user.groups.all|length %}
-                {% if test > 0 %}
-                    <a href="{% url 'front:add-taxon' taxonomic_unit.taxon_id %}"><img src="{% static 'refs/images/pencil.svg' %}"/></a>
-                {% endif %}
-            {% endwith %}</h1>
+            <h1><i>{{taxonomic_unit.complete_name}}</i> ({{taxonomic_unit.taxon_author}})</h1>
         {% else %}
-            <h1><i>{{taxonomic_unit.complete_name}}</i> 
-            {% with test=user.groups.all|length %}
-                {% if test > 0 %}
-                    <a href="{% url 'front:add-taxon' taxonomic_unit.taxon_id %}"><img src="{% static 'refs/images/pencil.svg' %}"/></a>
-                {% endif %}
-            {% endwith %}</h1>
+            <h1><i>{{taxonomic_unit.complete_name}}</i></h1>
         {% endif %}
         
         {% if taxonomic_unit.n_usage != invalid %}

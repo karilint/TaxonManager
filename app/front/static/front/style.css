@@ -341,6 +341,39 @@ select[name="reference"] {
   pointer-events: none;
 }
 
+#tabButton {
+  background-color: #f9fdf7;
+  float: right;
+  font-size: medium;
+  padding: 3px 16px;
+  margin-right: 1px;
+  margin-top:35px;
+  border: 1px solid #3f2503
+}
+
+#tabButton_activated{
+  background-color: #e9f8cc;
+  float: right;
+  font-size: medium;
+  padding: 3px 16px;
+  margin-right: 1px;
+  margin-top:35px;
+  border: 2px solid #3f2503
+}
+
+#tabButton_activated:hover {
+  background-color: #bed4a5 !important;
+}
+
+#tabButton:hover {
+  background-color: #bed4a5 !important;
+}
+
+#h1 {
+  margin: 0;
+  padding-right: 170px;
+}
+
 #header_image {
   position: absolute;
   top: -25px;

@@ -2,9 +2,13 @@
 {% block content %}
     <body>
         {% if taxonomic_unit.taxon_author %}
-            <h1><i>{{taxonomic_unit.complete_name}}</i> ({{taxonomic_unit.taxon_author}})</h1>
+            <h1 id="h1"><i>{{taxonomic_unit.complete_name}}</i> ({{taxonomic_unit.taxon_author}})
+                <button title = "Taxon list" id="tabButton">History</button>
+                <button title = "Taxon list" id="tabButton_activated">Taxon</button></h1>
         {% else %}
-            <h1><i>{{taxonomic_unit.complete_name}}</i></h1>
+            <h1 id="h1"><i>{{taxonomic_unit.complete_name}}</i>
+                <button title = "Taxon list" id="tabButton">History</button>
+                <button title = "Taxon list" id="tabButton_activated">Taxon</button></h1>
         {% endif %}
         
         {% if taxonomic_unit.n_usage != invalid %}

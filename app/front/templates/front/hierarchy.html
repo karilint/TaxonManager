@@ -2,136 +2,181 @@
 {% block content %}
     <body>
         {% if taxonomic_unit.taxon_author %}
-            <h1 id="h1"><i>{{taxonomic_unit.complete_name}}</i> ({{taxonomic_unit.taxon_author}})
-                <button title = "Taxon list" id="tabButton">History</button>
-                <button title = "Taxon list" id="tabButton_activated">Taxon</button></h1>
+            <h1 class="tabh1"><i>{{taxonomic_unit.complete_name}}</i> ({{taxonomic_unit.taxon_author}})
+                <button title = "Change history" onclick="openTab(event, 'Updates')" class="tabButton">Updates</button>
+                <button title = "Taxon details" onclick="openTab(event, 'Taxon')" class="tabButton active">Taxon</button></h1>
         {% else %}
-            <h1 id="h1"><i>{{taxonomic_unit.complete_name}}</i>
-                <button title = "Taxon list" id="tabButton">History</button>
-                <button title = "Taxon list" id="tabButton_activated">Taxon</button></h1>
+            <h1 class="tabh1"><i>{{taxonomic_unit.complete_name}}</i>
+                <button title = "Change history" onclick="openTab(event, 'Updates')" class="tabButton">Updates</button>
+                <button title = "Taxon details" onclick="openTab(event, 'Taxon')" class="tabButton active">Taxon</button></h1>
         {% endif %}
         
         {% if taxonomic_unit.n_usage != invalid %}
             <p>Valid name: {{taxonomic_unit.n_usage}}</p>
         {% endif %}
 
-        <table class="hierarchy" style="width:80%">
-            <th class="whiteboxhead" colspan="2" align="left">Taxonomy and Nomenclature</th>
-            <tr>
-                <td class="datatype" valign="top" align="left" width="35%">Kingdom:</td>
-                <td class="datafield" width="65%">{{taxonomic_unit.kingdom}}</td>
-            </tr>
-            <tr>
-                <td class="datatype" valign="top" align="left" width="35%">Taxonomic Rank:</td>
-                <td class="datafield" width="65%">{{taxonomic_unit.rank.rank_name}}</td>
-            </tr>
-            <tr>
-                {% if isJunior %}
-                    <td class="datatype" valign="top" align="left" width="35%">Senior synonym:</td>
+        <div id="Taxon" class="togglable">
+        
+            <table class="hierarchy" style="width:80%">
+                <th class="whiteboxhead" colspan="2" align="left">Taxonomy and Nomenclature</th>
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Kingdom:</td>
+                    <td class="datafield" width="65%">{{taxonomic_unit.kingdom}}</td>
+                </tr>
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Taxonomic Rank:</td>
+                    <td class="datafield" width="65%">{{taxonomic_unit.rank.rank_name}}</td>
+                </tr>
+                <tr>
+                    {% if isJunior %}
+                        <td class="datatype" valign="top" align="left" width="35%">Senior synonym:</td>
+                        <td class="datafield" width="65%">
+                            <a href={{ seniorSynonym.taxon_id }}>{{ seniorSynonym.complete_name }}</a>
+                        </td>
+                    {% else %}
+                        <td class="datatype" valign="top" align="left" width="35%">Synonyms:</td>
+                        <td class="datafield" width="65%">
+                            {% for synonym in synonyms %}
+                                <a href={{ synonym.taxon_id }}>{{ synonym.complete_name }},</a>
+                            {% endfor %}
+                            <a href="{% url 'front:add_junior_synonym' taxon_id=taxonomic_unit.taxon_id %}">Add junior synonym</a>
+                        </td>
+                    {% endif %}
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Taxonomic status:</td>
+                    <td class="datafield" width="65%">{{taxonomic_unit.n_usage}}</td>
+                </tr>
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Author:</td>
+                    <td class="datafield" width="65%">{{taxonomic_unit.taxon_author}}</td>
+                </tr>
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Experts:</td>
                     <td class="datafield" width="65%">
-                        <a href={{ seniorSynonym.taxon_id }}>{{ seniorSynonym.complete_name }}</a>
-                    </td>
-                {% else %}
-                    <td class="datatype" valign="top" align="left" width="35%">Synonyms:</td>
-                    <td class="datafield" width="65%">
-                        {% for synonym in synonyms %}
-                            <a href={{ synonym.taxon_id }}>{{ synonym.complete_name }},</a>
-                        {% endfor %}
-                        <a href="{% url 'front:add_junior_synonym' taxon_id=taxonomic_unit.taxon_id %}">Add junior synonym</a>
-                    </td>
-                {% endif %}
-            <tr>
-                <td class="datatype" valign="top" align="left" width="35%">Taxonomic status:</td>
-                <td class="datafield" width="65%">{{taxonomic_unit.n_usage}}</td>
-            </tr>
-            <tr>
-                <td class="datatype" valign="top" align="left" width="35%">Author:</td>
-                <td class="datafield" width="65%">{{taxonomic_unit.taxon_author}}</td>
-            </tr>
-            <tr>
-                <td class="datatype" valign="top" align="left" width="35%">Experts:</td>
-                <td class="datafield" width="65%">
-                    {% for expert in taxon_experts %}
-                        {% if forloop.last %}
-                            {{ expert }}
-                        {% else %}
-                            {{ expert }}, 
-                        {% endif %}
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td class="datatype" valign="top" align="left" width="25%">Geographic locations:</td>
-                <td class="datafield" width="75%">
-                    {% for geo in taxonomic_unit.geographic_div.all %}
-                        {% if forloop.last %}
-                            {{ geo }}
-                        {% else %}
-                            {{ geo }}, 
-                        {% endif %}
-                    {% endfor %}</td>
-            </tr>
-        </table>
-        <p></p>
-    
-        {% if isJunior == False %}
-            <table class="hierarchy hiearchy-lists" style="width:80%">
-                <th class="whiteboxhead" colspan="2" align="left">Taxonomic Hierarchy</th>
-                    {% for name, root in name_list %}
-                        <tr>
-                            <td class="datatype" valign="top" width="35%">{{ name |safe }}:</td>
-                            {% if root.rank.rank_id > 170 %}
-                                <td class="datafield" width="65%"><a href="{% url 'front:hierarchy' root.taxon_id %}"><i>{{ root.complete_name }}</i></td>
+                        {% for expert in taxon_experts %}
+                            {% if forloop.last %}
+                                {{ expert }}
                             {% else %}
-                                <td class="datafield" width="65%"><a href="{% url 'front:hierarchy' root.taxon_id %}">{{ root.complete_name }}</td>
+                                {{ expert }}, 
                             {% endif %}
-                        </tr>
-                    {% endfor %}
-                    <td class="datatype" valign="top" width="35%"></td>
-
-                    {% if childTaxa %}
-                        <td class="datafield" width="65%"><b>Direct Children:</b></td>
-                        {% for taxon in childTaxa %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="25%">Geographic locations:</td>
+                    <td class="datafield" width="75%">
+                        {% for geo in taxonomic_unit.geographic_div.all %}
+                            {% if forloop.last %}
+                                {{ geo }}
+                            {% else %}
+                                {{ geo }}, 
+                            {% endif %}
+                        {% endfor %}</td>
+                </tr>
+            </table>
+            <p></p>
+        
+            {% if isJunior == False %}
+                <table class="hierarchy hiearchy-lists" style="width:80%">
+                    <th class="whiteboxhead" colspan="2" align="left">Taxonomic Hierarchy</th>
+                        {% for name, root in name_list %}
                             <tr>
-                                <td class="w3-right-align" width="35%">{{ taxon.rank.rank_name |safe }}:</td>
-                                {% if taxon.rank.rank_id > 170 %}
-                                    <td class="datafield" width="65%"><a href="{% url 'front:hierarchy' taxon.taxon_id %}"><i>{{ taxon.complete_name }}</i></td>
+                                <td class="datatype" valign="top" width="35%">{{ name |safe }}:</td>
+                                {% if root.rank.rank_id > 170 %}
+                                    <td class="datafield" width="65%"><a href="{% url 'front:hierarchy' root.taxon_id %}"><i>{{ root.complete_name }}</i></td>
                                 {% else %}
-                                    <td class="datafield" width="65%"><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</td>
+                                    <td class="datafield" width="65%"><a href="{% url 'front:hierarchy' root.taxon_id %}">{{ root.complete_name }}</td>
                                 {% endif %}
                             </tr>
                         {% endfor %}
-                    {% endif %}
-            </table>
-        {% endif %}
-        
-        <table class="hierarchy" style="width:80%">
-            <th class="whiteboxhead" colspan="2" align="left">References</th>
+                        <td class="datatype" valign="top" width="35%"></td>
 
-            {% for ref in references %}
-                <tr>
-                    <td class="datatype" valign="top" width="35%">Title:</td>
-                    <td class="datafield" width="65%">{{ ref.title }}</td>
-                </tr>
-                <tr>
-                    <td class="datatype" valign="top" width="35%">Authors:</td>
-                    <td class="datafield" width="65%">{{ ref.authors }}</td>
-                </tr>
-                <tr>
-                    <td class="datatype" valign="top" width="35%">DOI:</td>
-                    <td class="datafield" width="65%">{{ ref.doi }}</td>
-                </tr>
-                <tr>
-                    <td class="datatype" valign="top" width="35%">Notes:</td>
-                    <td class="datafield" width="65%">{{ ref.note }}</td>
-                </tr>
-                {% if not forloop.last %}
-                    </tr>
-                    <td class="datatype" valign="top" width="35%"></td>
-                    <td class="datafield" width="65%"></td>
+                        {% if childTaxa %}
+                            <td class="datafield" width="65%"><b>Direct Children:</b></td>
+                            {% for taxon in childTaxa %}
+                                <tr>
+                                    <td class="w3-right-align" width="35%">{{ taxon.rank.rank_name |safe }}:</td>
+                                    {% if taxon.rank.rank_id > 170 %}
+                                        <td class="datafield" width="65%"><a href="{% url 'front:hierarchy' taxon.taxon_id %}"><i>{{ taxon.complete_name }}</i></td>
+                                    {% else %}
+                                        <td class="datafield" width="65%"><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                </table>
+            {% endif %}
+            
+            <table class="hierarchy" style="width:80%">
+                <th class="whiteboxhead" colspan="2" align="left">References</th>
+
+                {% for ref in references %}
                     <tr>
-                {% endif %}
-            {% endfor %}
-        </table>
+                        <td class="datatype" valign="top" width="35%">Title:</td>
+                        <td class="datafield" width="65%">{{ ref.title }}</td>
+                    </tr>
+                    <tr>
+                        <td class="datatype" valign="top" width="35%">Authors:</td>
+                        <td class="datafield" width="65%">{{ ref.authors }}</td>
+                    </tr>
+                    <tr>
+                        <td class="datatype" valign="top" width="35%">DOI:</td>
+                        <td class="datafield" width="65%">{{ ref.doi }}</td>
+                    </tr>
+                    <tr>
+                        <td class="datatype" valign="top" width="35%">Notes:</td>
+                        <td class="datafield" width="65%">{{ ref.note }}</td>
+                    </tr>
+                    {% if not forloop.last %}
+                        </tr>
+                        <td class="datatype" valign="top" width="35%"></td>
+                        <td class="datafield" width="65%"></td>
+                        <tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+        <div id="Updates" class="togglable">
+            <table class="hierarchy" style="width:80%">
+                <th class="whiteboxhead" colspan="2" align="left">Taxonomy and Nomenclature</th>
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Kingdom:</td>
+                    <td class="datafield" width="65%">{{taxonomic_unit.kingdom}}</td>
+                </tr>
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Taxonomic Rank:</td>
+                    <td class="datafield" width="65%">{{taxonomic_unit.rank.rank_name}}</td>
+                </tr>
+            </table>
+        </div>
+
+        <script>
+            var i, togglable, tabButton
+
+            function openTab(evt, name) {
+                
+
+                // Get all elements with class="togglable" and hide them
+                togglable = document.getElementsByClassName("togglable");
+
+                for (i = 0; i < togglable.length; i++) {
+                    togglable[i].style.display = "none";
+                }
+
+                // Get all elements with class="tabButton" and remove the class "active"
+                tabButton = document.getElementsByClassName("tabButton");
+
+                for (i = 0; i < tabButton.length; i++) {
+                    tabButton[i].className = tabButton[i].className.replace(" active", "");
+                }
+
+
+                // Show the current tab, and add an "active" class to the button that opened the tab
+                document.getElementById(name).style.display = "block";
+
+                evt.currentTarget.className += " active";
+            }
+
+        </script>
     </body>
 {% endblock %} 

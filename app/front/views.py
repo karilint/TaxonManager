@@ -129,6 +129,9 @@ def taxon_add(request, pk = None):
                     else:
                         new_unit.name_usage = "valid"
 
+                author = form.cleaned_data['taxon_author_id']
+                if author:
+                    new_unit.taxon_author_id=author.taxon_author_id
 
                 new_unit.save()
 
@@ -146,10 +149,6 @@ def taxon_add(request, pk = None):
                 experts = form.cleaned_data['expert']
                 for expert in experts:
                     new_unit.expert.add(expert)
-                author = form.cleaned_data['taxon_author_id']
-                if author:
-                    new_unit.taxon_author_id=author.taxon_author_id
-                new_unit.save()
                
                 if pk:
                     move_taxon_update_hierarchystring(taxon)

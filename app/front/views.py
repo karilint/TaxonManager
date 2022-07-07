@@ -85,7 +85,12 @@ def taxon_add(request, pk = None):
 
     if request.method == 'POST':
         if pk:
-            taxon = TaxonomicUnit.objects.get(pk=pk)        
+            # Editing an existing taxon
+            taxon = TaxonomicUnit.objects.get(pk=pk)
+            # Clear old manyTomany relations
+            taxon.expert.clear()
+            taxon.references.clear()
+            taxon.geographic_div.clear()
         # create a form instance and populate it with data from the request:
         form = TaxonForm(request.POST, instance = taxon)
         # check whether it's valid:
@@ -732,21 +737,23 @@ def view_hierarchy(request, parent_id=None):
     childTaxa = TaxonomicUnit.objects.filter(parent_id=chosenTaxon.taxon_id)
 
     # Select experts
-    percentage = '%'
-    taxon_experts = Expert.objects.raw("""
-        SELECT DISTINCT e.id, e.expert
-        FROM front_expert e
-        JOIN front_taxonomicunit_expert et ON et.expert_id=e.id
-        JOIN front_expertsgeographicdiv eg ON eg.expert_id=e.id
-        JOIN front_taxonomicunit tu ON tu.taxon_id=et.taxonomicunit_id
-        JOIN front_hierarchy h ON h.hierarchy_string LIKE CONCAT(%s,'-', tu.taxon_id ,'-',%s)
-        or h.hierarchy_string LIKE CONCAT(%s,'-', tu.taxon_id)
-        JOIN front_taxonomicunit tu2 ON tu2.taxon_id=h.taxon_id
-        JOIN front_geographicdiv g ON g.id=eg.geographic_id
-        JOIN front_taxonomicunit_geographic_div tug ON tug.taxonomicunit_id=tu2.taxon_id
-        AND tug.geographicdiv_id=eg.geographic_id
-        WHERE tu2.taxon_id = %s
-        """, [percentage, percentage, percentage, chosenTaxon.taxon_id])
+    # percentage = '%'
+    # taxon_experts = Expert.objects.raw("""
+    #     SELECT DISTINCT e.id, e.expert
+    #     FROM front_expert e
+    #     JOIN front_taxonomicunit_expert et ON et.expert_id=e.id
+    #     JOIN front_expertsgeographicdiv eg ON eg.expert_id=e.id
+    #     JOIN front_taxonomicunit tu ON tu.taxon_id=et.taxonomicunit_id
+    #     JOIN front_hierarchy h ON h.hierarchy_string LIKE CONCAT(%s,'-', tu.taxon_id ,'-',%s)
+    #     or h.hierarchy_string LIKE CONCAT(%s,'-', tu.taxon_id)
+    #     JOIN front_taxonomicunit tu2 ON tu2.taxon_id=h.taxon_id
+    #     JOIN front_geographicdiv g ON g.id=eg.geographic_id
+    #     JOIN front_taxonomicunit_geographic_div tug ON tug.taxonomicunit_id=tu2.taxon_id
+    #     AND tug.geographicdiv_id=eg.geographic_id
+    #     WHERE tu2.taxon_id = %s
+    #     """, [percentage, percentage, percentage, chosenTaxon.taxon_id])
+
+    taxon_experts = chosenTaxon.expert.all()
 
     hierarchyObject = Hierarchy.objects.get(taxon=chosenTaxon)
     # Get the synonym_ids of those taxons, where the accepted_taxon_id matches with

@@ -108,7 +108,7 @@
             {% endif %}
             
             <table class="hierarchy" style="width:80%">
-                <th class="whiteboxhead" colspan="2" align="left">References</th>
+                <th class="whiteboxhead" colspan="2" align="left">Reference</th>
                 <tr>
                     <td class="datatype" valign="top" width="35%">Title:</td>
                     <td class="datafield" width="65%">{{ taxonomic_unit.reference.title }}</td>
@@ -134,17 +134,41 @@
             </table>
         </div>
         <div id="Updates" class="togglable">
+            {% if history.items %}
+                {% for key, value in history.items %}
+                <table class="hierarchy" style="width:80%">
+                    <th class="whiteboxhead" colspan="2" align="left">Updated on {{key}}</th>
+                    <tr>
+                        <td class="datatype" valign="top" align="left" width="35%">Modified by:</td>
+                        <td class="datafield" width="65%">{{value.user}}</td>
+                    </tr>
+                    <tr>
+                        <td class="datatype" valign="top" align="left" width="35%">Changes:</td>
+                        <td class="datafield" width="65%">{{value.changes}}</td>
+                    </tr>
+                    <tr>
+                        <td class="datatype" valign="top" align="left" width="35%">Reference:</td>
+                        <td class="datafield" width="65%">{{value.reference}}</td>
+                    </tr>
+                </table>
+                {% endfor %}
+            {% else %}
             <table class="hierarchy" style="width:80%">
-                <th class="whiteboxhead" colspan="2" align="left">Taxonomy and Nomenclature</th>
+                <th class="whiteboxhead" colspan="2" align="left">No update history available</th>
                 <tr>
-                    <td class="datatype" valign="top" align="left" width="35%">Kingdom:</td>
-                    <td class="datafield" width="65%">{{taxonomic_unit.kingdom}}</td>
+                    <td class="datatype" valign="top" align="left" width="35%">Modified by:</td>
+                    <td class="datafield" width="65%">N/A</td>
                 </tr>
                 <tr>
-                    <td class="datatype" valign="top" align="left" width="35%">Taxonomic Rank:</td>
-                    <td class="datafield" width="65%">{{taxonomic_unit.rank.rank_name}}</td>
+                    <td class="datatype" valign="top" align="left" width="35%">Changes:</td>
+                    <td class="datafield" width="65%">N/A</td>
+                </tr>
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Reference:</td>
+                    <td class="datafield" width="65%">N/A</td>
                 </tr>
             </table>
+            {% endif %}
         </div>
 
         <script>

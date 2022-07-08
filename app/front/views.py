@@ -737,6 +737,27 @@ def view_hierarchy(request, parent_id=None):
     chosenTaxon = TaxonomicUnit.objects.get(taxon_id=parent_id)
     childTaxa = TaxonomicUnit.objects.filter(parent_id=chosenTaxon.taxon_id)
 
+    # Get taxon's history as records
+    records = chosenTaxon.history.all()
+    history = {}
+
+    # Add update history to 'history' dict, one update (record) at a time
+    for record in records:
+        if record.prev_record:
+            timestamp = record.history_date
+            history[timestamp] = {}
+            history[timestamp]['user'] = record.history_user.username
+            history[timestamp]['changes'] = ''
+            history[timestamp]['reference'] = f"{record.reference.authors}. {record.reference.title}."
+            delta = record.diff_against(record.prev_record)
+            for change in delta.changes:
+                if change.field != 'reference':
+                    if len(history[timestamp]['changes']) == 0:
+                        history[timestamp]['changes'] = "{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
+                    else:
+                        (history[timestamp]['changes']) += ",\n{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
+            if len(history[timestamp]['changes']) == 0:
+                history[timestamp]['changes'] = "Not available."
     # Select experts
     # percentage = '%'
     # taxon_experts = Expert.objects.raw("""
@@ -779,8 +800,6 @@ def view_hierarchy(request, parent_id=None):
     name_list = []
     grow = 0
 
-    references = []
-
     while (len(hierarchy) != 0):
         index = hierarchy.pop(0)
         if len(TaxonomicUnit.objects.filter(taxon_id=index)) == 1:
@@ -812,7 +831,8 @@ def view_hierarchy(request, parent_id=None):
         # 'references': references[0],
         'synonyms': synonymTaxons,
         'seniorSynonym': seniorSynonym,
-        'isJunior': seniorSynonym is not None
+        'isJunior': seniorSynonym is not None,
+        'history': history
     }
 
     return render(request, 'front/hierarchy.html', context)

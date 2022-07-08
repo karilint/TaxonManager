@@ -85,7 +85,11 @@ def taxon_add(request, pk = None):
 
     if request.method == 'POST':
         if pk:
-            taxon = TaxonomicUnit.objects.get(pk=pk)        
+            # Editing an existing taxon
+            taxon = TaxonomicUnit.objects.get(pk=pk)
+            # Clear old manyTomany relations
+            taxon.expert.clear()
+            taxon.geographic_div.clear()
         # create a form instance and populate it with data from the request:
         form = TaxonForm(request.POST, instance = taxon)
         # check whether it's valid:
@@ -129,7 +133,12 @@ def taxon_add(request, pk = None):
                     else:
                         new_unit.name_usage = "valid"
 
+                author = form.cleaned_data['taxon_author_id']
+                if author:
+                    new_unit.taxon_author_id=author.taxon_author_id
+                reference = form.cleaned_data['reference']
 
+                new_unit.reference = reference
                 new_unit.save()
 
                 #add SynonymLink
@@ -137,19 +146,15 @@ def taxon_add(request, pk = None):
                     SynonymLink.objects.create(synonym_id = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["unit_name1"]).taxon_id, taxon_id_accepted=TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["senior_synonym"])).save()
                     new_unit.save()
                 
-                refs = form.cleaned_data['references']
-                for ref in refs:
-                    new_unit.references.add(ref)
+                # refs = form.cleaned_data['references']
+                # for ref in refs:
+                #     new_unit.references.add(ref)
                 geos = form.cleaned_data['geographic_div']
                 for geo in geos:
                     new_unit.geographic_div.add(geo)
                 experts = form.cleaned_data['expert']
                 for expert in experts:
                     new_unit.expert.add(expert)
-                author = form.cleaned_data['taxon_author_id']
-                if author:
-                    new_unit.taxon_author_id=author.taxon_author_id
-                new_unit.save()
                
                 if pk:
                     move_taxon_update_hierarchystring(taxon)
@@ -178,7 +183,9 @@ def taxon_add(request, pk = None):
             'unit_name2': taxon.unit_name2,
             'unit_name3': taxon.unit_name3,
             'unit_name4': taxon.unit_name4,
-            'geographic_div': taxon.geographic_div.values_list('id', flat=True)
+            'geographic_div': taxon.geographic_div.values_list('id', flat=True),
+            'expert': taxon.expert.values_list('id', flat=True),
+            'taxon_author_id': taxon.taxon_author
              })
 
         except TaxonomicUnit.DoesNotExist:
@@ -731,21 +738,23 @@ def view_hierarchy(request, parent_id=None):
     childTaxa = TaxonomicUnit.objects.filter(parent_id=chosenTaxon.taxon_id)
 
     # Select experts
-    percentage = '%'
-    taxon_experts = Expert.objects.raw("""
-        SELECT DISTINCT e.id, e.expert
-        FROM front_expert e
-        JOIN front_taxonomicunit_expert et ON et.expert_id=e.id
-        JOIN front_expertsgeographicdiv eg ON eg.expert_id=e.id
-        JOIN front_taxonomicunit tu ON tu.taxon_id=et.taxonomicunit_id
-        JOIN front_hierarchy h ON h.hierarchy_string LIKE CONCAT(%s,'-', tu.taxon_id ,'-',%s)
-        or h.hierarchy_string LIKE CONCAT(%s,'-', tu.taxon_id)
-        JOIN front_taxonomicunit tu2 ON tu2.taxon_id=h.taxon_id
-        JOIN front_geographicdiv g ON g.id=eg.geographic_id
-        JOIN front_taxonomicunit_geographic_div tug ON tug.taxonomicunit_id=tu2.taxon_id
-        AND tug.geographicdiv_id=eg.geographic_id
-        WHERE tu2.taxon_id = %s
-        """, [percentage, percentage, percentage, chosenTaxon.taxon_id])
+    # percentage = '%'
+    # taxon_experts = Expert.objects.raw("""
+    #     SELECT DISTINCT e.id, e.expert
+    #     FROM front_expert e
+    #     JOIN front_taxonomicunit_expert et ON et.expert_id=e.id
+    #     JOIN front_expertsgeographicdiv eg ON eg.expert_id=e.id
+    #     JOIN front_taxonomicunit tu ON tu.taxon_id=et.taxonomicunit_id
+    #     JOIN front_hierarchy h ON h.hierarchy_string LIKE CONCAT(%s,'-', tu.taxon_id ,'-',%s)
+    #     or h.hierarchy_string LIKE CONCAT(%s,'-', tu.taxon_id)
+    #     JOIN front_taxonomicunit tu2 ON tu2.taxon_id=h.taxon_id
+    #     JOIN front_geographicdiv g ON g.id=eg.geographic_id
+    #     JOIN front_taxonomicunit_geographic_div tug ON tug.taxonomicunit_id=tu2.taxon_id
+    #     AND tug.geographicdiv_id=eg.geographic_id
+    #     WHERE tu2.taxon_id = %s
+    #     """, [percentage, percentage, percentage, chosenTaxon.taxon_id])
+
+    taxon_experts = chosenTaxon.expert.all()
 
     hierarchyObject = Hierarchy.objects.get(taxon=chosenTaxon)
     # Get the synonym_ids of those taxons, where the accepted_taxon_id matches with
@@ -779,10 +788,10 @@ def view_hierarchy(request, parent_id=None):
         else:
             root = None
 
-        if (len(hierarchy) == 0):
-            # This takes only the reference for the selected taxon.
-            # E.G. User chooses Deuterostomia -> this takes the refenences for deuterostomia and not for the parent taxons
-            references.append(root.references.all())
+        # if (len(hierarchy) == 0):
+        #     # This takes only the reference for the selected taxon.
+        #     # E.G. User chooses Deuterostomia -> this takes the refenences for deuterostomia and not for the parent taxons
+        #     references.append(root.references.all())
 
         space = "&nbsp" * grow
 
@@ -800,7 +809,7 @@ def view_hierarchy(request, parent_id=None):
         'childTaxa': childTaxa,
         # 'hierarchies': result,
         'name_list': name_list,
-        'references': references[0],
+        # 'references': references[0],
         'synonyms': synonymTaxons,
         'seniorSynonym': seniorSynonym,
         'isJunior': seniorSynonym is not None

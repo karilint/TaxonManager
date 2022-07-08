@@ -336,9 +336,9 @@ class TaxonomicUnit(BaseModel):
     uncertain_prnt_ind = models.CharField(max_length=3, null=True, blank=True)
     n_usage = models.CharField(max_length=12, null=True, blank=True)
     complete_name = models.CharField(max_length=300, null=True, blank=True)
-    references = models.ManyToManyField(Reference)
-    geographic_div = models.ManyToManyField(GeographicDiv)
-    expert = models.ManyToManyField(Expert, null=True, blank=True)
+    geographic_div = models.ManyToManyField(GeographicDiv, blank=True)
+    expert = models.ManyToManyField(Expert, blank=True)
+    reference = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True)
 
     # Relationships
     comments = models.ManyToManyField(

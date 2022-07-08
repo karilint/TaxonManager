@@ -89,7 +89,6 @@ def taxon_add(request, pk = None):
             taxon = TaxonomicUnit.objects.get(pk=pk)
             # Clear old manyTomany relations
             taxon.expert.clear()
-            taxon.references.clear()
             taxon.geographic_div.clear()
         # create a form instance and populate it with data from the request:
         form = TaxonForm(request.POST, instance = taxon)
@@ -137,7 +136,9 @@ def taxon_add(request, pk = None):
                 author = form.cleaned_data['taxon_author_id']
                 if author:
                     new_unit.taxon_author_id=author.taxon_author_id
+                reference = form.cleaned_data['reference']
 
+                new_unit.reference = reference
                 new_unit.save()
 
                 #add SynonymLink
@@ -145,9 +146,9 @@ def taxon_add(request, pk = None):
                     SynonymLink.objects.create(synonym_id = TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["unit_name1"]).taxon_id, taxon_id_accepted=TaxonomicUnit.objects.get(unit_name1 = form.cleaned_data["senior_synonym"])).save()
                     new_unit.save()
                 
-                refs = form.cleaned_data['references']
-                for ref in refs:
-                    new_unit.references.add(ref)
+                # refs = form.cleaned_data['references']
+                # for ref in refs:
+                #     new_unit.references.add(ref)
                 geos = form.cleaned_data['geographic_div']
                 for geo in geos:
                     new_unit.geographic_div.add(geo)
@@ -787,10 +788,10 @@ def view_hierarchy(request, parent_id=None):
         else:
             root = None
 
-        if (len(hierarchy) == 0):
-            # This takes only the reference for the selected taxon.
-            # E.G. User chooses Deuterostomia -> this takes the refenences for deuterostomia and not for the parent taxons
-            references.append(root.references.all())
+        # if (len(hierarchy) == 0):
+        #     # This takes only the reference for the selected taxon.
+        #     # E.G. User chooses Deuterostomia -> this takes the refenences for deuterostomia and not for the parent taxons
+        #     references.append(root.references.all())
 
         space = "&nbsp" * grow
 
@@ -808,7 +809,7 @@ def view_hierarchy(request, parent_id=None):
         'childTaxa': childTaxa,
         # 'hierarchies': result,
         'name_list': name_list,
-        'references': references[0],
+        # 'references': references[0],
         'synonyms': synonymTaxons,
         'seniorSynonym': seniorSynonym,
         'isJunior': seniorSynonym is not None

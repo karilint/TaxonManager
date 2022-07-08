@@ -109,31 +109,28 @@
             
             <table class="hierarchy" style="width:80%">
                 <th class="whiteboxhead" colspan="2" align="left">References</th>
-
-                {% for ref in references %}
-                    <tr>
-                        <td class="datatype" valign="top" width="35%">Title:</td>
-                        <td class="datafield" width="65%">{{ ref.title }}</td>
+                <tr>
+                    <td class="datatype" valign="top" width="35%">Title:</td>
+                    <td class="datafield" width="65%">{{ taxonomic_unit.reference.title }}</td>
+                </tr>
+                <tr>
+                    <td class="datatype" valign="top" width="35%">Authors:</td>
+                    <td class="datafield" width="65%">{{ taxonomic_unit.reference.authors }}</td>
+                </tr>
+                <tr>
+                    <td class="datatype" valign="top" width="35%">DOI:</td>
+                    <td class="datafield" width="65%">{{ taxonomic_unit.reference.doi }}</td>
+                </tr>
+                <tr>
+                    <td class="datatype" valign="top" width="35%">Notes:</td>
+                    <td class="datafield" width="65%">{{ taxonomic_unit.reference.note }}</td>
+                </tr>
+                <!-- {% if not forloop.last %}
                     </tr>
+                    <td class="datatype" valign="top" width="35%"></td>
+                    <td class="datafield" width="65%"></td>
                     <tr>
-                        <td class="datatype" valign="top" width="35%">Authors:</td>
-                        <td class="datafield" width="65%">{{ ref.authors }}</td>
-                    </tr>
-                    <tr>
-                        <td class="datatype" valign="top" width="35%">DOI:</td>
-                        <td class="datafield" width="65%">{{ ref.doi }}</td>
-                    </tr>
-                    <tr>
-                        <td class="datatype" valign="top" width="35%">Notes:</td>
-                        <td class="datafield" width="65%">{{ ref.note }}</td>
-                    </tr>
-                    {% if not forloop.last %}
-                        </tr>
-                        <td class="datatype" valign="top" width="35%"></td>
-                        <td class="datafield" width="65%"></td>
-                        <tr>
-                    {% endif %}
-                {% endfor %}
+                {% endif %} -->
             </table>
         </div>
         <div id="Updates" class="togglable">

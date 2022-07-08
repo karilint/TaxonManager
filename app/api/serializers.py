@@ -60,13 +60,12 @@ class TaxonomicUnitSerializer(serializers.ModelSerializer):
         many=True, queryset=models.GeographicDiv.objects.all(), slug_field='geographic_value')
     expert = serializers.SlugRelatedField(
         many=True, queryset=models.Expert.objects.all(), slug_field='expert')
-    references = serializers.SlugRelatedField(
-        many=True, queryset=models.Reference.objects.all(), slug_field='title')
+    reference = serializers.SlugRelatedField(queryset=models.Reference.objects.all(), slug_field='title')
 
     class Meta:
         model = models.TaxonomicUnit
         fields = ['taxon_id', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'parent_id',
-                  'taxon_author', 'kingdom', 'rank', 'complete_name', 'references', 'geographic_div', 'expert']
+                  'taxon_author', 'kingdom', 'rank', 'complete_name', 'reference', 'geographic_div', 'expert']
 
     def create(self, validated_data):
         taxon = super().create(validated_data)

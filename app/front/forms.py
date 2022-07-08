@@ -92,9 +92,7 @@ class TaxonForm(forms.ModelForm):
     
     # reference = forms.ModelChoiceField(queryset=Reference.objects.all(), label="References where the taxon is mentioned", empty_label="Please choose reference for this taxon")
     # https://stackoverflow.com/a/8538923
-    reference = forms.ModelChoiceField(
-        queryset=Reference.objects.filter(visible=1)
-    )
+    reference = forms.ModelChoiceField(queryset=Reference.objects.filter(visible=1))
 
     geographic_div = forms.ModelMultipleChoiceField(
         queryset=GeographicDiv.objects.all(),
@@ -124,11 +122,11 @@ class TaxonForm(forms.ModelForm):
 
     class Meta:
         model = TaxonomicUnit
-        fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'references', 'geographic_div', 'expert', 'taxon_author_id']
+        fields = ['kingdom_name' , 'taxonnomic_types', 'rank_name', 'unit_name1', 'unit_name2', 'unit_name3', 'unit_name4', 'reference', 'geographic_div', 'expert', 'taxon_author_id']
         exclude = ['unnamed_taxon_ind']
     def __init__(self, *args, **kwargs):
         super(TaxonForm, self).__init__(*args, **kwargs) 
-        for field in ["expert", "taxon_author_id", "references"]:
+        for field in ["expert", "taxon_author_id", "reference"]:
                 self.fields[field].widget = RelatedFieldWidgetWrapper(
                 self.fields[field].widget,
                 self.instance._meta.get_field(field).remote_field,

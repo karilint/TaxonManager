@@ -431,19 +431,19 @@ class ReferenceLink(BaseModel):
         return f"taxon_id: {self.taxon}, documentation_id = {self.documentation}"
 
 
-class ExpertsGeographicDiv(BaseModel):
-    """ join-table between Expert and
-    GeographicDiv tables """
-    # FIXME: Connecting the ExpertsGeographicDiv with TSN might not work
-    # correctly to achieve many-to-many relationship between experts and
-    # geographic areas. If we defined an ID to GeographicDiv table, this
-    # may work better. This is just a hunch though.
-    geographic = models.ForeignKey(
-        GeographicDiv, on_delete=models.CASCADE, default=1)
-    expert = models.ForeignKey(Expert, on_delete=models.CASCADE)
+# class ExpertsGeographicDiv(BaseModel):
+#     """ join-table between Expert and
+#     GeographicDiv tables """
+#     # FIXME: Connecting the ExpertsGeographicDiv with TSN might not work
+#     # correctly to achieve many-to-many relationship between experts and
+#     # geographic areas. If we defined an ID to GeographicDiv table, this
+#     # may work better. This is just a hunch though.
+#     geographic = models.ForeignKey(
+#         GeographicDiv, on_delete=models.CASCADE, default=1)
+#     expert = models.ForeignKey(Expert, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return f"geographic_id: {self.geographic}, expert: {self.expert}"
+#     def __str__(self):
+#         return f"geographic_id: {self.geographic}, expert: {self.expert}"
 
 
 class SynonymLink(BaseModel):

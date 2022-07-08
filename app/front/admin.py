@@ -1,5 +1,5 @@
 from django.contrib import admin # pylint:disable=W0611
-from front.models import (Comment, Expert, ExpertsGeographicDiv, GeographicDiv, Hierarchy, Kingdom, Publication,
+from front.models import (Comment, Expert, GeographicDiv, Hierarchy, Kingdom, Publication,
 Reference, ReferenceLink, SynonymLink, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, TuCommentLink)
 from simple_history.admin import SimpleHistoryAdmin
 
@@ -7,8 +7,8 @@ class CommentAdmin(SimpleHistoryAdmin):
     readonly_fields = ('created_by', 'modified_by', 'created_at', 'updated_at')
 class ExpertAdmin(SimpleHistoryAdmin):
     readonly_fields = ('created_by', 'modified_by', 'created_at', 'updated_at')
-class ExpertsGeographicDivAdmin(SimpleHistoryAdmin):
-    readonly_fields = ('created_by', 'modified_by', 'created_at', 'updated_at')
+# class ExpertsGeographicDivAdmin(SimpleHistoryAdmin):
+#     readonly_fields = ('created_by', 'modified_by', 'created_at', 'updated_at')
 class GeographicDivAdmin(SimpleHistoryAdmin):
     readonly_fields = ('created_by', 'modified_by', 'created_at', 'updated_at')
 class HierarchyAdmin(SimpleHistoryAdmin):
@@ -34,7 +34,7 @@ class TuCommentLinkAdmin(SimpleHistoryAdmin):
 
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Expert, ExpertAdmin)
-admin.site.register(ExpertsGeographicDiv, ExpertsGeographicDivAdmin)
+# admin.site.register(ExpertsGeographicDiv, ExpertsGeographicDivAdmin)
 admin.site.register(GeographicDiv, GeographicDivAdmin)
 admin.site.register(Hierarchy, HierarchyAdmin)
 admin.site.register(Kingdom, KingdomAdmin)

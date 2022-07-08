@@ -108,9 +108,11 @@ class Reference(BaseModel):
 
     def __str__(self):
         """Simple string representation of the reference."""
-
-        return '{}: {}, {}'.format(self.id, self._get_or_missing('authors'),
+        representation = '{}: {}, {}'.format(self.id, self._get_or_missing('authors'),
                                    self._get_or_missing('title'))
+        representation = representation[:50]
+        return representation
+
 
     @property
     def qualified_id(self):

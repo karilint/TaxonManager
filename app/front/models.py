@@ -110,7 +110,8 @@ class Reference(BaseModel):
         """Simple string representation of the reference."""
         representation = '{}: {}, {}'.format(self.id, self._get_or_missing('authors'),
                                    self._get_or_missing('title'))
-        representation = representation[:50]
+        if len(representation) > 50:
+            representation = representation[:50]+'...'
         return representation
 
 

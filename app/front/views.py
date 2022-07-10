@@ -473,10 +473,11 @@ def import_data_from_excel(request):
 
 def view_reference(request):
     refs = Reference.objects.all().filter(visible=1)
+    nresults = len(refs)
     paginator = Paginator(refs, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    c = {'page_obj': page_obj, 'paginator': paginator}
+    c = {'page_obj': page_obj, 'paginator': paginator, 'nresults': nresults}
     return render(request, 'front/references.html', c)
 
 
@@ -928,6 +929,7 @@ def add_author(request):
     else:
         form = AuthorForm()
     return render(request, 'front/add-author.html', {'form': form})
+
 def view_experts(request):
     experts = Expert.objects.all()
     sorted_experts = sorted(

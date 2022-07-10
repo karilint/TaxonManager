@@ -316,6 +316,24 @@ select[name="reference"] {
   transition: max-height 0.2s ease-out;
 }
 
+.listTable {
+  width: 60%;
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+#detailButton {
+  background-color: #f9fdf7;
+  text-align: center;
+  font-size: larger;
+  padding: 1px 18px !important;
+  border: 1px solid #3f2503 !important;
+}
+
+#detailButton:hover {
+  background-color: #bed4a5 !important;
+}
+
 #sideButton {
   text-align: center;
   padding: 3px 16px !important;
@@ -469,7 +487,7 @@ select[name="reference"] {
 .liststaxon:nth-child(odd)
 {
     background-color:#d4edb7;
-    border-bottom: solid #d4edb7;
+    /* border-bottom: solid #d4edb7; */
 }
 
 #style_expert_author:nth-child(odd)

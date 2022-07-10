@@ -4,7 +4,7 @@
 <body>
 
   <div class="container">
-    <h1>Taxa list</h1>
+    <h1>Taxa</h1>
 
     <form method="get">
       <div class="card card-body search-card">
@@ -27,11 +27,11 @@
     
     {% if page_obj %}
     <h2 class="text-center" style="font-size:x-large"><i>{{ nresults }} results</i></h2>
-    <table style="width:60%; border-collapse: collapse">
+    <table class=listTable>
           {% for taxon in page_obj %}
           <tr class="liststaxon">
-
-            <td width="40.0%" id="hover_link"><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a></td>
+            <td><a title = "Go to detail view" class="w3-bar-item w3-button" id="detailButton" href="{% url 'front:hierarchy' taxon.taxon_id %}"> > </a></td>
+            <td width="40.0%">{{ taxon.complete_name }}</a></td>
             <td style="font-size:x-small" width="11.0%">{{ taxon.kingdom }}</td>
             <td style="font-size:x-small" width="11.0%">{{ taxon.rank.rank_name }}</td>
             {% if taxon.n_usage is None %}

@@ -126,7 +126,7 @@ class TaxonForm(forms.ModelForm):
         exclude = ['unnamed_taxon_ind']
     def __init__(self, *args, **kwargs):
         super(TaxonForm, self).__init__(*args, **kwargs) 
-        for field in ["expert", "taxon_author_id", "reference"]:
+        for field in ["expert", "taxon_author_id", "reference", "geographic_div"]:
                 self.fields[field].widget = RelatedFieldWidgetWrapper(
                 self.fields[field].widget,
                 self.instance._meta.get_field(field).remote_field,

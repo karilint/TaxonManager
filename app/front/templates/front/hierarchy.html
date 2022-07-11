@@ -17,7 +17,7 @@
 
         <div id="Taxon" class="togglable">
         
-            <table class="hierarchy" style="width:80%">
+            <table class="details" style="width:80%">
                 <th class="whiteboxhead" colspan="2" align="left">Taxonomy and Nomenclature</th>
                 <tr>
                     <td class="datatype" valign="top" align="left" width="35%">Kingdom:</td>
@@ -77,7 +77,7 @@
             <p></p>
         
             {% if isJunior == False %}
-                <table class="hierarchy hiearchy-lists" style="width:80%">
+                <table class="details hiearchy-lists" style="width:80%">
                     <th class="whiteboxhead" colspan="2" align="left">Taxonomic Hierarchy</th>
                         {% for name, root in name_list %}
                             <tr>
@@ -107,7 +107,7 @@
                 </table>
             {% endif %}
             
-            <table class="hierarchy" style="width:80%">
+            <table class="details" style="width:80%">
                 <th class="whiteboxhead" colspan="2" align="left">Reference</th>
                 <tr>
                     <td class="datatype" valign="top" width="35%">Title:</td>
@@ -136,7 +136,7 @@
         <div id="Updates" class="togglable">
             {% if history.items %}
                 {% for key, value in history.items %}
-                <table class="hierarchy" style="width:80%">
+                <table class="details" style="width:80%">
                     <th class="whiteboxhead" colspan="2" align="left">Updated on {{key}}</th>
                     <tr>
                         <td class="datatype" valign="top" align="left" width="35%">Modified by:</td>
@@ -153,7 +153,7 @@
                 </table>
                 {% endfor %}
             {% else %}
-            <table class="hierarchy" style="width:80%">
+            <table class="details" style="width:80%">
                 <th class="whiteboxhead" colspan="2" align="left">No update history available</th>
                 <tr>
                     <td class="datatype" valign="top" align="left" width="35%">Modified by:</td>

@@ -473,11 +473,42 @@ def import_data_from_excel(request):
 
 def view_reference(request):
     refs = Reference.objects.all().filter(visible=1)
+    nresults = len(refs)
     paginator = Paginator(refs, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    c = {'page_obj': page_obj, 'paginator': paginator}
+    c = {'page_obj': page_obj, 'paginator': paginator, 'nresults': nresults}
     return render(request, 'front/references.html', c)
+
+def view_reference_details(request, id):
+    """ View for individual reference """
+    chosenRef = Reference.objects.get(id=id)
+    
+    # Get reference's history as records
+    records = chosenRef.history.all()
+    history = {}
+
+        # Add update history to 'history' dict, one update (record) at a time
+    try:
+        for record in records:
+            if record.prev_record:
+                timestamp = record.history_date
+                history[timestamp] = {}
+                history[timestamp]['user'] = record.history_user.username
+                history[timestamp]['changes'] = ''
+                delta = record.diff_against(record.prev_record)
+                for change in delta.changes:
+                    if len(history[timestamp]['changes']) == 0:
+                        history[timestamp]['changes'] = "{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
+                    else:
+                        (history[timestamp]['changes']) += ",\n{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
+                if len(history[timestamp]['changes']) == 0:
+                    history[timestamp]['changes'] = "Not available."
+    except:
+        print("An error occured while fetching reference history records.")
+
+    context = {'reference': chosenRef, 'history': history}
+    return render(request, 'front/ref-details.html', context)
 
 
 def search_references(request):
@@ -742,22 +773,25 @@ def view_hierarchy(request, parent_id=None):
     history = {}
 
     # Add update history to 'history' dict, one update (record) at a time
-    for record in records:
-        if record.prev_record:
-            timestamp = record.history_date
-            history[timestamp] = {}
-            history[timestamp]['user'] = record.history_user.username
-            history[timestamp]['changes'] = ''
-            history[timestamp]['reference'] = f"{record.reference.authors}. {record.reference.title}."
-            delta = record.diff_against(record.prev_record)
-            for change in delta.changes:
-                if change.field != 'reference':
-                    if len(history[timestamp]['changes']) == 0:
-                        history[timestamp]['changes'] = "{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
-                    else:
-                        (history[timestamp]['changes']) += ",\n{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
-            if len(history[timestamp]['changes']) == 0:
-                history[timestamp]['changes'] = "Not available."
+    try:
+        for record in records:
+            if record.prev_record:
+                timestamp = record.history_date
+                history[timestamp] = {}
+                history[timestamp]['user'] = record.history_user.username
+                history[timestamp]['changes'] = ''
+                history[timestamp]['reference'] = f"{record.reference.authors}. {record.reference.title}."
+                delta = record.diff_against(record.prev_record)
+                for change in delta.changes:
+                    if change.field != 'reference':
+                        if len(history[timestamp]['changes']) == 0:
+                            history[timestamp]['changes'] = "{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
+                        else:
+                            (history[timestamp]['changes']) += ",\n{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
+                if len(history[timestamp]['changes']) == 0:
+                    history[timestamp]['changes'] = "Not available."
+    except:
+        print("An error occured while fetching taxon history records.")
     # Select experts
     # percentage = '%'
     # taxon_experts = Expert.objects.raw("""
@@ -795,8 +829,6 @@ def view_hierarchy(request, parent_id=None):
         seniorSynonym = None
     hierarchy = hierarchyObject.hierarchy_string.split('-')
 
-    # TODO result array seems useless?
-    # result = []
     name_list = []
     grow = 0
 
@@ -819,14 +851,12 @@ def view_hierarchy(request, parent_id=None):
         else:
             name = space + root.rank.rank_name
             name_list.append((name, root))
-        # result.append(root)
         grow += 2
 
     context = {
         'taxonomic_unit': chosenTaxon,
         'taxon_experts': taxon_experts,
         'childTaxa': childTaxa,
-        # 'hierarchies': result,
         'name_list': name_list,
         # 'references': references[0],
         'synonyms': synonymTaxons,
@@ -928,6 +958,7 @@ def add_author(request):
     else:
         form = AuthorForm()
     return render(request, 'front/add-author.html', {'form': form})
+
 def view_experts(request):
     experts = Expert.objects.all()
     sorted_experts = sorted(

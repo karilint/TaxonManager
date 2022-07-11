@@ -107,7 +107,7 @@
                     <tr><th><a title = "Advanced taxon search" class="w3-bar-item w3-button" id="sideButton" href="/taxa-search"> Taxon search </a></th></tr>
                     {% endif %}
                 
-                    {% if request.path == '/references/' or 'add-references/' in request.path or request.path == '/doi-autofill/' or request.path == '/bibtex-autofill/' %}
+                    {% if '/references/' in request.path or '/reference-details/' in request.path or 'add-references/' in request.path or request.path == '/doi-autofill/' or request.path == '/bibtex-autofill/' %}
                     <tr><th><a title = "Reference list" class="w3-bar-item w3-button" id="sideButton_activated" href="/references"> References </a></th></tr>
                     {% else %}
                     <tr><th><a title = "Reference list" class="w3-bar-item w3-button" id="sideButton" href="/references"> References </a></th></tr>
@@ -140,6 +140,8 @@
                         {% if test > 0 %}
                             {% if 'hierarchy' in request.path %}
                             <a title = "Edit this taxon" class="w3-bar-item w3-button" id="sideButton" href="{% url 'front:add-taxon' taxonomic_unit.taxon_id %}"> Edit taxon </a>
+                            {% elif '/reference-details/' in request.path %}
+                            <a title = "Edit this reference" class="w3-bar-item w3-button" id="sideButton" href="{% url 'front:add-references' reference.id %}"> Edit reference </a>
                             {% else %}
                             <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Edit </a>                 
                             {% endif %}
@@ -161,7 +163,7 @@
                                 {% endif %}
                             {% elif 'add-references/' in request.path or request.path == '/doi-autofill/' or request.path == '/bibtex-autofill/' %}
                                 {% if title == 'Edit' %}
-                                <a title = "Cancel editing this reference" class="w3-bar-item w3-button" id="sideButton" href="/references/"> Cancel </a>
+                                <a title = "Cancel editing this reference" class="w3-bar-item w3-button" id="sideButton" href="{{request.META.HTTP_REFERER|escape}}"> Cancel </a>
                                 {% else %}
                                 <a title = "Cancel adding this reference" class="w3-bar-item w3-button" id="sideButton" href="/references/"> Cancel </a>
                                 {% endif %}
@@ -205,7 +207,7 @@
                         {% if test > 0 %}
                             {% if 'hierarchy' in request.path or '/taxa/' in request.path %}
                             <a title = "Add a new taxon to the database" class="w3-bar-item w3-button" id="sideButton" href="/add-taxon"> Add taxon </a>
-                            {% elif request.path == '/references/' %}
+                            {% elif request.path == '/references/' or '/reference-details/' in request.path %}
                             <a title = "Add a new reference to the database" class="w3-bar-item w3-button" id="sideButton" href="/add-references"> Add reference </a>
                             {% elif request.path == '/experts/' %}
                             <a title = "Add a new expert to the database" class="w3-bar-item w3-button" id="sideButton" href="/add-expert"> Add expert </a>
@@ -220,6 +222,7 @@
                         {% endwith %}
                     </th></tr>
 
+                    <!-- Admin button -->
                     {% if user.is_superuser %}
                     <tr><th>
                         <a title = "Admin panel" class="w3-bar-item w3-button" id="sideButton" href="{% url 'admin:index' %}"> Admin </a>

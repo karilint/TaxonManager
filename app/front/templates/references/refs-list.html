@@ -1,39 +1,22 @@
 {% extends "references/refBase.html" %}
-{% load static pyref_tags %}
-
-{% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{% static 'refs/css/refs.css' %}" />
-{% endblock %}
-
-{% block extra_js %}
-<script>
-$(function() {
-    $('.delete-ref').click(function() {
-        return window.confirm("Are you sure you want to delete this reference?");
-    });
-});
-</script>
-{% endblock %}
 
 {% block content %}
 
-<h1>Reference List</h1>
+<h1>References</h1>
 
-    <table style="width:60%; border-collapse: collapse">
-        {% for ref in page_obj %}
-          <tr class="liststaxon">
-            {% with test=user.groups.all|length %}
-            {% if test > 0 %}
-            <td width="3.0%"><a class="delete-ref" href="{% url "front:delete" ref.pk %}"><img src="{% static 'refs/images/trashcan.svg' %}"/></a></td>
-            <td width="3.0%"><a href="{% url 'front:add-references' ref.pk %}"><img src="{% static 'refs/images/pencil.svg' %}"/></a></td>
-            {% endif %}
-            {% endwith %}
-
-            <td width="90.0%">{% ref_html ref 3 %}</td> 
-          </tr>
-          {% endfor %}
+{% if page_obj %}
+  <h2 class="text-center" style="font-size:x-large"><i>{{ nresults }} results</i></h2>
+  <table class=listTable>
+        {% for reference in page_obj %}
+        <tr class="lists">
+          <td><a title = "Go to detail view" class="w3-bar-item w3-button" id="detailButton" href="{% url 'front:ref-details' reference.id %}"> > </a></td>
+          <td>{{ reference }}</td>
+        </tr>
+        {% endfor %}
   </table>
-
+{% else %}
+  <h2 class="text-center">No result.</h2>
+{% endif %}
 
 <div class="pagination">
     {% if page_obj.has_previous %}

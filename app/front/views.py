@@ -971,9 +971,13 @@ def view_experts(request):
     return render(request, 'front/experts.html', context)
 
 
-def add_expert(request):
+def add_expert(request, pk=None):
+    context = {'pk': pk if pk else ''}
     if request.method == 'POST':
-        form = ExpertForm(request.POST)
+        expert = None
+        if pk:
+            expert = Expert.objects.get(pk=pk)
+        form = ExpertForm(request.POST, instance=expert)
         if form.is_valid():
             try:
                 new_expert = form.save(commit=False)
@@ -986,8 +990,15 @@ def add_expert(request):
                 print("Saving a new expert did not workout; do something")
             return HttpResponseRedirect('/experts')
     else:
-        form = ExpertForm()
-    return render(request, 'front/add-expert.html', {'form': form})
+        try:
+            expert = Expert.objects.get(pk=pk)
+            context['title'] = 'Edit'
+        except Expert.DoesNotExist:
+            expert = None
+            context['title'] = 'Add'
+        form = ExpertForm(instance=expert)
+    context['form'] = form
+    return render(request, 'front/add-expert.html', context)
 
 def view_authors(request):
     authors = TaxonAuthorLkp.objects.all()
@@ -1001,9 +1012,13 @@ def view_authors(request):
     return render(request, 'front/authors.html', context)
 
 
-def add_author(request):
+def add_author(request, pk=None):
+    context = {'pk': pk if pk else ''}
     if request.method == 'POST':
-        form = AuthorForm(request.POST)
+        author = None
+        if pk:
+            author = TaxonAuthorLkp.objects.get(pk=pk)
+        form = AuthorForm(request.POST, instance=author)
         if form.is_valid():
             try:
                 new_author = form.save(commit=False)
@@ -1012,8 +1027,15 @@ def add_author(request):
                 print("saving new author did not workout; do something")
             return HttpResponseRedirect('/authors')
     else:
-        form = AuthorForm()
-    return render(request, 'front/add-author.html', {'form': form})
+        try:
+            author = TaxonAuthorLkp.objects.get(pk=pk)
+            context['title'] = 'Edit'
+        except TaxonAuthorLkp.DoesNotExist:
+            author = None
+            context['title'] = 'Add'
+        form = AuthorForm(instance=author)
+    context['form'] = form
+    return render(request, 'front/add-author.html', context)
 
 def help(request):
     return render(request, 'front/help.html')

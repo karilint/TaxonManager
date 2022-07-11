@@ -902,74 +902,18 @@ def add_junior_synonym(request, taxon_id=None):
     else:
         form = JuniorSynonymForm()
     return render(request, 'front/add_junior_synonym.html', {'form': form})
-    
+
 def view_experts(request):
     experts = Expert.objects.all()
+    nresults = len(experts)
     sorted_experts = sorted(
         experts, key=lambda objects: objects.expert.lower())
     paginator = Paginator(sorted_experts, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    context = {'paginator': paginator, 'page_obj': page_obj}
+    context = {'paginator': paginator, 'page_obj': page_obj, 'nresults': nresults}
     return render(request, 'front/experts.html', context)
-
-
-def add_expert(request):
-    if request.method == 'POST':
-        form = ExpertForm(request.POST)
-        if form.is_valid():
-            try:
-                new_expert = form.save(commit=False)
-                new_expert.save()
-
-                geos = form.cleaned_data['geographic_div']
-                for geo in geos:
-                    new_expert.geographic_div.add(geo)
-            except Expert.DoesNotExist:
-                print("Saving a new expert did not workout; do something")
-            return HttpResponseRedirect('/experts')
-    else:
-        form = ExpertForm()
-    return render(request, 'front/add-expert.html', {'form': form})
-
-def view_authors(request):
-    authors = TaxonAuthorLkp.objects.all()
-    sorted_authors = sorted(
-        authors, key=lambda objects: objects.taxon_author.lower())
-    paginator = Paginator(sorted_authors, 20)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {'paginator': paginator, 'page_obj': page_obj}
-    return render(request, 'front/authors.html', context)
-
-
-def add_author(request):
-    if request.method == 'POST':
-        form = AuthorForm(request.POST)
-        if form.is_valid():
-            try:
-                new_author = form.save(commit=False)
-                new_author.save()
-            except TaxonAuthorLkp.DoesNotExist:
-                print("saving new author did not workout; do something")
-            return HttpResponseRedirect('/authors')
-    else:
-        form = AuthorForm()
-    return render(request, 'front/add-author.html', {'form': form})
-
-def view_experts(request):
-    experts = Expert.objects.all()
-    sorted_experts = sorted(
-        experts, key=lambda objects: objects.expert.lower())
-    paginator = Paginator(sorted_experts, 20)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {'paginator': paginator, 'page_obj': page_obj}
-    return render(request, 'front/experts.html', context)
-
 
 def add_expert(request, pk=None):
     context = {'pk': pk if pk else ''}
@@ -1002,15 +946,14 @@ def add_expert(request, pk=None):
 
 def view_authors(request):
     authors = TaxonAuthorLkp.objects.all()
+    nresults = len(authors)
     sorted_authors = sorted(
         authors, key=lambda objects: objects.taxon_author.lower())
     paginator = Paginator(sorted_authors, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-
-    context = {'paginator': paginator, 'page_obj': page_obj}
+    context = {'paginator': paginator, 'page_obj': page_obj, 'nresults': nresults}
     return render(request, 'front/authors.html', context)
-
 
 def add_author(request, pk=None):
     context = {'pk': pk if pk else ''}
@@ -1024,7 +967,7 @@ def add_author(request, pk=None):
                 new_author = form.save(commit=False)
                 new_author.save()
             except TaxonAuthorLkp.DoesNotExist:
-                print("saving new author did not workout; do something")
+                print("Saving a new author did not workout; do something")
             return HttpResponseRedirect('/authors')
     else:
         try:

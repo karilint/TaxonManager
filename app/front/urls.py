@@ -11,6 +11,7 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('references/', views.view_reference, name='references'),
     path('references-search/', views.search_references, name='references-search'),
+    re_path(r'reference-details/(?:(?P<id>\d+))?$', views.view_reference_details, name='ref-details'),
     re_path(r'^add-references/(?:(?P<pk>\d+))?$', views.refs_add, name='add-references'),
     re_path(r'^delete/(?P<pk>\d+)$', views.delete, name='delete'),
     re_path(r'^add-taxon/(?:(?P<pk>\d+))?$', views.taxon_add, name ='add-taxon'),

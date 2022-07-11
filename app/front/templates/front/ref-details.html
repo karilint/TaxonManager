@@ -1,0 +1,123 @@
+{% extends "front/base.html" %}
+{% block content %}
+<body>
+
+    <h1 class="tabh1"><i>Reference (id:{{reference.id}}) details</i>
+        <button title = "Change history" onclick="openTab(event, 'Updates')" class="tabButton">Updates</button>
+        <button title = "Reference details" onclick="openTab(event, 'Reference')" class="tabButton active">Reference</button></h1>
+
+        <div id ="Reference" class="togglable">
+        
+            <table class="details" style="width:80%">
+                <th class="whiteboxhead" colspan="2" align="left">Details</th>
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Author(s):</td>
+                    <td class="datafield" width="65%">{{reference.authors}}</td>
+                </tr>
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Title:</td>
+                    <td class="datafield" width="65%">{{reference.title}}</td>
+                </tr>
+                {% if reference.year %}
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Year:</td>
+                    <td class="datafield" width="65%">{{reference.year}}</td>
+                </tr>
+                {% endif %}
+                {% if reference.doi%}
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">DOI:</td>
+                    <td class="datafield" width="65%">{{reference.doi}}</td>
+                </tr>
+                {% endif %}
+                {% if reference.url%}
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">URL:</td>
+                    <td class="datafield" width="65%">{{reference.url}}</td>
+                </tr>
+                {% endif %}
+                {% if reference.journal %}
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Journal:</td>
+                    <td class="datafield" width="65%">{{reference.journal}}</td>
+                </tr>
+                {% endif %}
+                {% if reference.volume %}
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Volume:</td>
+                    <td class="datafield" width="65%">{{reference.volume}}</td>
+                </tr>
+                {% endif %}
+                {% if reference.note %}
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Note:</td>
+                    <td class="datafield" width="65%">{{reference.note}}</td>
+                </tr>
+                {% endif %}
+            </table>        
+        </div>
+
+        <div id="Updates" class="togglable">
+            {% if history.items %}
+                {% for key, value in history.items %}
+                <table class="details" style="width:80%">
+                    <th class="whiteboxhead" colspan="2" align="left">Updated on {{key}}</th>
+                    <tr>
+                        <td class="datatype" valign="top" align="left" width="35%">Modified by:</td>
+                        <td class="datafield" width="65%">{{value.user}}</td>
+                    </tr>
+                    <tr>
+                        <td class="datatype" valign="top" align="left" width="35%">Changes:</td>
+                        <td class="datafield" width="65%">{{value.changes}}</td>
+                    </tr>
+                </table>
+                {% endfor %}
+            {% else %}
+            <table class="details" style="width:80%">
+                <th class="whiteboxhead" colspan="2" align="left">No update history available</th>
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Modified by:</td>
+                    <td class="datafield" width="65%">N/A</td>
+                </tr>
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Changes:</td>
+                    <td class="datafield" width="65%">N/A</td>
+                </tr>
+                <tr>
+                    <td class="datatype" valign="top" align="left" width="35%">Reference:</td>
+                    <td class="datafield" width="65%">N/A</td>
+                </tr>
+            </table>
+            {% endif %}
+        </div>
+
+        <script>
+            var i, togglable, tabButton
+
+            function openTab(evt, name) {
+                
+
+                // Get all elements with class="togglable" and hide them
+                togglable = document.getElementsByClassName("togglable");
+
+                for (i = 0; i < togglable.length; i++) {
+                    togglable[i].style.display = "none";
+                }
+
+                // Get all elements with class="tabButton" and remove the class "active"
+                tabButton = document.getElementsByClassName("tabButton");
+
+                for (i = 0; i < tabButton.length; i++) {
+                    tabButton[i].className = tabButton[i].className.replace(" active", "");
+                }
+
+
+                // Show the current tab, and add an "active" class to the button that opened the tab
+                document.getElementById(name).style.display = "block";
+
+                evt.currentTarget.className += " active";
+            }
+
+        </script>
+</body>
+{% endblock %} 

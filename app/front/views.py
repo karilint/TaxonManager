@@ -480,6 +480,36 @@ def view_reference(request):
     c = {'page_obj': page_obj, 'paginator': paginator, 'nresults': nresults}
     return render(request, 'front/references.html', c)
 
+def view_reference_details(request, id):
+    """ View for individual reference """
+    chosenRef = Reference.objects.get(id=id)
+    
+    # Get reference's history as records
+    records = chosenRef.history.all()
+    history = {}
+
+        # Add update history to 'history' dict, one update (record) at a time
+    try:
+        for record in records:
+            if record.prev_record:
+                timestamp = record.history_date
+                history[timestamp] = {}
+                history[timestamp]['user'] = record.history_user.username
+                history[timestamp]['changes'] = ''
+                delta = record.diff_against(record.prev_record)
+                for change in delta.changes:
+                    if len(history[timestamp]['changes']) == 0:
+                        history[timestamp]['changes'] = "{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
+                    else:
+                        (history[timestamp]['changes']) += ",\n{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
+                if len(history[timestamp]['changes']) == 0:
+                    history[timestamp]['changes'] = "Not available."
+    except:
+        print("An error occured while fetching reference history records.")
+
+    context = {'reference': chosenRef, 'history': history}
+    return render(request, 'front/ref-details.html', context)
+
 
 def search_references(request):
     ref_list = Reference.objects.all().filter(visible=1)
@@ -761,7 +791,7 @@ def view_hierarchy(request, parent_id=None):
                 if len(history[timestamp]['changes']) == 0:
                     history[timestamp]['changes'] = "Not available."
     except:
-        print("An error occured while creating history records.")
+        print("An error occured while fetching taxon history records.")
     # Select experts
     # percentage = '%'
     # taxon_experts = Expert.objects.raw("""

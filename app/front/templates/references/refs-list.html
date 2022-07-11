@@ -9,7 +9,7 @@
   <table class=listTable>
         {% for reference in page_obj %}
         <tr class="lists">
-          <td><a title = "Go to detail view" class="w3-bar-item w3-button" id="detailButton" href="/"> > </a></td>
+          <td><a title = "Go to detail view" class="w3-bar-item w3-button" id="detailButton" href="{% url 'front:ref-details' reference.id %}"> > </a></td>
           <td>{{ reference }}</td>
         </tr>
         {% endfor %}

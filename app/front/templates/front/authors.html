@@ -11,7 +11,7 @@
   <table class=listTable>
         {% for author in page_obj %}
         <tr class="lists">
-          <td><a title = "Go to detail view" class="w3-bar-item w3-button" id="detailButton" href="/"> > </a></td>
+          <td><a title = "Go to detail view" class="w3-bar-item w3-button" id="detailButton" href="{% url 'front:author-details' author.taxon_author_id %}"> > </a></td>
           <td>{{ author.taxon_author }}</td>
         </tr>
         {% endfor %}
@@ -19,8 +19,6 @@
 {% else %}
   <h2 class="text-center">No results.</h2>
 {% endif %}
-
-
 
 <div class="pagination">
     {% if page_obj.has_previous %}

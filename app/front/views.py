@@ -955,6 +955,36 @@ def view_authors(request):
     context = {'paginator': paginator, 'page_obj': page_obj, 'nresults': nresults}
     return render(request, 'front/authors.html', context)
 
+def view_author_details(request, id):
+    """ View for individual author """
+    chosenAuthor = TaxonAuthorLkp.objects.get(taxon_author_id=id)
+    
+    # Get author's history as records
+    records = chosenAuthor.history.all()
+    history = {}
+
+        # Add update history to 'history' dict, one update (record) at a time
+    try:
+        for record in records:
+            if record.prev_record:
+                timestamp = record.history_date
+                history[timestamp] = {}
+                history[timestamp]['user'] = record.history_user.username
+                history[timestamp]['changes'] = ''
+                delta = record.diff_against(record.prev_record)
+                for change in delta.changes:
+                    if len(history[timestamp]['changes']) == 0:
+                        history[timestamp]['changes'] = "{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
+                    else:
+                        (history[timestamp]['changes']) += ",\n{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
+                if len(history[timestamp]['changes']) == 0:
+                    history[timestamp]['changes'] = "Not available."
+    except:
+        print("An error occured while fetching author's history records.")
+
+    context = {'author': chosenAuthor, 'history': history}
+    return render(request, 'front/author-details.html', context)
+
 def add_author(request, pk=None):
     context = {'pk': pk if pk else ''}
     if request.method == 'POST':

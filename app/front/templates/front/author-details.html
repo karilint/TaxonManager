@@ -22,7 +22,7 @@
         </div>
 
         <div id="Updates" class="togglable">
-            {% if history.items %}
+            {% if history.items or author.created_at %}
                 {% for key, value in history.items %}
                 <table class="details" style="width:80%">
                     <th class="whiteboxhead" colspan="2" align="left">Updated on {{key}}</th>
@@ -36,6 +36,13 @@
                     </tr>
                 </table>
                 {% endfor %}
+                <table class="details" style="width:80%">
+                    <th class="whiteboxhead" colspan="2" align="left">Created on {% firstof author.created_at "N/A" %}</th>
+                    <tr>
+                        <td class="datatype" valign="top" align="left" width="35%">Created by:</td>
+                        <td class="datafield" width="65%">{% firstof author.created_by.username "N/A" %}</td>
+                    </tr>
+                </table>
             {% else %}
             <table class="details" style="width:80%">
                 <th class="whiteboxhead" colspan="2" align="left">No update history available</th>

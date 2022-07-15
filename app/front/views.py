@@ -753,6 +753,13 @@ def view_hierarchy(request, parent_id=None):
     # Get taxon's history as records
     records = chosenTaxon.history.all()
     history = {}
+    
+    # Get the first reference related to the taxon
+    first_ref = ""
+    try:
+        first_ref = f"{records[0].reference.authors}. {records[0].reference.title}."
+    except:
+        print("Couldn't get initial reference.")
 
     # Add update history to 'history' dict, one update (record) at a time
     try:
@@ -774,6 +781,7 @@ def view_hierarchy(request, parent_id=None):
                     history[timestamp]['changes'] = "Not available."
     except:
         print("An error occured while fetching taxon history records.")
+        
     # Select experts
     # percentage = '%'
     # taxon_experts = Expert.objects.raw("""
@@ -844,7 +852,8 @@ def view_hierarchy(request, parent_id=None):
         'synonyms': synonymTaxons,
         'seniorSynonym': seniorSynonym,
         'isJunior': seniorSynonym is not None,
-        'history': history
+        'history': history,
+        'first_ref': first_ref
     }
 
     return render(request, 'front/hierarchy.html', context)

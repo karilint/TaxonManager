@@ -487,25 +487,7 @@ def view_reference_details(request, id):
     # Get reference's history as records
     records = chosenRef.history.all()
     history = {}
-
-        # Add update history to 'history' dict, one update (record) at a time
-    try:
-        for record in records:
-            if record.prev_record:
-                timestamp = record.history_date
-                history[timestamp] = {}
-                history[timestamp]['user'] = record.history_user.username
-                history[timestamp]['changes'] = ''
-                delta = record.diff_against(record.prev_record)
-                for change in delta.changes:
-                    if len(history[timestamp]['changes']) == 0:
-                        history[timestamp]['changes'] = "{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
-                    else:
-                        (history[timestamp]['changes']) += ",\n{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
-                if len(history[timestamp]['changes']) == 0:
-                    history[timestamp]['changes'] = "Not available."
-    except:
-        print("An error occured while fetching reference history records.")
+    history = _create_history_records(history, records)
 
     context = {'reference': chosenRef, 'history': history}
     return render(request, 'front/ref-details.html', context)
@@ -975,25 +957,7 @@ def view_author_details(request, id):
     # Get author's history as records
     records = chosenAuthor.history.all()
     history = {}
-
-        # Add update history to 'history' dict, one update (record) at a time
-    try:
-        for record in records:
-            if record.prev_record:
-                timestamp = record.history_date
-                history[timestamp] = {}
-                history[timestamp]['user'] = record.history_user.username
-                history[timestamp]['changes'] = ''
-                delta = record.diff_against(record.prev_record)
-                for change in delta.changes:
-                    if len(history[timestamp]['changes']) == 0:
-                        history[timestamp]['changes'] = "{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
-                    else:
-                        (history[timestamp]['changes']) += ",\n{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
-                if len(history[timestamp]['changes']) == 0:
-                    history[timestamp]['changes'] = "Not available."
-    except:
-        print("An error occured while fetching author's history records.")
+    history = _create_history_records(history, records)
 
     context = {'author': chosenAuthor, 'history': history}
     return render(request, 'front/author-details.html', context)

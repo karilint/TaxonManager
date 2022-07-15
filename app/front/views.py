@@ -915,6 +915,19 @@ def view_experts(request):
     context = {'paginator': paginator, 'page_obj': page_obj, 'nresults': nresults}
     return render(request, 'front/experts.html', context)
 
+def view_expert_details(request, id):
+    """ View for individual expert """
+    chosenExpert = Expert.objects.get(id=id)
+    geo_divs = chosenExpert.geographic_div.all()
+    
+    # Get expert's history as records
+    records = chosenExpert.history.all()
+    history = {}
+    history = _create_history_records(history, records)
+
+    context = {'expert': chosenExpert, 'history': history, 'geos': geo_divs}
+    return render(request, 'front/expert-details.html', context)
+
 def add_expert(request, pk=None):
     context = {'pk': pk if pk else ''}
     if request.method == 'POST':
@@ -1012,3 +1025,24 @@ def add_author(request, pk=None):
 
 def help(request):
     return render(request, 'front/help.html')
+
+def _create_history_records(history, records):
+    # Add update history to 'history' dict, one update (record) at a time
+    try:
+        for record in records:
+            if record.prev_record:
+                timestamp = record.history_date
+                history[timestamp] = {}
+                history[timestamp]['user'] = record.history_user.username
+                history[timestamp]['changes'] = ''
+                delta = record.diff_against(record.prev_record)
+                for change in delta.changes:
+                    if len(history[timestamp]['changes']) == 0:
+                        history[timestamp]['changes'] = "{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
+                    else:
+                        (history[timestamp]['changes']) += ",\n{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
+                if len(history[timestamp]['changes']) == 0:
+                    history[timestamp]['changes'] = "Not available."
+    except:
+        print("An error occured while fetching reference history records.")
+    return history

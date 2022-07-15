@@ -473,12 +473,5 @@ select[name="reference"] {
 .lists:nth-child(odd)
 {
     background-color:#d4edb7;
-    /* border-bottom: solid #d4edb7; */
-}
-
-#style_expert_author:nth-child(odd)
-{
-    background-color: #d4edb7;
-    border-color: #d4edb7;
 }
 

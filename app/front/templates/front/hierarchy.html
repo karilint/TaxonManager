@@ -111,7 +111,7 @@
                 <th class="whiteboxhead" colspan="2" align="left">Reference</th>
                 <tr>
                     <td class="datatype" valign="top" width="35%">Title:</td>
-                    <td class="datafield" width="65%">{{ taxonomic_unit.reference.title }}</td>
+                    <td class="datafield" width="65%"><a href="{% url 'front:ref-details' taxonomic_unit.reference.id %}">{{ taxonomic_unit.reference.title }}</a></td>
                 </tr>
                 <tr>
                     <td class="datatype" valign="top" width="35%">Authors:</td>

@@ -2,63 +2,27 @@
 {% block content %}
 <body>
 
-    <h1 class="tabh1"><i>Reference (id:{{reference.id}}) details</i>
+    <h1 class="tabh1"><i>{{author.taxon_author}}</i>
         <button title = "Change history" onclick="openTab(event, 'Updates')" class="tabButton">Updates</button>
-        <button title = "Reference details" onclick="openTab(event, 'Reference')" class="tabButton active">Reference</button></h1>
+        <button title = "Author details" onclick="openTab(event, 'Author')" class="tabButton active">Author</button></h1>
 
-        <div id ="Reference" class="togglable">
+        <div id ="Author" class="togglable">
         
             <table class="details" style="width:80%">
                 <th class="whiteboxhead" colspan="2" align="left">Details</th>
                 <tr>
-                    <td class="datatype" valign="top" align="left" width="35%">Author(s):</td>
-                    <td class="datafield" width="65%">{{reference.authors}}</td>
+                    <td class="datatype" valign="top" align="left" width="35%">Name:</td>
+                    <td class="datafield" width="65%">{{author.taxon_author}}</td>
                 </tr>
                 <tr>
-                    <td class="datatype" valign="top" align="left" width="35%">Title:</td>
-                    <td class="datafield" width="65%">{{reference.title}}</td>
+                    <td class="datatype" valign="top" align="left" width="35%">Kingdom:</td>
+                    <td class="datafield" width="65%">{{author.kingdom}}</td>
                 </tr>
-                {% if reference.year %}
-                <tr>
-                    <td class="datatype" valign="top" align="left" width="35%">Year:</td>
-                    <td class="datafield" width="65%">{{reference.year}}</td>
-                </tr>
-                {% endif %}
-                {% if reference.doi%}
-                <tr>
-                    <td class="datatype" valign="top" align="left" width="35%">DOI:</td>
-                    <td class="datafield" width="65%">{{reference.doi}}</td>
-                </tr>
-                {% endif %}
-                {% if reference.url%}
-                <tr>
-                    <td class="datatype" valign="top" align="left" width="35%">URL:</td>
-                    <td class="datafield" width="65%"><a href="{{reference.url}}">{{reference.url}}</a></td>
-                </tr>
-                {% endif %}
-                {% if reference.journal %}
-                <tr>
-                    <td class="datatype" valign="top" align="left" width="35%">Journal:</td>
-                    <td class="datafield" width="65%">{{reference.journal}}</td>
-                </tr>
-                {% endif %}
-                {% if reference.volume %}
-                <tr>
-                    <td class="datatype" valign="top" align="left" width="35%">Volume:</td>
-                    <td class="datafield" width="65%">{{reference.volume}}</td>
-                </tr>
-                {% endif %}
-                {% if reference.note %}
-                <tr>
-                    <td class="datatype" valign="top" align="left" width="35%">Note:</td>
-                    <td class="datafield" width="65%">{{reference.note}}</td>
-                </tr>
-                {% endif %}
             </table>        
         </div>
 
         <div id="Updates" class="togglable">
-            {% if history.items or reference.created_at %}
+            {% if history.items or author.created_at %}
                 {% for key, value in history.items %}
                 <table class="details" style="width:80%">
                     <th class="whiteboxhead" colspan="2" align="left">Updated on {{key}}</th>
@@ -73,10 +37,10 @@
                 </table>
                 {% endfor %}
                 <table class="details" style="width:80%">
-                    <th class="whiteboxhead" colspan="2" align="left">Created on {% firstof reference.created_at "N/A" %}</th>
+                    <th class="whiteboxhead" colspan="2" align="left">Created on {% firstof author.created_at "N/A" %}</th>
                     <tr>
                         <td class="datatype" valign="top" align="left" width="35%">Created by:</td>
-                        <td class="datafield" width="65%">{% firstof reference.created_by.username "N/A" %}</td>
+                        <td class="datafield" width="65%">{% firstof author.created_by.username "N/A" %}</td>
                     </tr>
                 </table>
             {% else %}
@@ -97,8 +61,7 @@
         <script>
             var i, togglable, tabButton
 
-            function openTab(evt, name) {
-                
+            function openTab(evt, name) {         
 
                 // Get all elements with class="togglable" and hide them
                 togglable = document.getElementsByClassName("togglable");

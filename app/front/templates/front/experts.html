@@ -3,19 +3,21 @@
 {% block content %}
 <body>
 
-
 <h1>Experts</h1>
-<p>
-    <table style="width:60%">
+
+{% if page_obj %}
+  <h2 class="text-center" style="font-size:x-large"><i>{{ nresults }} results</i></h2>
+  <table class=listTable>
         {% for expert in page_obj %}
-        <tr id="style_expert_author">
-        <td width="20.0%">{{ expert.expert }}</td>
+        <tr class="lists">
+          <td><a title = "Go to detail view" class="w3-bar-item w3-button" id="detailButton" href="{% url 'front:expert-details' expert.id %}"> > </a></td>
+          <td>{{ expert.expert }}</td>
         </tr>
         {% endfor %}
-    </table>
-</p>
-
-
+  </table>
+{% else %}
+  <h2 class="text-center">No results.</h2>
+{% endif %}
 
 <div class="pagination">
     {% if page_obj.has_previous %}

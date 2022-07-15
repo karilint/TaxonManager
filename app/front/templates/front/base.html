@@ -142,6 +142,10 @@
                             <a title = "Edit this taxon" class="w3-bar-item w3-button" id="sideButton" href="{% url 'front:add-taxon' taxonomic_unit.taxon_id %}"> Edit taxon </a>
                             {% elif '/reference-details/' in request.path %}
                             <a title = "Edit this reference" class="w3-bar-item w3-button" id="sideButton" href="{% url 'front:add-references' reference.id %}"> Edit reference </a>
+                            {% elif '/author-details/' in request.path %}
+                            <a title = "Edit this author" class="w3-bar-item w3-button" id="sideButton" href="{% url 'front:add-author' author.taxon_author_id %}"> Edit author </a>
+                            {% elif '/expert-details/' in request.path %}
+                            <a title = "Edit this expert" class="w3-bar-item w3-button" id="sideButton" href="{% url 'front:add-expert' expert.id %}"> Edit expert </a>
                             {% else %}
                             <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Edit </a>                 
                             {% endif %}
@@ -167,9 +171,9 @@
                                 {% else %}
                                 <a title = "Cancel adding this reference" class="w3-bar-item w3-button" id="sideButton" href="/references/"> Cancel </a>
                                 {% endif %}
-                            {% elif request.path == '/add-expert/' %}
+                            {% elif '/add-expert/' in request.path %}
                             <a title = "Cancel adding this expert" class="w3-bar-item w3-button" id="sideButton" href="/experts/"> Cancel </a>
-                            {% elif request.path == '/add-author/' %}
+                            {% elif '/add-author/' in request.path %}
                             <a title = "Cancel adding this author" class="w3-bar-item w3-button" id="sideButton" href="/authors/"> Cancel </a>
                             {% else %}
                             <a class="w3-bar-item w3-button" id="sideButton_notAvailable" href="/"> Cancel </a>                 
@@ -183,9 +187,9 @@
                     <!-- Save button -->
                     <tr><th>{% with test=user.groups.all|length %}
                         {% if test > 0 %}
-                            {% if request.path == '/add-expert/'%}
+                            {% if '/add-expert/' in request.path %}
                             <button title = "Save this expert" type="submit" form="parent-form" class="w3-bar-item w3-button" id="sideButton"> Save </button>
-                            {% elif request.path == '/add-author/'%}
+                            {% elif '/add-author/' in request.path %}
                             <button title = "Save this author" type="submit" form="parent-form" class="w3-bar-item w3-button" id="sideButton"> Save </button>
                             {% elif '/add-taxon/' in request.path%}
                             <button title = "Save this taxon" type="submit" form="parent-form" class="w3-bar-item w3-button" id="sideButton"> Save </button>

@@ -111,7 +111,7 @@
                 <th class="whiteboxhead" colspan="2" align="left">Reference</th>
                 <tr>
                     <td class="datatype" valign="top" width="35%">Title:</td>
-                    <td class="datafield" width="65%">{{ taxonomic_unit.reference.title }}</td>
+                    <td class="datafield" width="65%"><a href="{% url 'front:ref-details' taxonomic_unit.reference.id %}">{{ taxonomic_unit.reference.title }}</a></td>
                 </tr>
                 <tr>
                     <td class="datatype" valign="top" width="35%">Authors:</td>
@@ -134,7 +134,7 @@
             </table>
         </div>
         <div id="Updates" class="togglable">
-            {% if history.items %}
+            {% if history.items or taxonomic_unit.created_at %}
                 {% for key, value in history.items %}
                 <table class="details" style="width:80%">
                     <th class="whiteboxhead" colspan="2" align="left">Updated on {{key}}</th>
@@ -152,6 +152,17 @@
                     </tr>
                 </table>
                 {% endfor %}
+                <table class="details" style="width:80%">
+                    <th class="whiteboxhead" colspan="2" align="left">Created on {% firstof taxonomic_unit.created_at "N/A" %}</th>
+                    <tr>
+                        <td class="datatype" valign="top" align="left" width="35%">Created by:</td>
+                        <td class="datafield" width="65%">{% firstof taxonomic_unit.created_by.username "N/A" %}</td>
+                    </tr>
+                    <tr>
+                        <td class="datatype" valign="top" align="left" width="35%">Reference:</td>
+                        <td class="datafield" width="65%">{% firstof first_ref "N/A" %}</td>
+                    </tr>
+                </table>
             {% else %}
             <table class="details" style="width:80%">
                 <th class="whiteboxhead" colspan="2" align="left">No update history available</th>

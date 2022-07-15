@@ -2,7 +2,7 @@
 <body>
   {% with test=user.groups.all|length %} {% if test > 0 %}
 
-  <h1>Add author</h1>
+  <h1>{{title}} Author</h1>
   <form action="" method="post" id="parent-form" novalidate>
     {% csrf_token %}
     <table>

@@ -487,25 +487,7 @@ def view_reference_details(request, id):
     # Get reference's history as records
     records = chosenRef.history.all()
     history = {}
-
-        # Add update history to 'history' dict, one update (record) at a time
-    try:
-        for record in records:
-            if record.prev_record:
-                timestamp = record.history_date
-                history[timestamp] = {}
-                history[timestamp]['user'] = record.history_user.username
-                history[timestamp]['changes'] = ''
-                delta = record.diff_against(record.prev_record)
-                for change in delta.changes:
-                    if len(history[timestamp]['changes']) == 0:
-                        history[timestamp]['changes'] = "{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
-                    else:
-                        (history[timestamp]['changes']) += ",\n{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
-                if len(history[timestamp]['changes']) == 0:
-                    history[timestamp]['changes'] = "Not available."
-    except:
-        print("An error occured while fetching reference history records.")
+    history = _create_history_records(history, records)
 
     context = {'reference': chosenRef, 'history': history}
     return render(request, 'front/ref-details.html', context)
@@ -771,6 +753,13 @@ def view_hierarchy(request, parent_id=None):
     # Get taxon's history as records
     records = chosenTaxon.history.all()
     history = {}
+    
+    # Get the first reference related to the taxon
+    first_ref = ""
+    try:
+        first_ref = f"{records[0].reference.authors}. {records[0].reference.title}."
+    except:
+        print("Couldn't get initial reference.")
 
     # Add update history to 'history' dict, one update (record) at a time
     try:
@@ -792,6 +781,7 @@ def view_hierarchy(request, parent_id=None):
                     history[timestamp]['changes'] = "Not available."
     except:
         print("An error occured while fetching taxon history records.")
+        
     # Select experts
     # percentage = '%'
     # taxon_experts = Expert.objects.raw("""
@@ -862,7 +852,8 @@ def view_hierarchy(request, parent_id=None):
         'synonyms': synonymTaxons,
         'seniorSynonym': seniorSynonym,
         'isJunior': seniorSynonym is not None,
-        'history': history
+        'history': history,
+        'first_ref': first_ref
     }
 
     return render(request, 'front/hierarchy.html', context)
@@ -902,22 +893,39 @@ def add_junior_synonym(request, taxon_id=None):
     else:
         form = JuniorSynonymForm()
     return render(request, 'front/add_junior_synonym.html', {'form': form})
+
+def view_experts(request):
+    experts = Expert.objects.all()
+    nresults = len(experts)
+    sorted_experts = sorted(
+        experts, key=lambda objects: objects.expert.lower())
+    paginator = Paginator(sorted_experts, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'paginator': paginator, 'page_obj': page_obj, 'nresults': nresults}
+    return render(request, 'front/experts.html', context)
+
+def view_expert_details(request, id):
+    """ View for individual expert """
+    chosenExpert = Expert.objects.get(id=id)
+    geo_divs = chosenExpert.geographic_div.all()
     
-def view_experts(request):
-    experts = Expert.objects.all()
-    sorted_experts = sorted(
-        experts, key=lambda objects: objects.expert.lower())
-    paginator = Paginator(sorted_experts, 20)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    # Get expert's history as records
+    records = chosenExpert.history.all()
+    history = {}
+    history = _create_history_records(history, records)
 
-    context = {'paginator': paginator, 'page_obj': page_obj}
-    return render(request, 'front/experts.html', context)
+    context = {'expert': chosenExpert, 'history': history, 'geos': geo_divs}
+    return render(request, 'front/expert-details.html', context)
 
-
-def add_expert(request):
+def add_expert(request, pk=None):
+    context = {'pk': pk if pk else ''}
     if request.method == 'POST':
-        form = ExpertForm(request.POST)
+        expert = None
+        if pk:
+            expert = Expert.objects.get(pk=pk)
+        form = ExpertForm(request.POST, instance=expert)
         if form.is_valid():
             try:
                 new_expert = form.save(commit=False)
@@ -930,90 +938,84 @@ def add_expert(request):
                 print("Saving a new expert did not workout; do something")
             return HttpResponseRedirect('/experts')
     else:
-        form = ExpertForm()
-    return render(request, 'front/add-expert.html', {'form': form})
+        try:
+            expert = Expert.objects.get(pk=pk)
+            context['title'] = 'Edit'
+        except Expert.DoesNotExist:
+            expert = None
+            context['title'] = 'Add'
+        form = ExpertForm(instance=expert)
+    context['form'] = form
+    return render(request, 'front/add-expert.html', context)
 
 def view_authors(request):
     authors = TaxonAuthorLkp.objects.all()
+    nresults = len(authors)
     sorted_authors = sorted(
         authors, key=lambda objects: objects.taxon_author.lower())
     paginator = Paginator(sorted_authors, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-
-    context = {'paginator': paginator, 'page_obj': page_obj}
+    context = {'paginator': paginator, 'page_obj': page_obj, 'nresults': nresults}
     return render(request, 'front/authors.html', context)
 
+def view_author_details(request, id):
+    """ View for individual author """
+    chosenAuthor = TaxonAuthorLkp.objects.get(taxon_author_id=id)
+    
+    # Get author's history as records
+    records = chosenAuthor.history.all()
+    history = {}
+    history = _create_history_records(history, records)
 
-def add_author(request):
+    context = {'author': chosenAuthor, 'history': history}
+    return render(request, 'front/author-details.html', context)
+
+def add_author(request, pk=None):
+    context = {'pk': pk if pk else ''}
     if request.method == 'POST':
-        form = AuthorForm(request.POST)
+        author = None
+        if pk:
+            author = TaxonAuthorLkp.objects.get(pk=pk)
+        form = AuthorForm(request.POST, instance=author)
         if form.is_valid():
             try:
                 new_author = form.save(commit=False)
                 new_author.save()
             except TaxonAuthorLkp.DoesNotExist:
-                print("saving new author did not workout; do something")
+                print("Saving a new author did not workout; do something")
             return HttpResponseRedirect('/authors')
     else:
-        form = AuthorForm()
-    return render(request, 'front/add-author.html', {'form': form})
-
-def view_experts(request):
-    experts = Expert.objects.all()
-    sorted_experts = sorted(
-        experts, key=lambda objects: objects.expert.lower())
-    paginator = Paginator(sorted_experts, 20)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {'paginator': paginator, 'page_obj': page_obj}
-    return render(request, 'front/experts.html', context)
-
-
-def add_expert(request):
-    if request.method == 'POST':
-        form = ExpertForm(request.POST)
-        if form.is_valid():
-            try:
-                new_expert = form.save(commit=False)
-                new_expert.save()
-
-                geos = form.cleaned_data['geographic_div']
-                for geo in geos:
-                    new_expert.geographic_div.add(geo)
-            except Expert.DoesNotExist:
-                print("Saving a new expert did not workout; do something")
-            return HttpResponseRedirect('/experts')
-    else:
-        form = ExpertForm()
-    return render(request, 'front/add-expert.html', {'form': form})
-
-def view_authors(request):
-    authors = TaxonAuthorLkp.objects.all()
-    sorted_authors = sorted(
-        authors, key=lambda objects: objects.taxon_author.lower())
-    paginator = Paginator(sorted_authors, 20)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {'paginator': paginator, 'page_obj': page_obj}
-    return render(request, 'front/authors.html', context)
-
-
-def add_author(request):
-    if request.method == 'POST':
-        form = AuthorForm(request.POST)
-        if form.is_valid():
-            try:
-                new_author = form.save(commit=False)
-                new_author.save()
-            except TaxonAuthorLkp.DoesNotExist:
-                print("saving new author did not workout; do something")
-            return HttpResponseRedirect('/authors')
-    else:
-        form = AuthorForm()
-    return render(request, 'front/add-author.html', {'form': form})
+        try:
+            author = TaxonAuthorLkp.objects.get(pk=pk)
+            context['title'] = 'Edit'
+        except TaxonAuthorLkp.DoesNotExist:
+            author = None
+            context['title'] = 'Add'
+        form = AuthorForm(instance=author)
+    context['form'] = form
+    return render(request, 'front/add-author.html', context)
 
 def help(request):
     return render(request, 'front/help.html')
+
+def _create_history_records(history, records):
+    # Add update history to 'history' dict, one update (record) at a time
+    try:
+        for record in records:
+            if record.prev_record:
+                timestamp = record.history_date
+                history[timestamp] = {}
+                history[timestamp]['user'] = record.history_user.username
+                history[timestamp]['changes'] = ''
+                delta = record.diff_against(record.prev_record)
+                for change in delta.changes:
+                    if len(history[timestamp]['changes']) == 0:
+                        history[timestamp]['changes'] = "{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
+                    else:
+                        (history[timestamp]['changes']) += ",\n{} changed from {} to {}".format(change.field.capitalize(), change.old, change.new)
+                if len(history[timestamp]['changes']) == 0:
+                    history[timestamp]['changes'] = "Not available."
+    except:
+        print("An error occured while fetching reference history records.")
+    return history

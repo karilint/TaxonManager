@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'treebeard',
     'rest_framework',
     'rest_framework_filters',
+    'rest_framework_api_key',
     'django_select2',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -223,11 +224,8 @@ LOGIN_REDIRECT_URL = '/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAdminUser',
-    ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 20,
     'DEFAULT_FILTER_BACKENDS': (
     'rest_framework_filters.backends.RestFrameworkFilterBackend',
     ),

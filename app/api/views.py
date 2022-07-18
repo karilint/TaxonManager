@@ -9,7 +9,8 @@ from rest_framework.permissions import IsAdminUser
 
 class BaseViewSet(viewsets.ModelViewSet):
     permission_classes = [HasAPIKey | IsAdminUser]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend,
+                       filters.OrderingFilter]
 
     class Meta:
         abstract = True
@@ -22,6 +23,8 @@ class ReferenceViewSet(BaseViewSet):
                      'volume', 'page_start', 'page_end', 'doi', 'url', 'bibtex']
     search_fields = ['id', 'authors', 'title', 'journal',
                      'volume', 'page_start', 'page_end', 'doi', 'url', 'bibtex']
+    ordering_fields = ['id', 'authors', 'title', 'journal',
+                       'volume', 'doi', 'url']
 
 
 class KingdomViewSet(BaseViewSet):
@@ -29,6 +32,7 @@ class KingdomViewSet(BaseViewSet):
     queryset = models.Kingdom.objects.all()
     filter_fields = ['id', 'kingdom_name']
     search_fields = ['id', 'kingdom_name']
+    ordering_fields = ['id', 'kingdom_name']
 
 
 class TaxonUnitTypeViewSet(BaseViewSet):
@@ -38,6 +42,8 @@ class TaxonUnitTypeViewSet(BaseViewSet):
                      'dir_parent_rank_id', 'req_parent_rank_id']
     search_fields = ['id', 'kingdom__kingdom_name', 'rank_id', 'rank_name',
                      'dir_parent_rank_id', 'req_parent_rank_id']
+    ordering_fields = ['id', 'kingdom__kingdom_name', 'rank_id', 'rank_name',
+                       'dir_parent_rank_id', 'req_parent_rank_id']
 
 
 class GeoGraphicDivViewSet(BaseViewSet):
@@ -45,6 +51,7 @@ class GeoGraphicDivViewSet(BaseViewSet):
     queryset = models.GeographicDiv.objects.all()
     filter_fields = ['id', 'geographic_value']
     search_fields = ['id', 'geographic_value']
+    ordering_fields = ['id', 'geographic_value']
 
 
 class TaxonAuthorLkpViewSet(BaseViewSet):
@@ -53,6 +60,8 @@ class TaxonAuthorLkpViewSet(BaseViewSet):
     filter_fields = ['taxon_author_id', 'taxon_author', 'kingdom']
     search_fields = ['taxon_author_id',
                      'taxon_author', 'kingdom__kingdom_name']
+    ordering_fields = ['taxon_author_id',
+                       'taxon_author', 'kingdom__kingdom_name']
 
 
 class ExpertViewSet(BaseViewSet):
@@ -60,6 +69,7 @@ class ExpertViewSet(BaseViewSet):
     queryset = models.Expert.objects.all()
     filter_fields = ['id', 'expert', 'geographic_div']
     search_fields = ['id', 'expert', 'geographic_div__geographic_value']
+    ordering_fields = ['id', 'expert', 'geographic_div__geographic_value']
 
 
 class TaxonomicUnitViewSet(BaseViewSet):
@@ -73,6 +83,10 @@ class TaxonomicUnitViewSet(BaseViewSet):
                      'unit_name3', 'unit_name4', 'kingdom__kingdom_name',
                      'rank__rank_name', 'complete_name', 'expert__expert',
                      'taxon_author__taxon_author', 'geographic_div__geographic_value']
+    ordering_fields = ['taxon_id', 'unit_name1', 'unit_name2',
+                       'unit_name3', 'kingdom__kingdom_name',
+                       'rank__rank_name', 'complete_name', 'expert__expert',
+                       'taxon_author__taxon_author', 'geographic_div__geographic_value']
 
 
 class HierarchyViewSet(BaseViewSet):
@@ -81,6 +95,8 @@ class HierarchyViewSet(BaseViewSet):
     filter_fields = ['id', 'hierarchy_string', 'taxon', 'parent_id', 'level']
     search_fields = ['id', 'hierarchy_string',
                      'taxonomicunit__taxon_id', 'parent_id', 'level']
+    ordering_fields = ['id', 'hierarchy_string',
+                       'taxonomicunit__taxon_id', 'parent_id', 'level']
 
 
 class SynonymLinkViewSet(BaseViewSet):
@@ -88,3 +104,4 @@ class SynonymLinkViewSet(BaseViewSet):
     queryset = models.SynonymLink.objects.all()
     filter_fields = ['id', 'synonym_id', 'taxon_id_accepted']
     search_fields = ['id', 'synonym_id', 'taxonomicunit__taxon_id']
+    ordering_fields = ['id', 'synonym_id', 'taxonomicunit__taxon_id']

@@ -20,7 +20,6 @@ router.register('hierarchys', views.HierarchyViewSet,
                 basename='hierarchy')
 router.register('synonymlinks', views.SynonymLinkViewSet,
                 basename='synonymlink')
-# router.register('comments', views.CommentViewSet, basename='comment')
 
 
 urlpatterns = [

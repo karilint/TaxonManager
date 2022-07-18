@@ -16,8 +16,8 @@ class KingdomSerializer(serializers.ModelSerializer):
 
 
 class TaxonUnitTypeSerializer(serializers.ModelSerializer):
-    kingdom = serializers.SlugRelatedField(
-        queryset=models.Kingdom.objects.all(), slug_field='kingdom_name')
+    kingdom = serializers.PrimaryKeyRelatedField(
+        queryset=models.Kingdom.objects.all())
 
     class Meta:
         model = models.TaxonUnitType
@@ -32,8 +32,8 @@ class GeoGraphicDivSerializer(serializers.ModelSerializer):
 
 
 class TaxonAuthorLkpSerializer(serializers.ModelSerializer):
-    kingdom = serializers.SlugRelatedField(
-        queryset=models.Kingdom.objects.all(), slug_field='kingdom_name')
+    kingdom = serializers.PrimaryKeyRelatedField(
+        queryset=models.Kingdom.objects.all())
 
     class Meta:
         model = models.TaxonAuthorLkp
@@ -41,8 +41,8 @@ class TaxonAuthorLkpSerializer(serializers.ModelSerializer):
 
 
 class ExpertSerializer(serializers.ModelSerializer):
-    geographic_div = serializers.SlugRelatedField(
-        many=True, queryset=models.GeographicDiv.objects.all(), slug_field='geographic_value')
+    geographic_div = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=models.GeographicDiv.objects.all())
 
     class Meta:
         model = models.Expert
@@ -50,17 +50,18 @@ class ExpertSerializer(serializers.ModelSerializer):
 
 
 class TaxonomicUnitSerializer(serializers.ModelSerializer):
-    kingdom = serializers.SlugRelatedField(
-        queryset=models.Kingdom.objects.all(), slug_field='kingdom_name')
-    taxon_author = serializers.SlugRelatedField(
-        queryset=models.TaxonAuthorLkp.objects.all(), slug_field='taxon_author')
-    rank = serializers.SlugRelatedField(
-        queryset=models.TaxonUnitType.objects.all(), slug_field='rank_name')
-    geographic_div = serializers.SlugRelatedField(
-        many=True, queryset=models.GeographicDiv.objects.all(), slug_field='geographic_value')
-    expert = serializers.SlugRelatedField(
-        many=True, queryset=models.Expert.objects.all(), slug_field='expert')
-    reference = serializers.SlugRelatedField(queryset=models.Reference.objects.all(), slug_field='title')
+    kingdom = serializers.PrimaryKeyRelatedField(
+        queryset=models.Kingdom.objects.all())
+    taxon_author = serializers.PrimaryKeyRelatedField(
+        queryset=models.TaxonAuthorLkp.objects.all())
+    rank = serializers.PrimaryKeyRelatedField(
+        queryset=models.TaxonUnitType.objects.all())
+    geographic_div = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=models.GeographicDiv.objects.all())
+    expert = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=models.Expert.objects.all())
+    reference = serializers.PrimaryKeyRelatedField(
+        queryset=models.Reference.objects.all())
 
     class Meta:
         model = models.TaxonomicUnit
@@ -74,8 +75,8 @@ class TaxonomicUnitSerializer(serializers.ModelSerializer):
 
 
 class HiearchySerializer(serializers.ModelSerializer):
-    taxon = serializers.SlugRelatedField(
-        queryset=models.TaxonomicUnit.objects.all(), slug_field='complete_name')
+    taxon = serializers.PrimaryKeyRelatedField(
+        queryset=models.TaxonomicUnit.objects.all())
 
     class Meta:
         model = models.Hierarchy
@@ -84,15 +85,9 @@ class HiearchySerializer(serializers.ModelSerializer):
 
 class SynonymLinkSerializer(serializers.ModelSerializer):
 
-    taxon_id_accepted = serializers.SlugRelatedField(
-        queryset=models.TaxonomicUnit.objects.all(), slug_field='complete_name')
+    taxon_id_accepted = serializers.PrimaryKeyRelatedField(
+        queryset=models.TaxonomicUnit.objects.all())
 
     class Meta:
         model = models.SynonymLink
         fields = ['id', 'synonym_id', 'taxon_id_accepted']
-
-
-# class CommentSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = models.Comment
-#         fields = ['id', 'commentator', 'comment_detail']

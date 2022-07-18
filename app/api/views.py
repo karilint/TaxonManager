@@ -4,9 +4,9 @@ from api import serializers
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
-
+# Deny permission to any user, unless user.is_staff is True
 # settings.py :    'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+#         'rest_framework.permissions.IsAdminUser',
 #     ]
 
 
@@ -91,8 +91,3 @@ class SynonymLinkViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filter_fields = ['id', 'synonym_id', 'taxon_id_accepted']
     search_fields = ['id', 'synonym_id', 'taxonomicunit__taxon_id']
-
-
-# class CommentViewSet(viewsets.ModelViewSet):
-#     serializer_class = serializers.CommentSerializer
-#     queryset = models.Comment.objects.all()

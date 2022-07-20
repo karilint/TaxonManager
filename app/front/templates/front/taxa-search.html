@@ -128,23 +128,21 @@
 
     {% if page_obj %}
     <h2 class="text-center" style="font-size:x-large"><i>{{ nresults }} results</i></h2>
-    <table style="width:60%; border-collapse: collapse">
+    <table class=listTable>
           {% for taxon in page_obj %}
-          <tr class="liststaxon">
-            {% with test=user.groups.all|length %}
-            {% if test > 0 %}
-            <td width="3.0%"><a href="{% url 'front:add-taxon' taxon.pk %}"><img src="{% static 'refs/images/pencil.svg' %}" /></td>
-            {% endif %}
-            {% endwith %}
-
-            <td width="40.0%" id="hover_link"><a href="{% url 'front:hierarchy' taxon.taxon_id %}">{{ taxon.complete_name }}</a></td>
+          <tr class="lists">
+            <td><a title = "Go to detail view" class="w3-bar-item w3-button" id="detailButton" href="{% url 'front:hierarchy' taxon.taxon_id %}"> > </a></td>
+            <td width="40.0%">{{ taxon.complete_name }}</td>
             <td style="font-size:x-small" width="11.0%">{{ taxon.kingdom }}</td>
             <td style="font-size:x-small" width="11.0%">{{ taxon.rank.rank_name }}</td>
-            <td style="font-size:x-small" width="60.0%">{{ taxon.n_usage }}</td>  
-
+            {% if taxon.n_usage is None %}
+              <td style="font-size:x-small" width="60.0%"></td>  
+            {% else %}
+              <td style="font-size:x-small" width="60.0%">{{ taxon.n_usage }}</td>  
+            {% endif %}
           </tr>
           {% endfor %}
-  </table>
+    </table>
 
     <div class="pagination">
         {% if page_obj.has_previous %}

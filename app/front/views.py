@@ -472,13 +472,37 @@ def import_data_from_excel(request):
 
 
 def view_reference(request):
-    refs = Reference.objects.all().filter(visible=1)
-    nresults = len(refs)
-    paginator = Paginator(refs, 20)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    c = {'page_obj': page_obj, 'paginator': paginator, 'nresults': nresults}
-    return render(request, 'front/references.html', c)
+    ref_list = Reference.objects.all().filter(visible=1)
+    ref_filter = RefFilter(request.GET, queryset=ref_list)
+    nresults = ref_filter.qs.count()
+    filtered_qs = sorted(ref_filter.qs, key=lambda objects: objects.pk)
+
+    paginator = Paginator(filtered_qs, 20)
+
+    context = {}
+
+    page = request.GET.get('page')
+
+    try:
+        response = paginator.page(page)
+    except PageNotAnInteger:
+        response = paginator.page(1)
+    except EmptyPage:
+        response = paginator.page(paginator.num_pages)
+
+    querydict = request.GET.copy()
+
+    try:
+        del querydict['page']
+    except KeyError:
+        pass
+    context['querystring'] = '&' + querydict.urlencode()
+
+    context.update({'page_obj': response,
+                    'paginator': paginator,
+                    'filter': ref_filter,
+                    'nresults': nresults})
+    return render(request, 'front/references.html', context)
 
 def view_reference_details(request, id):
     """ View for individual reference """
@@ -688,11 +712,12 @@ def view_taxa(request):
         response = paginator.page(paginator.num_pages)
 
     querydict = request.GET.copy()
+
     try:
         del querydict['page']
     except KeyError:
         pass
-    # Specify the filter parameter to build to build a querystring together with pagination
+    # Specify the filter parameter to build a querystring together with pagination
     context['querystring'] = '&' + querydict.urlencode()
 
     context.update({'page_obj': response,
@@ -733,7 +758,7 @@ def search_taxa(request):
             del querydict['page']
         except KeyError:
             pass
-        # Specify the filter parameter to build to build a querystring together with pagination
+        # Specify the filter parameter to build a querystring together with pagination
         context['querystring'] = '&' + querydict.urlencode()
     else:
         response = None

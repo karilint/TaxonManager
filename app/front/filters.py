@@ -4,19 +4,33 @@ from django.db.models import Q
 import django_filters
 from django_filters import ModelChoiceFilter
 
+
 class RefFilter(django_filters.FilterSet):
 
     doi = django_filters.CharFilter(field_name='doi', label='Publication DOI',
-                    method='filter_by_doi')
-    bibcode = django_filters.CharFilter(field_name='bibcode',
-                    label='Publication Bibcode', lookup_expr='exact')
+                                    method='filter_by_doi')
     title = django_filters.CharFilter(field_name='title', label='Title',
-                    lookup_expr='icontains')
+                                      lookup_expr='icontains')
     author = django_filters.CharFilter(field_name='authors', label='Author',
-                    lookup_expr='icontains')
+                                       lookup_expr='icontains')
+    journal = django_filters.CharFilter(field_name='journal', label='Journal',
+                                        lookup_expr='icontains')
+    year = django_filters.NumberFilter(field_name='year', label='Year',
+                                       lookup_expr='exact')
+    bibcode = django_filters.CharFilter(field_name='bibcode',
+                                        label='Publication Bibcode', lookup_expr='exact')
+    any_field = django_filters.CharFilter(
+        method='filter_by_any_field', label='Search')
 
     def filter_by_doi(self, queryset, name, value):
         return queryset.filter(doi=canonicalize_doi(value))
+
+    def filter_by_any_field(self, queryset, name, value):
+        return queryset.filter(
+            Q(authors__icontains=value) | Q(title__icontains=value) | Q(
+                title_html__icontains=value) | Q(volume__exact=value)
+            | Q(note__icontains=value) | Q(doi__exact=value) | Q(bibcode__exact=value)
+        )
 
     class Meta:
         model = Reference

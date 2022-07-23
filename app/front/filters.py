@@ -1,4 +1,4 @@
-from front.models import Reference, TaxonAuthorLkp, TaxonomicUnit, SynonymLink
+from front.models import Expert, Reference, TaxonAuthorLkp, TaxonomicUnit, SynonymLink
 from front.utils import canonicalize_doi
 from django.db.models import Q
 import django_filters
@@ -57,7 +57,7 @@ class TaxonFilter(django_filters.FilterSet):
     author_name = django_filters.CharFilter(field_name='taxon_author__taxon_author', label='Author',
                     lookup_expr='icontains')
     geo_location = django_filters.CharFilter(field_name='geographic_div__geographic_value', label='Geographic location',
-                    lookup_expr='icontains')
+                    lookup_expr='icontains', distinct=True)
     any_field = django_filters.CharFilter(method='filter_by_any_field', label='Search', lookup_expr='icontains')
     synonyms = django_filters.CharFilter(method='filter_synonyms', label='Synonyms', lookup_expr='icontains')
     
@@ -140,4 +140,21 @@ class AuthorFilter(django_filters.FilterSet):
 
     class Meta:
         model = TaxonAuthorLkp
+        fields = []
+
+
+class ExpertFilter(django_filters.FilterSet):
+
+    expert = django_filters.CharFilter(
+        field_name='expert', label='Expert', lookup_expr='icontains')
+    geographic = django_filters.CharFilter(field_name='geographic_div__geographic_value', label='Geographic location',
+                                           lookup_expr='icontains')
+    any_field = django_filters.CharFilter(
+        method='filter_by_any_field', label='Search')
+
+    def filter_by_any_field(self, queryset, name, value):
+        return queryset.filter(Q(expert__icontains=value) | Q(geographic_div__geographic_value__icontains=value)).distinct()
+
+    class Meta:
+        model = Expert
         fields = []

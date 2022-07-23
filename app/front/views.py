@@ -17,7 +17,7 @@ from front.models import Reference
 from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom, Expert, SynonymLink, Reference, GeographicDiv
 from front.utils import canonicalize_doi
 from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm, DoiForm, BibtexForm
-from front.filters import RefFilter, TaxonFilter
+from front.filters import AuthorFilter, RefFilter, TaxonFilter
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm
@@ -975,13 +975,35 @@ def add_expert(request, pk=None):
 
 def view_authors(request):
     authors = TaxonAuthorLkp.objects.all()
-    nresults = len(authors)
-    sorted_authors = sorted(
-        authors, key=lambda objects: objects.taxon_author.lower())
-    paginator = Paginator(sorted_authors, 20)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    context = {'paginator': paginator, 'page_obj': page_obj, 'nresults': nresults}
+    author_filter = AuthorFilter(request.GET, queryset=authors)
+    nresults = author_filter.qs.count()
+    filtered_qs = sorted(
+        author_filter.qs, key=lambda objects: objects.taxon_author.lower())
+    paginator = Paginator(filtered_qs, 20)
+    context = {}
+    
+    page = request.GET.get('page')
+    try:
+        response = paginator.page(page)
+    except PageNotAnInteger:
+        response = paginator.page(1)
+    except EmptyPage:
+        response = paginator.page(paginator.num_pages)
+
+    querydict = request.GET.copy()
+
+    try:
+        del querydict['page']
+    except KeyError:
+        pass
+
+    context['querystring'] = '&' + querydict.urlencode()
+
+    context.update({'page_obj': response,
+                    'paginator': paginator,
+                    'filter': author_filter,
+                    'nresults': nresults})
+
     return render(request, 'front/authors.html', context)
 
 def view_author_details(request, id):

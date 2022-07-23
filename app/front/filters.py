@@ -1,22 +1,36 @@
-from front.models import Reference, TaxonomicUnit, SynonymLink
+from front.models import Expert, Reference, TaxonAuthorLkp, TaxonomicUnit, SynonymLink
 from front.utils import canonicalize_doi
 from django.db.models import Q
 import django_filters
 from django_filters import ModelChoiceFilter
 
+
 class RefFilter(django_filters.FilterSet):
 
     doi = django_filters.CharFilter(field_name='doi', label='Publication DOI',
-                    method='filter_by_doi')
-    bibcode = django_filters.CharFilter(field_name='bibcode',
-                    label='Publication Bibcode', lookup_expr='exact')
+                                    method='filter_by_doi')
     title = django_filters.CharFilter(field_name='title', label='Title',
-                    lookup_expr='icontains')
+                                      lookup_expr='icontains')
     author = django_filters.CharFilter(field_name='authors', label='Author',
-                    lookup_expr='icontains')
+                                       lookup_expr='icontains')
+    journal = django_filters.CharFilter(field_name='journal', label='Journal',
+                                        lookup_expr='icontains')
+    year = django_filters.NumberFilter(field_name='year', label='Year',
+                                       lookup_expr='exact')
+    bibcode = django_filters.CharFilter(field_name='bibcode',
+                                        label='Publication Bibcode', lookup_expr='exact')
+    any_field = django_filters.CharFilter(
+        method='filter_by_any_field', label='Search')
 
     def filter_by_doi(self, queryset, name, value):
         return queryset.filter(doi=canonicalize_doi(value))
+
+    def filter_by_any_field(self, queryset, name, value):
+        return queryset.filter(
+            Q(authors__icontains=value) | Q(title__icontains=value) | Q(
+                title_html__icontains=value) | Q(volume__exact=value)
+            | Q(note__icontains=value) | Q(doi__exact=value) | Q(bibcode__exact=value)
+        )
 
     class Meta:
         model = Reference
@@ -43,7 +57,7 @@ class TaxonFilter(django_filters.FilterSet):
     author_name = django_filters.CharFilter(field_name='taxon_author__taxon_author', label='Author',
                     lookup_expr='icontains')
     geo_location = django_filters.CharFilter(field_name='geographic_div__geographic_value', label='Geographic location',
-                    lookup_expr='icontains')
+                    lookup_expr='icontains', distinct=True)
     any_field = django_filters.CharFilter(method='filter_by_any_field', label='Search', lookup_expr='icontains')
     synonyms = django_filters.CharFilter(method='filter_synonyms', label='Synonyms', lookup_expr='icontains')
     
@@ -109,4 +123,38 @@ class TaxonFilter(django_filters.FilterSet):
 
     class Meta:
         model = TaxonomicUnit
+        fields = []
+
+
+class AuthorFilter(django_filters.FilterSet):
+
+    author = django_filters.CharFilter(
+        field_name='taxon_author', label='Author', lookup_expr='icontains')
+    kingdom = django_filters.CharFilter(
+        field_name='kingdom__kingdom_name', label='Kingdom', lookup_expr='icontains')
+    any_field = django_filters.CharFilter(
+        method='filter_by_any_field', label='Search')
+
+    def filter_by_any_field(self, queryset, name, value):
+        return queryset.filter(Q(taxon_author__icontains=value) | Q(kingdom__kingdom_name__icontains=value))
+
+    class Meta:
+        model = TaxonAuthorLkp
+        fields = []
+
+
+class ExpertFilter(django_filters.FilterSet):
+
+    expert = django_filters.CharFilter(
+        field_name='expert', label='Expert', lookup_expr='icontains')
+    geographic = django_filters.CharFilter(field_name='geographic_div__geographic_value', label='Geographic location',
+                                           lookup_expr='icontains')
+    any_field = django_filters.CharFilter(
+        method='filter_by_any_field', label='Search')
+
+    def filter_by_any_field(self, queryset, name, value):
+        return queryset.filter(Q(expert__icontains=value) | Q(geographic_div__geographic_value__icontains=value)).distinct()
+
+    class Meta:
+        model = Expert
         fields = []

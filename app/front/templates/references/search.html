@@ -23,16 +23,7 @@
                         {{ filter.form.doi }}
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="form-group col-md-4 text-right">
-                        <label for="id_bibcode">{{ filter.form.bibcode.label }}:</label>
-                    </div>
-                    <div class="form-group col-md-8">
-                        {{ filter.form.bibcode }}
-                    </div>
-                </div>
-
+                
                 <div class="row">
                     <div class="form-group col-md-4 text-right">
                         <label for="id_title">{{ filter.form.title.label }}:</label>
@@ -52,6 +43,33 @@
                 </div>
 
                 <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_journal">{{ filter.form.journal.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.journal }}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_year">{{ filter.form.year.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.year }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_bibcode">{{ filter.form.bibcode.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.bibcode }}
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="form-group col-md-12 text-center">
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
@@ -61,27 +79,17 @@
         </div>
     </form>
 
-
-    {% if page_obj is not None %}
-    <h2 class="text-center">{{ nresults }} Results</h2>
-
-    {% if nresults %}
-
-    <table style="width:60%; border-collapse: collapse">
-        {% for ref in page_obj %}
-          <tr class="liststaxon">
-            {% with test=user.groups.all|length %}
-            {% if test > 0 %}
-            <td width="3.0%"><a class="delete-ref" href="{% url "front:delete" ref.pk %}"><img src="{% static 'refs/images/trashcan.svg' %}"/></a></td>
-            <td width="3.0%"><a href="{% url 'front:add-references' ref.pk %}"><img src="{% static 'refs/images/pencil.svg' %}"/></a></td>
-            {% endif %}
-            {% endwith %}
-
-            <td width="90.0%">{% ref_html ref 3 %}</td> 
+    {% if page_obj %}
+    <h2 class="text-center" style="font-size:x-large"><i>{{ nresults }} results</i></h2>
+    <table class=listTable>
+          {% for reference in page_obj %}
+          <tr class="lists">
+            <td><a title = "Go to detail view" class="w3-bar-item w3-button" id="detailButton" href="{% url 'front:ref-details' reference.id %}"> > </a></td>
+            <td>{{ reference }}</td>
           </tr>
           {% endfor %}
-  </table>
-
+    </table>
+  
     <div class="pagination">
         {% if page_obj.has_previous %}
         <a class="page-first" href="?page=1{{ querystring }}">&laquo First</a>
@@ -93,10 +101,11 @@
         {% if page_obj.has_next %}
         <a class="page-next" href="?page={{ page_obj.next_page_number }}{{ querystring }}">Next</a>
         <a class="page-last" href="?page={{ page_obj.paginator.num_pages }}{{ querystring }}">Last &raquo</a>
-        {% endif %}
-      </div>
-
-    {% endif %}
+        {% endif %}    
+    </div>
+  
+    {% else %}
+        <h2 class="text-center">No results.</h2>
     {% endif %}
 
     {% endblock %}

@@ -17,7 +17,7 @@ from front.models import Reference
 from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom, Expert, SynonymLink, Reference, GeographicDiv
 from front.utils import canonicalize_doi
 from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm, DoiForm, BibtexForm
-from front.filters import RefFilter, TaxonFilter
+from front.filters import AuthorFilter, RefFilter, TaxonFilter, ExpertFilter
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm
@@ -472,13 +472,37 @@ def import_data_from_excel(request):
 
 
 def view_reference(request):
-    refs = Reference.objects.all().filter(visible=1)
-    nresults = len(refs)
-    paginator = Paginator(refs, 20)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    c = {'page_obj': page_obj, 'paginator': paginator, 'nresults': nresults}
-    return render(request, 'front/references.html', c)
+    ref_list = Reference.objects.all().filter(visible=1)
+    ref_filter = RefFilter(request.GET, queryset=ref_list)
+    nresults = ref_filter.qs.count()
+    filtered_qs = sorted(ref_filter.qs, key=lambda objects: objects.pk)
+
+    paginator = Paginator(filtered_qs, 20)
+
+    context = {}
+
+    page = request.GET.get('page')
+
+    try:
+        response = paginator.page(page)
+    except PageNotAnInteger:
+        response = paginator.page(1)
+    except EmptyPage:
+        response = paginator.page(paginator.num_pages)
+
+    querydict = request.GET.copy()
+
+    try:
+        del querydict['page']
+    except KeyError:
+        pass
+    context['querystring'] = '&' + querydict.urlencode()
+
+    context.update({'page_obj': response,
+                    'paginator': paginator,
+                    'filter': ref_filter,
+                    'nresults': nresults})
+    return render(request, 'front/references.html', context)
 
 def view_reference_details(request, id):
     """ View for individual reference """
@@ -688,11 +712,12 @@ def view_taxa(request):
         response = paginator.page(paginator.num_pages)
 
     querydict = request.GET.copy()
+
     try:
         del querydict['page']
     except KeyError:
         pass
-    # Specify the filter parameter to build to build a querystring together with pagination
+    # Specify the filter parameter to build a querystring together with pagination
     context['querystring'] = '&' + querydict.urlencode()
 
     context.update({'page_obj': response,
@@ -733,7 +758,7 @@ def search_taxa(request):
             del querydict['page']
         except KeyError:
             pass
-        # Specify the filter parameter to build to build a querystring together with pagination
+        # Specify the filter parameter to build a querystring together with pagination
         context['querystring'] = '&' + querydict.urlencode()
     else:
         response = None
@@ -894,16 +919,38 @@ def add_junior_synonym(request, taxon_id=None):
         form = JuniorSynonymForm()
     return render(request, 'front/add_junior_synonym.html', {'form': form})
 
+
 def view_experts(request):
     experts = Expert.objects.all()
-    nresults = len(experts)
-    sorted_experts = sorted(
-        experts, key=lambda objects: objects.expert.lower())
-    paginator = Paginator(sorted_experts, 20)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    expert_filter = ExpertFilter(request.GET, queryset=experts)
+    nresults = expert_filter.qs.count()
+    filtered_qs = sorted(
+        expert_filter.qs, key=lambda objects: objects.expert.lower())
 
-    context = {'paginator': paginator, 'page_obj': page_obj, 'nresults': nresults}
+    paginator = Paginator(filtered_qs, 20)
+    context = {}
+
+    page = request.GET.get('page')
+    try:
+        response = paginator.page(page)
+    except PageNotAnInteger:
+        response = paginator.page(1)
+    except EmptyPage:
+        response = paginator.page(paginator.num_pages)
+
+    querydict = request.GET.copy()
+
+    try:
+        del querydict['page']
+    except KeyError:
+        pass
+
+    context['querystring'] = '&' + querydict.urlencode()
+
+    context.update({'page_obj': response,
+                    'paginator': paginator,
+                    'filter': expert_filter,
+                    'nresults': nresults})
     return render(request, 'front/experts.html', context)
 
 def view_expert_details(request, id):
@@ -950,13 +997,36 @@ def add_expert(request, pk=None):
 
 def view_authors(request):
     authors = TaxonAuthorLkp.objects.all()
-    nresults = len(authors)
-    sorted_authors = sorted(
-        authors, key=lambda objects: objects.taxon_author.lower())
-    paginator = Paginator(sorted_authors, 20)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    context = {'paginator': paginator, 'page_obj': page_obj, 'nresults': nresults}
+    author_filter = AuthorFilter(request.GET, queryset=authors)
+    nresults = author_filter.qs.count()
+    filtered_qs = sorted(
+        author_filter.qs, key=lambda objects: objects.taxon_author.lower())
+
+    paginator = Paginator(filtered_qs, 20)
+    context = {}
+    
+    page = request.GET.get('page')
+    try:
+        response = paginator.page(page)
+    except PageNotAnInteger:
+        response = paginator.page(1)
+    except EmptyPage:
+        response = paginator.page(paginator.num_pages)
+
+    querydict = request.GET.copy()
+
+    try:
+        del querydict['page']
+    except KeyError:
+        pass
+
+    context['querystring'] = '&' + querydict.urlencode()
+
+    context.update({'page_obj': response,
+                    'paginator': paginator,
+                    'filter': author_filter,
+                    'nresults': nresults})
+
     return render(request, 'front/authors.html', context)
 
 def view_author_details(request, id):

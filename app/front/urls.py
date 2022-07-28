@@ -30,6 +30,7 @@ urlpatterns = [
     re_path(r'^expert-details/(?:(?P<id>\d+))?$', views.view_expert_details, name ='expert-details'),
     re_path(r'^add-expert/(?:(?P<pk>\d+))?$', views.add_expert, name ='add-expert'),
     path('authors/', views.view_authors, name='view-authors'),
+    path('author-search/', views.search_authors, name='author-search'),
     re_path(r'author-details/(?:(?P<id>\d+))?$', views.view_author_details, name='author-details'),
     re_path(r'^add-author/(?:(?P<pk>\d+))?$', views.add_author, name ='add-author'),
     path('doi-autofill/', views.doi_auto_fill, name='doi_auto_fill'),

@@ -1080,6 +1080,44 @@ def view_author_details(request, id):
     context = {'author': chosenAuthor, 'history': history}
     return render(request, 'front/author-details.html', context)
 
+def search_authors(request):
+
+    authors = TaxonAuthorLkp.objects.all()
+    author_filter = AuthorFilter(request.GET, queryset=authors)
+    
+    filtered_qs = sorted(
+        author_filter.qs, key=lambda objects: objects.taxon_author.lower())
+    nresults = len(filtered_qs)
+
+    paginator = Paginator(filtered_qs, 10)
+
+    context = {}
+    if request.GET:
+        page = request.GET.get('page')
+        try:
+            response = paginator.page(page)
+        except PageNotAnInteger:
+            response = paginator.page(1)
+        except EmptyPage:
+            response = paginator.page(paginator.num_pages)
+
+        querydict = request.GET.copy()
+        try:
+            del querydict['page']
+        except KeyError:
+            pass
+
+        context['querystring'] = '&' + querydict.urlencode()
+    else:
+        response = None
+
+    context.update({'page_obj': response,
+                    'paginator': paginator,
+                    'filter': author_filter,
+                    'nresults': nresults})
+
+    return render(request, 'front/author-search.html', context)
+
 def add_author(request, pk=None):
     context = {'pk': pk if pk else ''}
     if request.method == 'POST':

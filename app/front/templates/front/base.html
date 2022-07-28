@@ -136,6 +136,12 @@
                     {% else %}
                     <tr><th><a title = "Author list" class="w3-bar-item w3-button" id="sideButton" href="/authors"> Authors </a></th></tr>
                     {% endif %}
+
+                    {% if '/author-search/' in request.path %}
+                    <tr><th><a title = "Advanced Author search" class="w3-bar-item w3-button" id="sideButton_activated" href="/author-search"> Author search </a></th></tr>
+                    {% else %}
+                    <tr><th><a title = "Advanced Author search" class="w3-bar-item w3-button" id="sideButton" href="/author-search"> Author search </a></th></tr>
+                    {% endif %}
                     
                     <tr><th>
                         <div class="div-line"><hr></div>

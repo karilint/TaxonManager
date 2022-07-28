@@ -148,7 +148,7 @@ class ExpertFilter(django_filters.FilterSet):
     expert = django_filters.CharFilter(
         field_name='expert', label='Expert', lookup_expr='icontains')
     geographic = django_filters.CharFilter(field_name='geographic_div__geographic_value', label='Geographic location',
-                                           lookup_expr='icontains')
+                                           lookup_expr='icontains', distinct=True)
     any_field = django_filters.CharFilter(
         method='filter_by_any_field', label='Search')
 

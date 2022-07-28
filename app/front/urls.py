@@ -26,6 +26,7 @@ urlpatterns = [
     path('load_seniorSynonym/', views.load_seniorSynonym, name='load_seniorSynonym'),
     path('load_juniorSynonym/', views.load_juniorSynonym, name='load_juniorSynonym'),
     path('experts/', views.view_experts, name='view-experts'),
+    path('expert-search/', views.search_experts, name='expert-search'),
     re_path(r'^expert-details/(?:(?P<id>\d+))?$', views.view_expert_details, name ='expert-details'),
     re_path(r'^add-expert/(?:(?P<pk>\d+))?$', views.add_expert, name ='add-expert'),
     path('authors/', views.view_authors, name='view-authors'),

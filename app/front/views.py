@@ -966,6 +966,45 @@ def view_expert_details(request, id):
     context = {'expert': chosenExpert, 'history': history, 'geos': geo_divs}
     return render(request, 'front/expert-details.html', context)
 
+def search_experts(request):
+
+    experts = Expert.objects.all()
+    expert_filter = ExpertFilter(request.GET, queryset=experts)
+    
+    filtered_qs = sorted(
+        expert_filter.qs, key=lambda objects: objects.expert.lower())
+    nresults = len(filtered_qs)
+
+    paginator = Paginator(filtered_qs, 10)
+
+    context = {}
+    if request.GET:
+        page = request.GET.get('page')
+        try:
+            response = paginator.page(page)
+        except PageNotAnInteger:
+            response = paginator.page(1)
+        except EmptyPage:
+            response = paginator.page(paginator.num_pages)
+
+        querydict = request.GET.copy()
+        try:
+            del querydict['page']
+        except KeyError:
+            pass
+
+        context['querystring'] = '&' + querydict.urlencode()
+    else:
+        response = None
+
+    context.update({'page_obj': response,
+                    'paginator': paginator,
+                    'filter': expert_filter,
+                    'nresults': nresults})
+
+    return render(request, 'front/expert-search.html', context)
+
+
 def add_expert(request, pk=None):
     context = {'pk': pk if pk else ''}
     if request.method == 'POST':

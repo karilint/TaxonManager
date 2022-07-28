@@ -125,6 +125,12 @@
                     <tr><th><a title = "Expert list" class="w3-bar-item w3-button" id="sideButton" href="/experts"> Experts </a></th></tr>
                     {% endif %}
 
+                    {% if '/expert-search/' in request.path %}
+                    <tr><th><a title = "Advanced expert search" class="w3-bar-item w3-button" id="sideButton_activated" href="/expert-search"> Expert search </a></th></tr>
+                    {% else %}
+                    <tr><th><a title = "Advanced expert search" class="w3-bar-item w3-button" id="sideButton" href="/expert-search"> Expert search </a></th></tr>
+                    {% endif %}
+
                     {% if request.path == '/authors/' or request.path == '/add-author/' %}
                     <tr><th><a title = "Author list" class="w3-bar-item w3-button" id="sideButton_activated" href="/authors"> Authors </a></th></tr>
                     {% else %}

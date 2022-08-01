@@ -1,0 +1,78 @@
+{% extends "front/base.html" %}
+{% block content %}
+
+<body>
+
+<div class="container content-container">
+
+<h1>Advanced Search</h1>
+
+<div class="container">
+
+    <form method="get">
+        <div class="card card-body search-card">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_author">{{ filter.form.author.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.author }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-4 text-right">
+                        <label for="id_geographic">{{ filter.form.kingdom.label }}:</label>
+                    </div>
+                    <div class="form-group col-md-8">
+                        {{ filter.form.kingdom}}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12 text-center">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+
+    {% if page_obj %}
+    <h2 class="text-center" style="font-size:x-large"><i>{{ nresults }} results</i></h2>
+    <table class=listTable>
+      {% for author in page_obj %}
+        <tr class="lists">
+          <td><a title = "Go to detail view" class="w3-bar-item w3-button" id="detailButton" href="{% url 'front:author-details' author.taxon_author_id %}"> > </a></td>
+          <td>{{ author.taxon_author }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+      <a class="page-first" href="?page=1{{ querystring }}">&laquo First</a>
+      <a class="page-prev" href="?page={{ page_obj.previous_page_number}}{{ querystring }}">Previous</a>
+      {% endif %}
+  
+      <span class="pagination-text">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+  
+      {% if page_obj.has_next %}
+      <a class="page-next" href="?page={{ page_obj.next_page_number }}{{ querystring }}">Next</a>
+      <a class="page-last" href="?page={{ page_obj.paginator.num_pages }}{{ querystring }}">Last &raquo</a>
+      {% endif %}
+    </div>
+  
+  {% else %}
+    <h2 class="text-center">No results.</h2>
+  {% endif %}
+
+
+</div>
+</body>
+
+{% endblock %} 

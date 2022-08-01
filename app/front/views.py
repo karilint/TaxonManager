@@ -1,31 +1,19 @@
-import string
-from xxlimited import new
-from django import template
-from django.db import connection
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-
-
-# Create your views here.
-from django import forms
-from django.shortcuts import render, get_object_or_404
-from django.http import Http404, HttpResponseRedirect
-from django.urls import reverse
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.contrib.auth.decorators import user_passes_test
-from front.models import Reference
-from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom, Expert, SynonymLink, Reference, GeographicDiv
-from front.utils import canonicalize_doi
-from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm, DoiForm, BibtexForm
-from front.filters import AuthorFilter, RefFilter, TaxonFilter, ExpertFilter
-from django.contrib.auth.decorators import login_required
-from datetime import datetime
-from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm
-from front.filters import RefFilter, TaxonFilter
-from django.contrib.auth.decorators import login_required
-import csv, urllib.parse
+import csv
+import urllib.parse
 import requests
+from bibtexparser.bparser import BibTexParser
 from django.contrib import messages
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+
+from front.filters import AuthorFilter, ExpertFilter, RefFilter, TaxonFilter
+from front.forms import (AuthorForm, BibtexForm, DoiForm, ExpertForm,
+                         JuniorSynonymForm, RefForm, TaxonForm)
+from front.models import (Expert, GeographicDiv, Hierarchy, Kingdom, Reference,
+                          SynonymLink, TaxonAuthorLkp, TaxonomicUnit,
+                          TaxonUnitType)
+
 
 def index(request):
     return render(request, 'front/index.html')
@@ -614,8 +602,6 @@ def _fill_form_with_initial_values(parsed_bibtex: dict, bibtex: dict):
 
 def _parse_bibtex(bibtex_string):
     """ Parses bibtex string to a dictionary """
-    from bibtexparser.bparser import BibTexParser
-    from bibtexparser.bibdatabase import as_text
     bp = BibTexParser(interpolate_strings=False)
     bib_database = bp.parse(bibtex_string)
     return bib_database.entries[0]
@@ -966,6 +952,45 @@ def view_expert_details(request, id):
     context = {'expert': chosenExpert, 'history': history, 'geos': geo_divs}
     return render(request, 'front/expert-details.html', context)
 
+def search_experts(request):
+
+    experts = Expert.objects.all()
+    expert_filter = ExpertFilter(request.GET, queryset=experts)
+    
+    filtered_qs = sorted(
+        expert_filter.qs, key=lambda objects: objects.expert.lower())
+    nresults = len(filtered_qs)
+
+    paginator = Paginator(filtered_qs, 10)
+
+    context = {}
+    if request.GET:
+        page = request.GET.get('page')
+        try:
+            response = paginator.page(page)
+        except PageNotAnInteger:
+            response = paginator.page(1)
+        except EmptyPage:
+            response = paginator.page(paginator.num_pages)
+
+        querydict = request.GET.copy()
+        try:
+            del querydict['page']
+        except KeyError:
+            pass
+
+        context['querystring'] = '&' + querydict.urlencode()
+    else:
+        response = None
+
+    context.update({'page_obj': response,
+                    'paginator': paginator,
+                    'filter': expert_filter,
+                    'nresults': nresults})
+
+    return render(request, 'front/expert-search.html', context)
+
+
 def add_expert(request, pk=None):
     context = {'pk': pk if pk else ''}
     if request.method == 'POST':
@@ -1040,6 +1065,44 @@ def view_author_details(request, id):
 
     context = {'author': chosenAuthor, 'history': history}
     return render(request, 'front/author-details.html', context)
+
+def search_authors(request):
+
+    authors = TaxonAuthorLkp.objects.all()
+    author_filter = AuthorFilter(request.GET, queryset=authors)
+    
+    filtered_qs = sorted(
+        author_filter.qs, key=lambda objects: objects.taxon_author.lower())
+    nresults = len(filtered_qs)
+
+    paginator = Paginator(filtered_qs, 10)
+
+    context = {}
+    if request.GET:
+        page = request.GET.get('page')
+        try:
+            response = paginator.page(page)
+        except PageNotAnInteger:
+            response = paginator.page(1)
+        except EmptyPage:
+            response = paginator.page(paginator.num_pages)
+
+        querydict = request.GET.copy()
+        try:
+            del querydict['page']
+        except KeyError:
+            pass
+
+        context['querystring'] = '&' + querydict.urlencode()
+    else:
+        response = None
+
+    context.update({'page_obj': response,
+                    'paginator': paginator,
+                    'filter': author_filter,
+                    'nresults': nresults})
+
+    return render(request, 'front/author-search.html', context)
 
 def add_author(request, pk=None):
     context = {'pk': pk if pk else ''}

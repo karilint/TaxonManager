@@ -1,31 +1,19 @@
-import string
-from xxlimited import new
-from django import template
-from django.db import connection
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-
-
-# Create your views here.
-from django import forms
-from django.shortcuts import render, get_object_or_404
-from django.http import Http404, HttpResponseRedirect
-from django.urls import reverse
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.contrib.auth.decorators import user_passes_test
-from front.models import Reference
-from .models import Hierarchy, TaxonAuthorLkp, TaxonomicUnit, TaxonUnitType, Kingdom, Expert, SynonymLink, Reference, GeographicDiv
-from front.utils import canonicalize_doi
-from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm, DoiForm, BibtexForm
-from front.filters import AuthorFilter, RefFilter, TaxonFilter, ExpertFilter
-from django.contrib.auth.decorators import login_required
-from datetime import datetime
-from front.forms import RefForm, TaxonForm, ExpertForm, AuthorForm, JuniorSynonymForm
-from front.filters import RefFilter, TaxonFilter
-from django.contrib.auth.decorators import login_required
-import csv, urllib.parse
+import csv
+import urllib.parse
 import requests
+from bibtexparser.bparser import BibTexParser
 from django.contrib import messages
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+
+from front.filters import AuthorFilter, ExpertFilter, RefFilter, TaxonFilter
+from front.forms import (AuthorForm, BibtexForm, DoiForm, ExpertForm,
+                         JuniorSynonymForm, RefForm, TaxonForm)
+from front.models import (Expert, GeographicDiv, Hierarchy, Kingdom, Reference,
+                          SynonymLink, TaxonAuthorLkp, TaxonomicUnit,
+                          TaxonUnitType)
+
 
 def index(request):
     return render(request, 'front/index.html')
@@ -614,8 +602,6 @@ def _fill_form_with_initial_values(parsed_bibtex: dict, bibtex: dict):
 
 def _parse_bibtex(bibtex_string):
     """ Parses bibtex string to a dictionary """
-    from bibtexparser.bparser import BibTexParser
-    from bibtexparser.bibdatabase import as_text
     bp = BibTexParser(interpolate_strings=False)
     bib_database = bp.parse(bibtex_string)
     return bib_database.entries[0]

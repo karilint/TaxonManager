@@ -80,6 +80,7 @@ def taxon_add(request, pk = None):
             print("Clear old manyTomany relations")
             taxon.expert.clear()
             taxon.geographic_div.clear()
+            old_rank = TaxonomicUnit.objects.get(pk=pk).rank
             print("Cleared")
         # create a form instance and populate it with data from the request:
         form = TaxonForm(request.POST, instance = taxon)
@@ -152,8 +153,10 @@ def taxon_add(request, pk = None):
                     new_unit.expert.add(expert)
                
                 if pk:
-                    move_taxon_update_hierarchystring(taxon)
-                    print("out of move_taxon_update_hierarchystring")
+                    #check if hierarchy needs to be updated
+                    if Hierarchy.objects.get(taxon=taxon).parent_id != taxon.parent_id or taxon.rank != old_rank:
+                        move_taxon_update_hierarchystring(taxon)
+                        print("out of move_taxon_update_hierarchystring")
                 else:
                     print("create_hierarchystring(new_unit)")
                     create_hierarchystring(new_unit)                                    

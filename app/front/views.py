@@ -74,10 +74,13 @@ def taxon_add(request, pk = None):
     if request.method == 'POST':
         if pk:
             # Editing an existing taxon
+            print("# Editing an existing taxon")
             taxon = TaxonomicUnit.objects.get(pk=pk)
             # Clear old manyTomany relations
+            print("Clear old manyTomany relations")
             taxon.expert.clear()
             taxon.geographic_div.clear()
+            print("Cleared")
         # create a form instance and populate it with data from the request:
         form = TaxonForm(request.POST, instance = taxon)
         # check whether it's valid:
@@ -127,7 +130,9 @@ def taxon_add(request, pk = None):
                 reference = form.cleaned_data['reference']
 
                 new_unit.reference = reference
+                print("saving")
                 new_unit.save()
+                print("saved")
 
                 #add SynonymLink
                 if form.cleaned_data["is_junior_synonym"] and form.cleaned_data["senior_synonym"] != "":
@@ -139,14 +144,18 @@ def taxon_add(request, pk = None):
                 #     new_unit.references.add(ref)
                 geos = form.cleaned_data['geographic_div']
                 for geo in geos:
+                    print("add geo", geo)
                     new_unit.geographic_div.add(geo)
                 experts = form.cleaned_data['expert']
                 for expert in experts:
+                    print("add expert", expert)
                     new_unit.expert.add(expert)
                
                 if pk:
                     move_taxon_update_hierarchystring(taxon)
+                    print("out of move_taxon_update_hierarchystring")
                 else:
+                    print("create_hierarchystring(new_unit)")
                     create_hierarchystring(new_unit)                                    
             except TaxonomicUnit.DoesNotExist:
                 # form was filled incorrectly
@@ -183,10 +192,12 @@ def taxon_add(request, pk = None):
     c['form'] = form
     c['taxon'] = taxon
     c['parent'] = parent
+    print("taxon add end, render ->")
     return render(request, 'front/add-taxon.html', c)
 
 
 def move_taxon_update_hierarchystring(taxon):
+    print("in method move_taxon_update_hierarchystring")
     currentHierarchy = Hierarchy.objects.get(taxon = taxon)
     # get the old Hierarchy object's parent's id
     idToBeChanged = currentHierarchy.parent_id 

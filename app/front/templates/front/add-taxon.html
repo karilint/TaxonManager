@@ -7,7 +7,7 @@
   {% with test=user.groups.all|length %}
   {% if test > 0 %}
 
-  <h1>{{title}} taxon</h1>
+  <h1>{{title|default:"Add or edit"}} taxon</h1>
   <form action="{% url 'front:add-taxon' pk %}" method="post" id="parent-form" ,
     data-rankOfTaxonToBeAdded-url="/load_rankOfTaxonToBeAdded" data_parentTaxon-url="/load_parentTaxon" data-seniorSynonym-url="/load_seniorSynonym" novalidate>
     {% csrf_token %}
@@ -71,6 +71,7 @@
       }
 
       if (parentId) {
+        console.log("parentId:", parentId)
         $.ajax({
           url: url,
           data: {
@@ -91,6 +92,7 @@
 
     // fetch parents based on kingdom and taxon's rank
     $("#id_taxonnomic_types").change(function (e) {
+      console.log("fetch parents based on kingdom and taxon's rank")
       e.preventDefault();
       var url = $('#parent-form').attr('data_parentTaxon-url');
       var rankId = $(this).val();
@@ -142,6 +144,7 @@
 
     // when taxon is edited, retain old info
     $("#id_kingdom_name").ready(function () {
+      console.log("when taxon is edited, retain old info")
       var url = $('#parent-form').attr('data-rankOfTaxonToBeAdded-url');
 
       var rankName = '{{ taxon.rank.rank_name }}';

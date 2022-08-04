@@ -2,11 +2,11 @@
 {% block content %}
     <body>
         {% if taxonomic_unit.taxon_author %}
-            <h1 class="tabh1"><i>{{taxonomic_unit.complete_name}}</i> ({{taxonomic_unit.taxon_author}})
+            <h2 class="tabh1"><i>{{taxonomic_unit.complete_name}}</i> ({{taxonomic_unit.taxon_author}})
                 <button title = "Change history" onclick="openTab(event, 'Updates')" class="tabButton">Updates</button>
                 <button title = "Taxon details" onclick="openTab(event, 'Taxon')" class="tabButton active">Taxon</button></h1>
         {% else %}
-            <h1 class="tabh1"><i>{{taxonomic_unit.complete_name}}</i>
+            <h2 class="tabh1"><i>{{taxonomic_unit.complete_name}}</i>
                 <button title = "Change history" onclick="openTab(event, 'Updates')" class="tabButton">Updates</button>
                 <button title = "Taxon details" onclick="openTab(event, 'Taxon')" class="tabButton active">Taxon</button></h1>
         {% endif %}

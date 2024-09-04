@@ -26,7 +26,7 @@ djangorestframework-filters==1.0.0.dev2
 djangorestframework-api-key==2.2.0
 future==0.18.3
 gunicorn==20.1.0
-idna==3.3
+idna==3.7
 iniconfig==1.1.1
 mysqlclient==2.0.3
 oauthlib==3.2.2

@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/karilint/TaxonManager#readme",
   "devDependencies": {
-    "cypress": "^13.3.0"
+    "cypress": "^16.1.1"
   }
 }
